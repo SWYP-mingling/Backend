@@ -4,7 +4,8 @@ import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 /**
- *
+ * 비즈니스 로직에서 발생하는 공통 예외
+ * 서비스 계층에서 발생하는 비즈니스 규칙 위반 시 사용
  */
 @Getter
 public class BusinessException extends RuntimeException{

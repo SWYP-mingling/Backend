@@ -11,7 +11,8 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import swyp.mingling.global.response.ApiResponse;
 
 /**
- *
+ * 글로벌 예외 처리 핸들러
+ * 모든 예외를 ApiResponse 형식으로 통일하여 응답
  */
 @Slf4j
 @RestControllerAdvice
