@@ -1,4 +1,4 @@
-package swyp.mingling.global.documentation.sample;
+package swyp.mingling.global.documentation;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
