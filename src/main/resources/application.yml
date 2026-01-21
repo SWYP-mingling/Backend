@@ -14,3 +14,6 @@ springdoc:
   show-actuator: true
   default-consumes-media-type: application/json
   default-produces-media-type: application/json
+
+server:
+  port: 8888
