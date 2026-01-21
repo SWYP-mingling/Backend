@@ -28,7 +28,13 @@ public enum ErrorCode {
     CONFLICT(HttpStatus.CONFLICT, "CONFLICT", "요청이 현재 리소스 상태와 충돌합니다."),
 
     // 500 INTERNAL_SERVER_ERROR
-    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "INTERNAL_SERVER_ERROR", "서버 내부 오류가 발생했습니다.");
+    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "INTERNAL_SERVER_ERROR", "서버 내부 오류가 발생했습니다."),
+
+    // 모임 관련 에러
+    INVALID_CAPACITY(HttpStatus.BAD_REQUEST, "INVALID_CAPACITY", "모임 인원은 최소 2명 이상이어야 합니다."),
+    CAPACITY_EXCEEDED(HttpStatus.BAD_REQUEST, "CAPACITY_EXCEEDED", "모임 인원은 최대 30명까지 가능합니다."),
+    INVALID_DEADLINE(HttpStatus.BAD_REQUEST, "INVALID_DEADLINE", "마감 시간은 현재 시간 이후여야 합니다."),
+    ;
 
     /**
      * 상태 코드
