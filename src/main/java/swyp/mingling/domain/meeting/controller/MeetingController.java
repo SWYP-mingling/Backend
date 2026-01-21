@@ -1,15 +1,12 @@
 package swyp.mingling.domain.meeting.controller;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import org.springframework.web.bind.annotation.*;
-import swyp.mingling.domain.meeting.dto.CreateMeetingRequest;
-import swyp.mingling.domain.meeting.dto.CreateMeetingResponse;
-import swyp.mingling.domain.meeting.dto.GetMidpointResponse;
-import swyp.mingling.domain.meeting.dto.ResultMeetingResponse;
+import swyp.mingling.domain.meeting.dto.request.CreateMeetingRequest;
+import swyp.mingling.domain.meeting.dto.response.CreateMeetingResponse;
+import swyp.mingling.domain.meeting.dto.response.GetMidpointResponse;
+import swyp.mingling.domain.meeting.dto.response.ResultMeetingResponse;
 import swyp.mingling.global.documentation.MeetingApiDocumentation;
 import swyp.mingling.global.response.ApiResponse;
 
