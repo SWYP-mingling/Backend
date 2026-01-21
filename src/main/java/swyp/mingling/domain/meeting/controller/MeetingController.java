@@ -1,14 +1,12 @@
 package swyp.mingling.domain.meeting.controller;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import org.springframework.web.bind.annotation.*;
 import swyp.mingling.domain.meeting.dto.CreateMeetingRequest;
 import swyp.mingling.domain.meeting.dto.CreateMeetingResponse;
 import swyp.mingling.domain.meeting.dto.GetMidpointResponse;
+import swyp.mingling.domain.meeting.dto.ResultMeetingResponse;
 import swyp.mingling.global.documentation.MeetingApiDocumentation;
 import swyp.mingling.global.response.ApiResponse;
 
@@ -62,5 +60,22 @@ public class MeetingController {
 
         return ApiResponse.success(response);
     }
+
+
+    /**
+     * 모임 생성 API
+     *
+     * @return 생성된 모임 URL 응답
+     */
+    @MeetingApiDocumentation.ResultMeetingDoc
+    @GetMapping("/{meetingId}/result")
+    public ApiResponse<ResultMeetingResponse> createMeeting() {
+        // 목 데이터 응답
+        String mockUrl = "https://mingling.com/meeting/abc123def456";
+        return ApiResponse.success(new ResultMeetingResponse(mockUrl));
+    }
+
+
+
 }
 
