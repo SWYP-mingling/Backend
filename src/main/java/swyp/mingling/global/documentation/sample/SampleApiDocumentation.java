@@ -1,4 +1,4 @@
-package swyp.mingling.global.documentation;
+package swyp.mingling.global.documentation.sample;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
