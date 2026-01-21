@@ -73,6 +73,7 @@ public class MeetingController {
         // 목 데이터 응답
         String mockUrl = "https://mingling.com/meeting/abc123def456";
         return ApiResponse.success(new ResultMeetingResponse(mockUrl));
+
     }
 
 
