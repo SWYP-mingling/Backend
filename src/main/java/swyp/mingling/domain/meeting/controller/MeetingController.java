@@ -45,14 +45,12 @@ public class MeetingController {
     @GetMapping("/{meetingId}/midpoint")
     public ApiResponse<GetMidpointResponse> getMidpoint(@PathVariable("meetingId") UUID meetingId) {
 
-        // 1. 중간지점(핫플레이스) 목 데이터 생성
         List<GetMidpointResponse.MidpointDto> mockMidpoints = List.of(
                 new GetMidpointResponse.MidpointDto("합정역", 37.5484757, 126.912071, 30, "2호선 > 6호선"),
                 new GetMidpointResponse.MidpointDto("서울역", 37.554648, 126.972559, 35, "1호선 > 4호선"),
                 new GetMidpointResponse.MidpointDto("용산역", 37.529844, 126.964804, 32, "경의중앙선 > 1호선")
         );
 
-        // 2. 주변 추천 장소 목 데이터 생성 (네이버 검색 결과 가정)
         List<GetMidpointResponse.RecommendationDto> mockRecommendations = List.of(
                 new GetMidpointResponse.RecommendationDto("합정 맛집 카페", "음식점 > 카페", "서울특별시 마포구 양화로..."),
                 new GetMidpointResponse.RecommendationDto("서울역 비즈니스 호텔", "숙박 > 호텔", "서울특별시 중구 한강대로...")
