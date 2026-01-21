@@ -28,6 +28,7 @@ public class ParticipantController {
         Double mockLongitude = 127.027621;
 
         return ApiResponse.success(new UpdateDepartureResponse(request.getUserName(), request.getDepartureName(), mockLatitude, mockLongitude));
+
     }
 
 }
