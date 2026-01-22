@@ -105,7 +105,7 @@ public class MeetingApiDocumentation {
     @Retention(RetentionPolicy.RUNTIME)
     @Operation(
             summary = "중간지점 조회 API",
-            description = "참여자들의 출발지를 기준으로 중간지점(번화가) 최소 1개, 최대 3곳과 주변 추천 장소를 조회합니다."
+            description = "참여자들의 출발지를 기준으로 중간지점(번화가) 최소 1개, 최대 3곳을 조회하고 정보 출력(로그인 비로그인 정보 차이)"
     )
     @ApiResponses({
             @ApiResponse(
@@ -114,52 +114,78 @@ public class MeetingApiDocumentation {
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = swyp.mingling.global.response.ApiResponse.class),
-                            examples = @ExampleObject(
-                                    name = "SUCCESS",
+                            examples = {@ExampleObject(
+                                    name = "비로그인 참여자 (경로 미포함)",
+                                    summary = "로그인하지 않은 경우",
                                     value = """
-                {
-                  "success": true,
-                  "data": {
-                    "midpoints": [
-                      {
-                        "name": "합정역",
-                        "latitude": 37.5484757,
-                        "longitude": 126.912071,
-                        "avgTravelTime": 30,
-                        "transferPath": "버스 > 1호선 > 2호선"
-                      },
-                      {
-                        "name": "서울역",
-                        "latitude": 37.554648,
-                        "longitude": 126.972559,
-                        "avgTravelTime": 35,
-                        "transferPath": "1호선 > 4호선"
-                      },
-                      {
-                        "name": "용산역",
-                        "latitude": 37.529844,
-                        "longitude": 126.964804,
-                        "avgTravelTime": 32,
-                        "transferPath": "경의중앙선 > 1호선"
-                      }
-                    ],
-                    "recommendations": [
-                      {
-                        "title": "맛있는 식당",
-                        "category": "음식점 > 한식",
-                        "roadAddress": "서울특별서 마포구 양화로..."
-                      },
-                      {
-                        "title": "감성 카페",
-                        "category": "카페 > 디저트",
-                        "roadAddress": "서울시 마포구 독막로..."
-                      }
-                    ]
-                  },
-                  "timestamp": "2026-01-21T15:15:00"
-                }
-                """
-                            )
+                                                {
+                                                  "success": true,
+                                                  "data": {
+                                                    "midpoints": [
+                                                      {
+                                                    "name": "합정역",
+                                                    "latitude": 37.5484757,
+                                                    "longitude": 126.912071,
+                                                    "avgTravelTime": 30,
+                                                    "transferPath": null
+                                                  },
+                                                  {
+                                                    "name": "서울역",
+                                                    "latitude": 37.554648,
+                                                    "longitude": 126.972559,
+                                                    "avgTravelTime": 35,
+                                                    "transferPath": null
+                                                  },
+                                                  {
+                                                    "name": "용산역",
+                                                    "latitude": 37.529844,
+                                                    "longitude": 126.964804,
+                                                    "avgTravelTime": 32,
+                                                    "transferPath": null
+                                                  }
+                                                ]
+                                              },
+                                              "timestamp": "2026-01-21T15:15:00"
+                                            }
+                                            """
+                            ),
+                                    @ExampleObject(
+                                            name = "로그인 참여자 (경로 포함)",
+                                            summary = "로그인한 경우",
+                                            value = """
+                                                        {
+                                                          "success": true,
+                                                          "data": {
+                                                            "midpoints": [
+                                                              {
+                                                            "name": "합정역",
+                                                            "latitude": 37.5484757,
+                                                            "longitude": 126.912071,
+                                                            "avgTravelTime": 30,
+                                                            "transferPath": "버스 > 1호선 > 2호선"
+                                                          },
+                                                          {
+                                                            "name": "서울역",
+                                                            "latitude": 37.554648,
+                                                            "longitude": 126.972559,
+                                                            "avgTravelTime": 35,
+                                                            "transferPath": "1호선 > 4호선"
+                                                          },
+                                                          {
+                                                            "name": "용산역",
+                                                            "latitude": 37.529844,
+                                                            "longitude": 126.964804,
+                                                            "avgTravelTime": 32,
+                                                            "transferPath": "경의중앙선 > 1호선"
+                                                          }
+                                                        ]
+                                                      },
+                                                      "timestamp": "2026-01-21T15:15:00"
+                                                    }
+                                                    """
+                                    )
+                            }
+
                     )
             ),
             @ApiResponse(
