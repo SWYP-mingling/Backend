@@ -40,7 +40,13 @@ public class MeetingController {
      */
     @MeetingApiDocumentation.GetMidpointDoc
     @GetMapping("/{meetingId}/midpoint")
-    public ApiResponse<GetMidpointResponse> getMidpoint(@PathVariable("meetingId") UUID meetingId) {
+    public ApiResponse<GetMidpointResponse> getMidpoint(@PathVariable("meetingId") UUID meetingId,
+                                                        @RequestParam(value = "userName", required = false) String name) {
+        // TODO: 실제 로직 구현 필요
+        // 1. meetingId로 모임 존재 여부 확인
+        // 2. name + meetingId로 기존 참여자 조회(확인필요)
+        // 3-1. 참여자가 조회가 된다면: 중간 지점 이름과 위도 경도만 전달
+        // 3-2. 참여자가 null이면 : 중간 지점까지의 경로 계산 후 전달
 
         List<GetMidpointResponse.MidpointDto> mockMidpoints = List.of(
                 new GetMidpointResponse.MidpointDto("합정역", 37.5484757, 126.912071, 30, "2호선 > 6호선"),
@@ -48,12 +54,9 @@ public class MeetingController {
                 new GetMidpointResponse.MidpointDto("용산역", 37.529844, 126.964804, 32, "경의중앙선 > 1호선")
         );
 
-        List<GetMidpointResponse.RecommendationDto> mockRecommendations = List.of(
-                new GetMidpointResponse.RecommendationDto("합정 맛집 카페", "음식점 > 카페", "서울특별시 마포구 양화로..."),
-                new GetMidpointResponse.RecommendationDto("서울역 비즈니스 호텔", "숙박 > 호텔", "서울특별시 중구 한강대로...")
-        );
 
-        GetMidpointResponse response = new GetMidpointResponse(mockMidpoints, mockRecommendations);
+
+        GetMidpointResponse response = new GetMidpointResponse(mockMidpoints);
 
         return ApiResponse.success(response);
     }
