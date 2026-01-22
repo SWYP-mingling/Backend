@@ -65,7 +65,7 @@ public class MeetingController {
      */
     @MeetingApiDocumentation.ResultMeetingDoc
     @GetMapping("/{meetingId}/result")
-    public ApiResponse<ResultMeetingResponse> resultMeeting() {
+    public ApiResponse<ResultMeetingResponse> resultMeeting(@PathVariable("meetingId") UUID meetingId) {
         // 목 데이터 응답
         String mockUrl = "https://mingling.com/meeting/abc123def456";
         return ApiResponse.success(new ResultMeetingResponse(mockUrl));
