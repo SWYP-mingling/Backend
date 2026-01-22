@@ -5,10 +5,7 @@ import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import swyp.mingling.domain.meeting.dto.request.CreateMeetingRequest;
 import swyp.mingling.domain.meeting.dto.request.EnterMeetingRequest;
-import swyp.mingling.domain.meeting.dto.response.CreateMeetingResponse;
-import swyp.mingling.domain.meeting.dto.response.EnterMeetingResponse;
-import swyp.mingling.domain.meeting.dto.response.GetMidpointResponse;
-import swyp.mingling.domain.meeting.dto.response.ResultMeetingResponse;
+import swyp.mingling.domain.meeting.dto.response.*;
 import swyp.mingling.global.documentation.MeetingApiDocumentation;
 import swyp.mingling.global.response.ApiResponse;
 
@@ -70,7 +67,7 @@ public class MeetingController {
      */
     @MeetingApiDocumentation.ResultMeetingDoc
     @GetMapping("/{meetingId}/result")
-    public ApiResponse<ResultMeetingResponse> resultMeeting() {
+    public ApiResponse<ResultMeetingResponse> resultMeeting(@PathVariable("meetingId") UUID meetingId) {
         // 목 데이터 응답
         String mockUrl = "https://mingling.com/meeting/abc123def456";
         return ApiResponse.success(new ResultMeetingResponse(mockUrl));
@@ -98,6 +95,29 @@ public class MeetingController {
         // 목 데이터 응답
         String mockToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkhvbmcgR2lsZG9uZyIsImlhdCI6MTUxNjIzOTAyMn0.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
         return ApiResponse.success(new EnterMeetingResponse(mockToken));
+    }
+
+
+    /**
+     * 장소 추천 API
+     *
+     * @param meetingId 모임 UUID
+     * @param midPlace  중간 지점 장소 (query param)
+     * @param category  모임 목적 (query param)
+     * @return 장소 추천 장소들 목록
+     */
+    @MeetingApiDocumentation.GetRecommendDoc
+    @GetMapping("/{meetingId}/recommend")
+    public ApiResponse<List<RecommendResponse>> getRecommend(@PathVariable("meetingId") UUID meetingId,
+                                                             @RequestParam String midPlace,
+                                                             @RequestParam String category) {
+
+        List<RecommendResponse> recommendResponses = List.of(
+                new RecommendResponse("카페1", "서울 동작구 동작대로..."),
+                new RecommendResponse("카페2", "서울 서초구 방배천로...")
+        );
+
+        return ApiResponse.success(recommendResponses);
     }
 }
 

@@ -374,5 +374,78 @@ public class MeetingApiDocumentation {
             )
     })
     public @interface EnterMeetingDoc {}
+
+
+
+    /**
+     * 장소 추천 API 문서
+     */
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.RUNTIME)
+    @Operation(
+            summary = "장소 추천 API",
+            description = "주변 추천 장소를 조회합니다."
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "장소 추천 조회 성공",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = swyp.mingling.global.response.ApiResponse.class),
+                            examples = @ExampleObject(
+                                    name = "SUCCESS",
+                                    value = """
+                {
+                  "success": true,
+                  "data": [
+                      {
+                        "title": "카페1",
+                        "roadAddress": "서울 동작구 동작대로..."
+                      },
+                      {
+                        "title": "카페2",
+                        "roadAddress": "서울 서초구 방배천로..."
+                      }
+                  ],
+                  "timestamp": "2026-01-22T16:00:00"
+                }
+                """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "존재하지 않는 모임",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject("""
+                {
+                  "success": false,
+                  "code": "NOT_FOUND",
+                  "message": "모임을 찾을 수 없습니다.",
+                  "timestamp": "2026-01-22T16:30:00"
+                }
+                """)
+                    )
+            ),
+            // INTERNAL_SERVER_ERROR
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "서버 내부 오류",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject("""
+                {
+                  "success": false,
+                  "code": "INTERNAL_SERVER_ERROR",
+                  "message": "서버 내부 오류가 발생했습니다.",
+                  "timestamp": "2026-01-22T17:00:00"
+                }
+                """)
+                    )
+            )
+    })
+    public @interface GetRecommendDoc {}
 }
 
