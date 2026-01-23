@@ -134,6 +134,8 @@ public class MeetingController {
     }
 
     /**
+     * 모임 참여 현황 조회 API
+     *
      * @param meetingId 모임 UUID
      * @return 참여현황 정보
      */
