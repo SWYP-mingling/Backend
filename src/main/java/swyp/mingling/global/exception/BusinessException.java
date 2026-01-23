@@ -25,4 +25,12 @@ public class BusinessException extends RuntimeException{
         this.errorCode = errorCode;
     }
 
+    /**
+     * 모임을 찾을 수 없는 경우 사용하는 정적 팩토리 메서드
+     *
+     * @return 모임을 찾을 수 없음 예외
+     */
+    public static BusinessException meetingNotFound() {
+        return new BusinessException(ErrorCode.MEETING_NOT_FOUND);
+    }
 }

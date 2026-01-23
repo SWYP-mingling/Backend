@@ -473,5 +473,92 @@ public class MeetingApiDocumentation {
             )
     })
     public @interface GetRecommendDoc {}
+
+    /**
+     * 모임 참여 현황 조회 API 문서
+     */
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.RUNTIME)
+    @Operation(
+        summary = "모임 참여 현황 조회 API",
+        description = "모임의 현재 참여 현황을 조회합니다. " +
+            "현재 참여자 수, 모임 마감 시간, 참여자 이름 및 출발역(위도/경도)을 반환합니다. "
+    )
+    @ApiResponses({
+        // SUCCESS
+        @ApiResponse(
+            responseCode = "200",
+            description = "모임 참여 현황 조회 성공",
+            content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = swyp.mingling.global.response.ApiResponse.class),
+                examples = @ExampleObject(
+                    name = "SUCCESS",
+                    description = "모임 참여 현황 조회 성공",
+                    value = """
+                    {
+                      "success": true,
+                      "data": {
+                        "totalParticipantCount": 10,
+                        "currentParticipantCount": 2,
+                        "deadlineAt": "2026-01-23T18:00:00",
+                        "participants": [
+                          {
+                            "userName": "김밍글",
+                            "stationName": "구로디지털단지역",
+                            "latitude": 37.485266,
+                            "longitude": 126.901401
+                          },
+                          {
+                            "userName": "이밍글",
+                            "stationName": "합정역",
+                            "latitude": 37.549556,
+                            "longitude": 126.913878
+                          }
+                        ]
+                      },
+                      "timestamp": "2026-01-23T23:00:00"
+                    }
+                    """
+                )
+            )
+        ),
+
+        // NOT_FOUND
+        @ApiResponse(
+            responseCode = "404",
+            description = "존재하지 않는 모임",
+            content = @Content(
+                mediaType = "application/json",
+                examples = @ExampleObject("""
+                {
+                  "success": false,
+                  "code": "MEETING_NOT_FOUND",
+                  "message": "모임을 찾을 수 없습니다.",
+                  "timestamp": "2026-01-23T23:00:00"
+                }
+                """)
+            )
+        ),
+
+        // INTERNAL_SERVER_ERROR
+        @ApiResponse(
+            responseCode = "500",
+            description = "서버 내부 오류",
+            content = @Content(
+                mediaType = "application/json",
+                examples = @ExampleObject("""
+                {
+                  "success": false,
+                  "code": "INTERNAL_SERVER_ERROR",
+                  "message": "서버 내부 오류가 발생했습니다.",
+                  "timestamp": "2026-01-23T23:00:00"
+                }
+                """)
+            )
+        )
+    })
+    public @interface GetMeetingStatusDoc {}
+
 }
 

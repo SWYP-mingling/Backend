@@ -2,15 +2,27 @@ package swyp.mingling.domain.meeting.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.*;
-import swyp.mingling.domain.meeting.dto.request.CreateMeetingRequest;
-import swyp.mingling.domain.meeting.dto.request.EnterMeetingRequest;
-import swyp.mingling.domain.meeting.dto.response.*;
-import swyp.mingling.global.documentation.MeetingApiDocumentation;
-import swyp.mingling.global.response.ApiResponse;
-
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import swyp.mingling.domain.meeting.dto.request.CreateMeetingRequest;
+import swyp.mingling.domain.meeting.dto.request.EnterMeetingRequest;
+import swyp.mingling.domain.meeting.dto.response.CreateMeetingResponse;
+import swyp.mingling.domain.meeting.dto.response.EnterMeetingResponse;
+import swyp.mingling.domain.meeting.dto.response.GetMeetingStatusResponse;
+import swyp.mingling.domain.meeting.dto.response.GetMidpointResponse;
+import swyp.mingling.domain.meeting.dto.response.RecommendResponse;
+import swyp.mingling.domain.meeting.dto.response.ResultMeetingResponse;
+import swyp.mingling.global.documentation.MeetingApiDocumentation;
+import swyp.mingling.global.exception.BusinessException;
+import swyp.mingling.global.response.ApiResponse;
 
 /**
  * 모임 관련 API 컨트롤러
@@ -119,6 +131,44 @@ public class MeetingController {
         );
 
         return ApiResponse.success(recommendResponses);
+    }
+
+    /**
+     * @param meetingId 모임 UUID
+     * @return 참여현황 정보
+     */
+    @MeetingApiDocumentation.GetMeetingStatusDoc
+    @GetMapping("/{meetingId}/status")
+    public ApiResponse<GetMeetingStatusResponse> getMeetingStatus(@PathVariable("meetingId") UUID meetingId) {
+
+        // TODO: 로그인 여부 확인 (토큰 있으면 참여자 식별)
+
+        // MEETING_NOT_FOUND
+        if (meetingId.toString().equals("00000000-0000-0000-0000-000000000404")) {
+            throw BusinessException.meetingNotFound();
+        }
+
+        GetMeetingStatusResponse response = GetMeetingStatusResponse.of(
+            10,
+            2,
+            LocalDateTime.now(),
+            List.of(
+                GetMeetingStatusResponse.ParticipantInfo.of(
+                    "김밍글",
+                    "구로디지털단지역",
+                    37.485266,
+                    126.901401
+                ),
+                GetMeetingStatusResponse.ParticipantInfo.of(
+                    "이밍글",
+                    "합정역",
+                    37.549556,
+                    126.913878
+                )
+            )
+        );
+
+        return ApiResponse.success(response);
     }
 }
 
