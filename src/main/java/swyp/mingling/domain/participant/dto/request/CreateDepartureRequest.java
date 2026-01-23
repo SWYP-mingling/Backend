@@ -18,7 +18,7 @@ public class CreateDepartureRequest {
     private String userName;
 
     @NotBlank
-    @Schema(description = "참여자 비밀번호", example = "Password!")
+    @Schema(description = "참여자 비밀번호", example = "Password1!")
     private String password;
 
     @NotBlank

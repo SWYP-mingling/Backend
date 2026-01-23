@@ -103,4 +103,142 @@ public class ParticipantApiDocumentation {
             )
     })
     public @interface UpdateDepartDoc {}
+
+    /**
+     * 출발역 등록 API 문서
+     */
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.RUNTIME)
+    @Operation(
+        summary = "출발역 등록 API",
+        description = "모임 참여자의 출발역 정보를 등록합니다."
+    )
+    @ApiResponses({
+        // SUCCESS
+        @ApiResponse(
+            responseCode = "200",
+            description = "출발역 등록 성공",
+            content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = swyp.mingling.global.response.ApiResponse.class),
+                examples = @ExampleObject(
+                    name = "SUCCESS",
+                    value = """
+                {
+                  "success": true,
+                  "data": {
+                    "userName": "김밍글",
+                    "stationName": "구로디지털단지역",
+                    "latitude": 37.485266,
+                    "longitude": 126.901401
+                  },
+                  "timestamp": "2026-01-24T04:00:00"
+                }
+                """
+                )
+            )
+        ),
+
+        // STATION_NOT_FOUND
+        @ApiResponse(
+            responseCode = "400",
+            description = "유효하지 않은 역 이름",
+            content = @Content(
+                mediaType = "application/json",
+                examples = @ExampleObject(
+                    name = "STATION_NOT_FOUND",
+                    value = """
+                {
+                  "success": false,
+                  "code": "STATION_NOT_FOUND",
+                  "message": "유효하지 않은 역 이름입니다.",
+                  "timestamp": "2026-01-24T04:00:00"
+                }
+                """
+                )
+            )
+        ),
+
+        // USER_UNAUTHORIZED
+        @ApiResponse(
+            responseCode = "401",
+            description = "사용자 인증 실패",
+            content = @Content(
+                mediaType = "application/json",
+                examples = @ExampleObject(
+                    name = "USER_UNAUTHORIZED",
+                    value = """
+                {
+                  "success": false,
+                  "code": "USER_UNAUTHORIZED",
+                  "message": "사용자 인증에 실패했습니다.",
+                  "timestamp": "2026-01-24T04:00:00"
+                }
+                """
+                )
+            )
+        ),
+
+        // MEETING_NOT_FOUND
+        @ApiResponse(
+            responseCode = "404",
+            description = "존재하지 않는 모임",
+            content = @Content(
+                mediaType = "application/json",
+                examples = @ExampleObject(
+                    name = "MEETING_NOT_FOUND",
+                    value = """
+                {
+                  "success": false,
+                  "code": "MEETING_NOT_FOUND",
+                  "message": "모임을 찾을 수 없습니다.",
+                  "timestamp": "2026-01-24T04:00:00"
+                }
+                """
+                )
+            )
+        ),
+
+        // MEETING_CLOSED
+        @ApiResponse(
+            responseCode = "409",
+            description = "마감된 모임",
+            content = @Content(
+                mediaType = "application/json",
+                examples = @ExampleObject(
+                    name = "MEETING_CLOSED",
+                    value = """
+                {
+                  "success": false,
+                  "code": "MEETING_CLOSED",
+                  "message": "이미 마감된 모임입니다.",
+                  "timestamp": "2026-01-24T04:00:00"
+                }
+                """
+                )
+            )
+        ),
+
+        // INTERNAL_SERVER_ERROR
+        @ApiResponse(
+            responseCode = "500",
+            description = "서버 내부 오류",
+            content = @Content(
+                mediaType = "application/json",
+                examples = @ExampleObject(
+                    name = "INTERNAL_SERVER_ERROR",
+                    value = """
+                {
+                  "success": false,
+                  "code": "INTERNAL_SERVER_ERROR",
+                  "message": "서버 내부 오류가 발생했습니다.",
+                  "timestamp": "2026-01-24T04:00:00"
+                }
+                """
+                )
+            )
+        )
+    })
+    public @interface CreateDepartureDoc {}
+
 }

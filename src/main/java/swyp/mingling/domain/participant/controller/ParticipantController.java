@@ -25,6 +25,7 @@ public class ParticipantController {
      * @param request 출발역 등록 요청 DTO
      * @return 출발역 등록 응답 DTO
      */
+    @ParticipantApiDocumentation.CreateDepartureDoc
     @PostMapping("/{meetingId}/departure")
     public ApiResponse<CreateDepartureResponse> createDeparture(
         @PathVariable("meetingId") UUID meetingId,
