@@ -35,6 +35,13 @@ public enum ErrorCode {
     CAPACITY_EXCEEDED(HttpStatus.BAD_REQUEST, "CAPACITY_EXCEEDED", "모임 인원은 최대 30명까지 가능합니다."),
     INVALID_DEADLINE(HttpStatus.BAD_REQUEST, "INVALID_DEADLINE", "마감 시간은 현재 시간 이후여야 합니다."),
     MEETING_NOT_FOUND(HttpStatus.NOT_FOUND, "MEETING_NOT_FOUND", "모임을 찾을 수 없습니다."),
+    MEETING_CLOSED(HttpStatus.CONFLICT, "MEETING_CLOSED", "이미 마감된 모임입니다."),
+
+    // 사용자 관련 에러
+    USER_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "USER_UNAUTHORIZED", "사용자 인증에 실패했습니다."),
+
+    // 지하철 관련 에러
+    STATION_NOT_FOUND(HttpStatus.BAD_REQUEST, "STATION_NOT_FOUND", "유효하지 않은 역 이름입니다.")
     ;
 
     /**

@@ -33,4 +33,31 @@ public class BusinessException extends RuntimeException{
     public static BusinessException meetingNotFound() {
         return new BusinessException(ErrorCode.MEETING_NOT_FOUND);
     }
+
+    /**
+     * 사용자 인증에 실패한 경우 사용하는 정적 팩토리 메서드
+     *
+     * @return 사용자 인증 실패 예외
+     */
+    public static BusinessException userUnauthorized() {
+        return new BusinessException(ErrorCode.USER_UNAUTHORIZED);
+    }
+
+    /**
+     * 존재하지 않는 지하철역이 입력된 경우 사용하는 정적 팩토리 메서드
+     *
+     * @return 지하철역을 찾을 수 없음 예외
+     */
+    public static BusinessException stationNotFound() {
+        return new BusinessException(ErrorCode.STATION_NOT_FOUND);
+    }
+
+    /**
+     * 이미 마감된 모임인 경우 사용하는 정적 팩토리 메서드
+     *
+     * @return 마감된 모임 예외
+     */
+    public static BusinessException meetingClosed() {
+        return new BusinessException(ErrorCode.MEETING_CLOSED);
+    }
 }
