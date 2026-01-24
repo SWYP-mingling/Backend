@@ -1,4 +1,4 @@
-package swyp.mingling.domain.participant.dto;
+package swyp.mingling.domain.participant.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
