@@ -20,18 +20,17 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew clean build -x test
 
-      # 2. NCR 로그인 및 푸시 (수정됨)
+      # 2. NCR 로그인 및 푸시
       - name: Login to NCR
         run: |
           docker login ${{ secrets.NCR_ENDPOINT }} -u ${{ secrets.NCP_ACCESS_KEY }} -p ${{ secrets.NCP_SECRET_KEY }}
 
       - name: Build and Push to NCR
         run: |
-          # 태그 형식: [레지스트리주소]/[이미지이름]:[태그]
           docker build -t ${{ secrets.NCR_ENDPOINT }}/mingling-app:latest .
           docker push ${{ secrets.NCR_ENDPOINT }}/mingling-app:latest
 
-      # 3. NCP 서버 접속 및 앱 교체 (수정됨)
+      # 3. NCP 서버 접속 및 앱 교체
       - name: SSH Deploy & Health Check
         uses: appleboy/ssh-action@master
         with:
@@ -46,7 +45,6 @@ jobs:
             
             docker pull ${{ secrets.NCR_ENDPOINT }}/mingling-app:latest
             
-            # -e 옵션으로 GitHub Secrets의 값을 Spring Boot 환경변수로 전달
             docker run -d --name spring-app \
               -p 8080:8080 \
               -e SPRING_PROFILES_ACTIVE=prod \
@@ -55,6 +53,20 @@ jobs:
               -e SPRING_DATASOURCE_PASSWORD="${{ secrets.DB_PASSWORD }}" \
               -e SPRING_DATA_REDIS_HOST="${{ secrets.REDIS_HOST }}" \
               ${{ secrets.NCR_ENDPOINT }}/mingling-app:latest
+            
+            echo "Health check starting..."
+            for i in {1..20}; do
+              STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/actuator/health)
+            
+              if [ $STATUS -eq 200 ]; then
+                echo "Health check success! (Status: $STATUS)"
+                docker image prune -f
+                exit 0
+              fi
+            
+              echo "Waiting for app to start... (Status: $STATUS, Retry: $i/20)"
+              sleep 5
+            done
             
             echo "Health check failed! Check logs."
             docker logs spring-app

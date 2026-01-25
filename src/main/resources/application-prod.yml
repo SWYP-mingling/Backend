@@ -7,7 +7,6 @@ spring:
       ddl-auto: none
     show-sql: false
 
-  # 외부 환경변수로부터 값을 주입받음
   datasource:
     url: ${SPRING_DATASOURCE_URL}
     username: ${SPRING_DATASOURCE_USERNAME}
