@@ -105,7 +105,7 @@ public class MeetingApiDocumentation {
     @Retention(RetentionPolicy.RUNTIME)
     @Operation(
             summary = "중간지점 조회 API",
-            description = "참여자들의 출발지를 기준으로 중간지점(번화가) 최소 1개, 최대 3곳을 조회하고 정보 출력(로그인 비로그인 정보 차이)"
+            description = "참여자들의 출발지를 기준으로 중간지점(번화가) 최소 1개, 최대 3곳을 조회하고 정보 출력"
     )
     @ApiResponses({
             @ApiResponse(
@@ -114,44 +114,9 @@ public class MeetingApiDocumentation {
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = swyp.mingling.global.response.ApiResponse.class),
-                            examples = {@ExampleObject(
-                                    name = "비로그인 참여자 (경로 미포함)",
-                                    summary = "로그인하지 않은 경우",
-                                    value = """
-                                                {
-                                                  "success": true,
-                                                  "data": {
-                                                    "midpoints": [
-                                                      {
-                                                    "name": "합정역",
-                                                    "latitude": 37.5484757,
-                                                    "longitude": 126.912071,
-                                                    "avgTravelTime": 30,
-                                                    "transferPath": null
-                                                  },
-                                                  {
-                                                    "name": "서울역",
-                                                    "latitude": 37.554648,
-                                                    "longitude": 126.972559,
-                                                    "avgTravelTime": 35,
-                                                    "transferPath": null
-                                                  },
-                                                  {
-                                                    "name": "용산역",
-                                                    "latitude": 37.529844,
-                                                    "longitude": 126.964804,
-                                                    "avgTravelTime": 32,
-                                                    "transferPath": null
-                                                  }
-                                                ]
-                                              },
-                                              "timestamp": "2026-01-21T15:15:00"
-                                            }
-                                            """
-                            ),
+                            examples =
                                     @ExampleObject(
-                                            name = "로그인 참여자 (경로 포함)",
-                                            summary = "로그인한 경우",
+                                            name = "응답",
                                             value = """
                                                         {
                                                           "success": true,
@@ -184,7 +149,6 @@ public class MeetingApiDocumentation {
                                                     }
                                                     """
                                     )
-                            }
 
                     )
             ),

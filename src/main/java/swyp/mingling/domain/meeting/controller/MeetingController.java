@@ -1,28 +1,19 @@
 package swyp.mingling.domain.meeting.controller;
 
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import swyp.mingling.domain.meeting.dto.request.CreateMeetingRequest;
 import swyp.mingling.domain.meeting.dto.request.EnterMeetingRequest;
-import swyp.mingling.domain.meeting.dto.response.CreateMeetingResponse;
-import swyp.mingling.domain.meeting.dto.response.EnterMeetingResponse;
-import swyp.mingling.domain.meeting.dto.response.GetMeetingStatusResponse;
-import swyp.mingling.domain.meeting.dto.response.GetMidpointResponse;
-import swyp.mingling.domain.meeting.dto.response.RecommendResponse;
-import swyp.mingling.domain.meeting.dto.response.ResultMeetingResponse;
+import swyp.mingling.domain.meeting.dto.response.*;
 import swyp.mingling.global.documentation.MeetingApiDocumentation;
 import swyp.mingling.global.exception.BusinessException;
 import swyp.mingling.global.response.ApiResponse;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * 모임 관련 API 컨트롤러
@@ -55,12 +46,12 @@ public class MeetingController {
     @MeetingApiDocumentation.GetMidpointDoc
     @GetMapping("/{meetingId}/midpoint")
     public ApiResponse<GetMidpointResponse> getMidpoint(@PathVariable("meetingId") UUID meetingId,
-                                                        @RequestParam(value = "userName", required = false) String name) {
+                                                        @Parameter(hidden = true)
+                                                        @SessionAttribute(value = "userName") String userName) {
         // TODO: 실제 로직 구현 필요
         // 1. meetingId로 모임 존재 여부 확인
         // 2. name + meetingId로 기존 참여자 조회(확인필요)
-        // 3-1. 참여자가 조회가 된다면: 중간 지점 이름과 위도 경도만 전달
-        // 3-2. 참여자가 null이면 : 중간 지점까지의 경로 계산 후 전달
+        // 3. 중간 지점 이름과 위도 경도, 로그인한 참여자의 출발 위치부터 중간지점 까지의 경로 전달
 
         List<GetMidpointResponse.MidpointDto> mockMidpoints = List.of(
                 new GetMidpointResponse.MidpointDto("합정역", 37.5484757, 126.912071, 30, "2호선 > 6호선"),
