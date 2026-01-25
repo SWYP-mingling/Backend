@@ -1,5 +1,6 @@
 package swyp.mingling.domain.participant.controller;
 
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
@@ -69,12 +70,15 @@ public class ParticipantController {
      */
     @ParticipantApiDocumentation.UpdateDepartDoc
     @PatchMapping("/{meetingId}/departure")
-    public ApiResponse<UpdateDepartureResponse> updateDeparture(@PathVariable("meetingId") UUID meetingId,  @Valid @RequestBody UpdateDepartureRequest request) {
+    public ApiResponse<UpdateDepartureResponse> updateDeparture(@PathVariable("meetingId") UUID meetingId,
+                                                                @Parameter(hidden = true)
+                                                                @SessionAttribute(name = "userName", required = false) String userName,
+                                                                @Valid @RequestBody UpdateDepartureRequest request) {
 
         Double mockLatitude = 37.497942;
         Double mockLongitude = 127.027621;
 
-        return ApiResponse.success(new UpdateDepartureResponse(request.getUserName(), request.getDepartureName(), mockLatitude, mockLongitude));
+        return ApiResponse.success(new UpdateDepartureResponse(userName, request.getDepartureName(), mockLatitude, mockLongitude));
 
     }
 
