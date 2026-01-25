@@ -8,9 +8,6 @@ import lombok.Getter;
 @AllArgsConstructor
 public class UpdateDepartureRequest {
 
-    @Schema(description = "모임 UUID", example = "합정역")
+    @Schema(description = "중간지점 이름", example = "합정역")
     private String departureName;
-
-    @Schema(description = "사용자 이름", example = "홍길동")
-    private String userName;
 }
