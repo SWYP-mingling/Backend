@@ -2,7 +2,7 @@ name: Production Deploy to NCP
 
 on:
   push:
-    branches: [ "feature/SW-38-CI-CD-test" ]
+    branches: [ "main" ]
 
 jobs:
   deploy:
