@@ -32,9 +32,8 @@ public class MeetingController {
     @MeetingApiDocumentation.CreateMeetingDoc
     @PostMapping
     public ApiResponse<CreateMeetingResponse> createMeeting(@Valid @RequestBody CreateMeetingRequest request) {
-        // 목 데이터 응답
-        String mockUrl = "https://mingling.com/meeting/abc123def456";
-        return ApiResponse.success(new CreateMeetingResponse(mockUrl));
+
+        return ApiResponse.success(new CreateMeetingResponse());
     }
 
     /**
