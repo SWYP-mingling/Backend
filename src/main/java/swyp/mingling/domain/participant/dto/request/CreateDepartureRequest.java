@@ -15,20 +15,10 @@ public class CreateDepartureRequest {
 
     @NotBlank
     @Schema(description = "참여자 이름", example = "김밍글")
-    private String userName;
-
-    @NotBlank
-    @Schema(description = "참여자 비밀번호", example = "Password1!")
-    private String password;
+    private String nickname;
 
     @NotBlank
     @Schema(description = "출발역 이름", example = "구로디지털단지역")
-    private String stationName;
-
-    @Schema(description = "위도", example = "37.485266")
-    private Double latitude;
-
-    @Schema(description = "경도", example = "126.901401")
-    private Double longitude;
+    private String departure;
 
 }
