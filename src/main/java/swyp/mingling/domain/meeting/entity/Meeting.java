@@ -52,9 +52,6 @@ public class Meeting extends BaseTimeEntity {
     @Column(name = "deadline", nullable = false)
     private LocalDateTime deadline;
 
-    @Column(name = "invite_url", nullable = false, length = 255)
-    private String inviteUrl;
-
     @Column(name = "status", nullable = false, length = 20)
     private String status;
 
@@ -72,7 +69,6 @@ public class Meeting extends BaseTimeEntity {
         this.name = name;
         this.count = count;
         this.deadline = deadline;
-        this.inviteUrl = inviteUrl;
         this.status = status;
         this.isDeleted = false;
     }
@@ -110,13 +106,6 @@ public class Meeting extends BaseTimeEntity {
      */
     public void updateDeadline(LocalDateTime deadline) {
         this.deadline = deadline;
-    }
-
-    /**
-     * 초대 URL 수정
-     */
-    public void updateInviteUrl(String inviteUrl) {
-        this.inviteUrl = inviteUrl;
     }
 
     /**
