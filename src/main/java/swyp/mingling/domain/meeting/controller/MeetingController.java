@@ -169,5 +169,17 @@ public class MeetingController {
 
         return ApiResponse.success(response);
     }
+
+    public int calculateSomething(int a, int b) {
+        int result = 0;
+
+        if (a > 0) {
+            result = a + b;
+        } else {
+            result = b;
+        }
+
+        return result;
+    }
 }
 
