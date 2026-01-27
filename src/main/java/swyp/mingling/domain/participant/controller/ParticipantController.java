@@ -34,9 +34,10 @@ public class ParticipantController {
     @PostMapping("/{meetingId}/departure")
     public ApiResponse<CreateDepartureResponse> createDeparture(
         @PathVariable("meetingId") UUID meetingId,
+        @SessionAttribute(name = "nickname", required = true) String nickname,
         @Valid @RequestBody CreateDepartureRequest request) {
 
-        CreateDepartureResponse response = createDepartureUseCase.execute(meetingId, request);
+        CreateDepartureResponse response = createDepartureUseCase.execute(meetingId, nickname, request);
 
         return ApiResponse.success(response);
     }
