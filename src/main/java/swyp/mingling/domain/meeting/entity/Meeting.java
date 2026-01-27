@@ -20,6 +20,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.JdbcTypeCode;
 import swyp.mingling.domain.participant.entity.Participant;
 import swyp.mingling.global.entity.BaseTimeEntity;
 
@@ -32,7 +33,8 @@ public class Meeting extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id", columnDefinition = "BINARY(16)", nullable = false)
+    @JdbcTypeCode(java.sql.Types.VARCHAR)
+    @Column(name = "id", columnDefinition = "VARCHAR(36)", nullable = false)
     private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY)
