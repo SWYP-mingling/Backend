@@ -8,6 +8,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -24,6 +26,10 @@ import org.hibernate.annotations.JdbcTypeCode;
 import swyp.mingling.domain.participant.entity.Participant;
 import swyp.mingling.global.entity.BaseTimeEntity;
 
+/**
+ * 모임 엔티티
+ * Schema: meeting
+ */
 @Entity
 @Table(name = "meeting")
 @Getter
@@ -41,8 +47,16 @@ public class Meeting extends BaseTimeEntity {
     @JoinColumn(name = "purpose_id", nullable = false)
     private MeetingPurpose purpose;
 
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinTable(
+            name = "meeting_purpose_mapping",
+            joinColumns = @JoinColumn(name = "meeting_id"),
+            inverseJoinColumns = @JoinColumn(name = "purpose_id")
+    )
+    private List<MeetingPurpose> purposes = new ArrayList<>();
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "hot_place_id", nullable = false)
+    @JoinColumn(name = "hot_place_id", nullable = true)
     private HotPlace hotPlace;
 
     @Column(name = "name", nullable = false, length = 100)

@@ -18,6 +18,7 @@ import swyp.mingling.global.entity.BaseTimeEntity;
 
 /**
  * 참여자 엔티티
+ * Schema: participant
  */
 @Entity
 @Table(name = "participant")
