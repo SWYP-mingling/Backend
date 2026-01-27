@@ -4,4 +4,3 @@ reviews:
     base_branches:
       - "main"
       - "develop"
-      - "fix/SW-52-coderabbit-config"
