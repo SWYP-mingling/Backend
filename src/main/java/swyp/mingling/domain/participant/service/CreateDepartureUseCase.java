@@ -3,6 +3,7 @@ package swyp.mingling.domain.participant.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import swyp.mingling.domain.meeting.entity.Meeting;
 import swyp.mingling.domain.meeting.repository.MeetingRepository;
 import swyp.mingling.domain.participant.dto.StationCoordinate;
 import swyp.mingling.domain.participant.dto.request.CreateDepartureRequest;
@@ -24,16 +25,14 @@ public class CreateDepartureUseCase {
     @Transactional
     public CreateDepartureResponse execute(UUID meetingId, String nickname, CreateDepartureRequest request) {
 
-//        // MEETING_NOT_FOUND
-//        Meeting meeting = meetingRepository.findById(meetingId)
-//                .orElseThrow(BusinessException::meetingNotFound);
-//
-//        // MEETING_CLOSED
-//        if (meeting.getStatus().equals("closed")) {
-//            throw BusinessException.meetingClosed();
-//        }
+        // MEETING_NOT_FOUND
+        Meeting meeting = meetingRepository.findById(meetingId)
+                .orElseThrow(BusinessException::meetingNotFound);
 
-        //닉네임 검증
+        // MEETING_CLOSED
+        if (meeting.getStatus().equals("closed")) {
+            throw BusinessException.meetingClosed();
+        }
 
         //지하철 역 위경도 추출
         StationCoordinate coordinate = findStationCoordinateUseCase.excute(request.getDeparture());
