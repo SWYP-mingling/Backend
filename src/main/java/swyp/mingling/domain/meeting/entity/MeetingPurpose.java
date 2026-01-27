@@ -6,10 +6,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
-
 /**
  * 모임 목적 엔티티
+ * Schema: meeting_purpose
  */
 @Entity
 @Table(name = "meeting_purpose")
@@ -26,12 +25,12 @@ public class MeetingPurpose {
     private String name;
 
     @Column(name = "is_active", nullable = false)
-    private Boolean isActive;
+    private Boolean isActive = true;
 
     @Builder
     public MeetingPurpose(String name, Boolean isActive) {
         this.name = name;
-        this.isActive = isActive;
+        this.isActive = isActive != null ? isActive : true;
     }
 
     /**

@@ -7,8 +7,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
+/**
+ * 핫플레이스 엔티티
+ * Schema: hot_place
+ */
 @Entity
 @Table(name = "hot_place")
 @Getter
