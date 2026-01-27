@@ -13,10 +13,10 @@ import lombok.Getter;
 public class CreateDepartureResponse {
 
     @Schema(description = "참여자 이름", example = "김밍글")
-    private String userName;
+    private String nickname;
 
     @Schema(description = "출발역 이름", example = "구로디지털단지역")
-    private String stationName;
+    private String departure;
 
     @Schema(description = "위도", example = "37.485266")
     private Double latitude;
@@ -28,11 +28,11 @@ public class CreateDepartureResponse {
      * 정적 팩토리 메서드
      */
     public static CreateDepartureResponse of(
-        String userName,
-        String stationName,
+        String nickname,
+        String departure,
         Double latitude,
         Double longitude
     ) {
-        return new CreateDepartureResponse(userName, stationName, latitude, longitude);
+        return new CreateDepartureResponse(nickname, departure, latitude, longitude);
     }
 }
