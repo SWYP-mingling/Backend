@@ -16,9 +16,9 @@ import java.util.UUID;
 public class HotPlace {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "hot_place_id", columnDefinition = "BINARY(16)", nullable = false)
-    private UUID hotPlaceId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "hot_place_id", nullable = false)
+    private Integer hotPlaceId;
 
     @Column(name = "name", nullable = false, length = 50)
     private String name;

@@ -35,10 +35,10 @@ spring:
       namespace: spring:session
     timeout: 30m
 
-    data:
-      redis:
-        host: ${LOCAL_REDIS_HOST}
-        port: ${LOCAL_REDIS_PORT}
+  data:
+    redis:
+      host: ${LOCAL_REDIS_HOST}
+      port: ${LOCAL_REDIS_PORT}
 
 springdoc:
   swagger-ui:

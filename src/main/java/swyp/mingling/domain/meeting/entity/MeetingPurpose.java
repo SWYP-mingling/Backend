@@ -18,9 +18,9 @@ import java.util.UUID;
 public class MeetingPurpose {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "purpose_id", columnDefinition = "BINARY(16)", nullable = false)
-    private UUID purposeId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "purpose_id", nullable = false)
+    private Integer purposeId;
 
     @Column(name = "name", nullable = false, length = 30)
     private String name;
