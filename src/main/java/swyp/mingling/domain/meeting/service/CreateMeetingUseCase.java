@@ -12,11 +12,8 @@ import swyp.mingling.domain.meeting.repository.MeetingPurposeRepository;
 import swyp.mingling.domain.meeting.repository.MeetingRepository;
 import swyp.mingling.global.exception.BusinessException;
 import swyp.mingling.global.exception.ErrorCode;
-import swyp.mingling.global.exception.ValidationErrorException;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -33,30 +30,15 @@ public class CreateMeetingUseCase {
      * @return 생성된 모임 URL
      */
     public CreateMeetingResponse createMeeting(CreateMeetingRequest request) {
-        // 1. 우선순위 순서대로 검증 (첫 번째 에러만 반환)
-        Map<String, String> errors = new HashMap<>();
-
-        // 우선순위 1: 마감 기한 검증 (현재 시간 이후여야 함)
-        if (request.getDeadline().isBefore(java.time.LocalDateTime.now())) {
-            errors.put("deadline", ErrorCode.INVALID_DEADLINE.getMessage());
-            throw new ValidationErrorException(errors);
-        }
-
-        // 우선순위 2: 정원 검증 (최소 2명 이상)
-        if (request.getCapacity() < 2) {
-            errors.put("capacity", ErrorCode.INVALID_CAPACITY.getMessage());
-            throw new ValidationErrorException(errors);
-        }
-
-        // 우선순위 3: 목적명 리스트로 MeetingPurpose 엔티티 조회
+        // 1. 목적명 리스트로 MeetingPurpose 엔티티 조회
         List<MeetingPurpose> purposes = meetingPurposeRepository.findByNameIn(request.getPurposes());
 
         if (purposes.size() != request.getPurposes().size()) {
-            errors.put("purposes", ErrorCode.PURPOSE_NOT_FOUND.getMessage());
-            throw new ValidationErrorException(errors);
+            // 정의되지 않은 목적명이 포함된 경우 BusinessException 발생
+            throw new BusinessException(ErrorCode.PURPOSE_NOT_FOUND);
         }
 
-        // 4. Meeting 엔티티 생성
+        // 2. Meeting 엔티티 생성
         Meeting meeting = Meeting.builder()
                 .name(request.getMeetingName())
                 .hotPlace(null)
@@ -65,10 +47,10 @@ public class CreateMeetingUseCase {
                 .status("ACTIVE")
                 .build();
 
-        // 5. Meeting 먼저 저장 (ID 생성)
+        // 3. Meeting 먼저 저장 (ID 생성)
         Meeting savedMeeting = meetingRepository.save(meeting);
 
-        // 6. 여러 개의 목적을 매핑 테이블에 저장
+        // 4. 여러 개의 목적을 매핑 테이블에 저장
         for (MeetingPurpose purpose : purposes) {
             MeetingPurposeMapping mapping = MeetingPurposeMapping.builder()
                     .meeting(savedMeeting)
@@ -77,7 +59,7 @@ public class CreateMeetingUseCase {
             savedMeeting.getPurposeMappings().add(mapping);
         }
 
-        // 7. 모임 URL 반환
+        // 5. 모임 URL 반환
         String meetingUrl = "https://mingling.com/meeting/" + savedMeeting.getId();
         String meetingId = savedMeeting.getId().toString();
 

@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
@@ -18,7 +19,28 @@ public class MeetingApiDocumentation {
     @Retention(RetentionPolicy.RUNTIME)
     @Operation(
             summary = "모임 생성 API",
-            description = "새로운 모임을 생성하고 모임 URL을 반환합니다."
+            description = "새로운 모임을 생성하고 모임 URL을 반환합니다. 사용자당 여러 개의 모임 목적을 지정할 수 있습니다.",
+            requestBody = @RequestBody(
+                    description = "모임 생성 요청 정보",
+                    required = true,
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = swyp.mingling.domain.meeting.dto.request.CreateMeetingRequest.class),
+                            examples = @ExampleObject(
+                                    name = "모임 생성 요청 예시",
+                                    description = "여러 개의 모임 목적을 지정한 모임 생성 요청",
+                                    value = """
+                                    {
+                                      "meetingName": "신년회",
+                                      "purposes": ["친목", "회식", "스터디"],
+                                      "purposeCount": 3,
+                                      "capacity": 10,
+                                      "deadline": "2026-01-30T23:59:59"
+                                    }
+                                    """
+                            )
+                    )
+            )
     )
     @ApiResponses({
             // SUCCESS
@@ -64,13 +86,37 @@ public class MeetingApiDocumentation {
                         """
                                     ),
                                     @ExampleObject(
-                                            name = "VALIDATION_ERROR",
-                                            description = "유효성 검사 실패",
+                                            name = "VALIDATION_ERROR_NAME",
+                                            description = "모임명 누락",
                                             value = """
                         {
                           "success": false,
                           "code": "VALIDATION_ERROR",
                           "message": "모임명은 필수입니다.",
+                          "timestamp": "2026-01-19T21:30:00"
+                        }
+                        """
+                                    ),
+                                    @ExampleObject(
+                                            name = "VALIDATION_ERROR_PURPOSES",
+                                            description = "모임 목적 리스트 누락",
+                                            value = """
+                        {
+                          "success": false,
+                          "code": "VALIDATION_ERROR",
+                          "message": "모임 목적 리스트는 필수입니다.",
+                          "timestamp": "2026-01-19T21:30:00"
+                        }
+                        """
+                                    ),
+                                    @ExampleObject(
+                                            name = "VALIDATION_ERROR_PURPOSE_COUNT",
+                                            description = "모임 목적 개수 누락",
+                                            value = """
+                        {
+                          "success": false,
+                          "code": "VALIDATION_ERROR",
+                          "message": "모임 목적 개수는 필수입니다.",
                           "timestamp": "2026-01-19T21:30:00"
                         }
                         """
