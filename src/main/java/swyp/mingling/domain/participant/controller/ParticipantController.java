@@ -21,10 +21,8 @@ import swyp.mingling.global.response.ApiResponse;
 import java.util.UUID;
 
 @Tag(name = "참여자 API", description = "참여자 출발자 입력 및 관리 API")
-@RestController
 @RequiredArgsConstructor
 @RequestMapping("/participant")
-@RequiredArgsConstructor
 public class ParticipantController {
 
     private final EnterMeetingUseCase enterMeetingUseCase;
