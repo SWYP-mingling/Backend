@@ -99,7 +99,7 @@ public class ParticipantController {
      * @param request   입장 요청 DTO (이름, 비밀번호)
      * @return JWT 토큰
      */
-    @MeetingApiDocumentation.EnterMeetingDoc
+    @ParticipantApiDocumentation.EnterMeetingDoc
     @PostMapping("/{meetingId}/enter")
     public ApiResponse<Object> enterMeeting(
             @PathVariable("meetingId") UUID meetingId,
