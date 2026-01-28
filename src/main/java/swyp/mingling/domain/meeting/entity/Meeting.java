@@ -8,8 +8,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -44,20 +42,11 @@ public class Meeting extends BaseTimeEntity {
     private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "purpose_id", nullable = false)
-    private MeetingPurpose purpose;
-
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinTable(
-            name = "meeting_purpose_mapping",
-            joinColumns = @JoinColumn(name = "meeting_id"),
-            inverseJoinColumns = @JoinColumn(name = "purpose_id")
-    )
-    private List<MeetingPurpose> purposes = new ArrayList<>();
-
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hot_place_id", nullable = true)
     private HotPlace hotPlace;
+
+    @OneToMany(mappedBy = "meeting", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    private List<MeetingPurposeMapping> purposeMappings = new ArrayList<>();
 
     @Column(name = "name", nullable = false, length = 100)
     private String name;
@@ -80,7 +69,6 @@ public class Meeting extends BaseTimeEntity {
     @Builder
     public Meeting(MeetingPurpose purpose, HotPlace hotPlace, String name, Integer count,
                    LocalDateTime deadline, String inviteUrl, String status) {
-        this.purpose = purpose;
         this.hotPlace = hotPlace;
         this.name = name;
         this.count = count;
@@ -94,13 +82,6 @@ public class Meeting extends BaseTimeEntity {
      */
     public void updateName(String name) {
         this.name = name;
-    }
-
-    /**
-     * 모임 목적 수정
-     */
-    public void updatePurpose(MeetingPurpose purpose) {
-        this.purpose = purpose;
     }
 
     /**
