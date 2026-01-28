@@ -94,11 +94,11 @@ public class GlobalExceptionHandler {
      * @param e 예외
      * @return 에러 응답
      */
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResponse<Void>> handleException(Exception e) {
-        log.error("Unexpected exception occurred", e);
-        return ResponseEntity
-            .status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .body(ApiResponse.error(ErrorCode.INTERNAL_SERVER_ERROR));
-    }
+//    @ExceptionHandler(Exception.class)
+//    public ResponseEntity<ApiResponse<Void>> handleException(Exception e) {
+//        log.error("Unexpected exception occurred", e);
+//        return ResponseEntity
+//            .status(HttpStatus.INTERNAL_SERVER_ERROR)
+//            .body(ApiResponse.error(ErrorCode.INTERNAL_SERVER_ERROR));
+//    }
 }

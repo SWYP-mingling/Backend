@@ -42,9 +42,9 @@ CREATE TABLE participant (
     meeting_id BINARY(16) NOT NULL,
     nickname VARCHAR(30) NOT NULL,
     password VARCHAR(255) NOT NULL,
-    departure VARCHAR(100) NOT NULL,
-    time INT NOT NULL,
-    is_deleted BOOLEAN NOT NULL DEFAULT FALSE,
+    departure VARCHAR(100) ,
+    time INT ,
+    is_deleted BOOLEAN DEFAULT FALSE,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (meeting_id) REFERENCES meeting(id)

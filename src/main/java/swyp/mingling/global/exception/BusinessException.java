@@ -60,4 +60,8 @@ public class BusinessException extends RuntimeException{
     public static BusinessException meetingClosed() {
         return new BusinessException(ErrorCode.MEETING_CLOSED);
     }
+
+    public static BusinessException meetingUser() {
+        return new BusinessException(ErrorCode.INVALID_CREDENTIALS);
+    }
 }

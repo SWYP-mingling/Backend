@@ -5,7 +5,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import swyp.mingling.domain.meeting.dto.request.CreateMeetingRequest;
-import swyp.mingling.domain.meeting.dto.request.EnterMeetingRequest;
 import swyp.mingling.domain.meeting.dto.response.*;
 import swyp.mingling.global.documentation.MeetingApiDocumentation;
 import swyp.mingling.global.exception.BusinessException;
@@ -77,31 +76,6 @@ public class MeetingController {
         String mockUrl = "https://mingling.com/meeting/abc123def456";
         return ApiResponse.success(new ResultMeetingResponse(mockUrl));
     }
-
-    /**
-     * 모임 입장하기 API
-     *
-     * @param meetingId 모임 UUID
-     * @param request   입장 요청 DTO (이름, 비밀번호)
-     * @return JWT 토큰
-     */
-    @MeetingApiDocumentation.EnterMeetingDoc
-    @PostMapping("/{meetingId}/enter")
-    public ApiResponse<EnterMeetingResponse> enterMeeting(
-            @PathVariable("meetingId") UUID meetingId,
-            @Valid @RequestBody EnterMeetingRequest request) {
-
-        // TODO: 실제 로직 구현 필요
-        // 1. meetingId로 모임 존재 여부 확인
-        // 2. name + meetingId로 기존 참여자 조회(확인필요)
-        // 3-1. 기존 참여자가 있으면: 비밀번호 검증 후 토큰 발급
-        // 3-2. 기존 참여자가 없으면: 신규 참여자 생성 후 토큰 발급
-
-        // 목 데이터 응답
-        String mockToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkhvbmcgR2lsZG9uZyIsImlhdCI6MTUxNjIzOTAyMn0.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
-        return ApiResponse.success(new EnterMeetingResponse(mockToken));
-    }
-
 
     /**
      * 장소 추천 API

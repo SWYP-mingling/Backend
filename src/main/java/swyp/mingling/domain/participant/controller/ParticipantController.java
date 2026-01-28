@@ -2,12 +2,17 @@ package swyp.mingling.domain.participant.controller;
 
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import swyp.mingling.domain.participant.dto.request.EnterMeetingRequest;
 import swyp.mingling.domain.participant.dto.request.CreateDepartureRequest;
 import swyp.mingling.domain.participant.dto.response.CreateDepartureResponse;
 import swyp.mingling.domain.participant.dto.request.UpdateDepartureRequest;
 import swyp.mingling.domain.participant.dto.response.UpdateDepartureResponse;
+import swyp.mingling.domain.participant.service.EnterMeetingUseCase;
+import swyp.mingling.global.documentation.MeetingApiDocumentation;
 import swyp.mingling.global.documentation.ParticipantApiDocumentation;
 import swyp.mingling.global.exception.BusinessException;
 import swyp.mingling.global.response.ApiResponse;
@@ -17,7 +22,10 @@ import java.util.UUID;
 @Tag(name = "참여자 API", description = "참여자 출발자 입력 및 관리 API")
 @RestController
 @RequestMapping("/participant")
+@RequiredArgsConstructor
 public class ParticipantController {
+
+    private final EnterMeetingUseCase enterMeetingUseCase;
 
     /**
      * 출발역 등록 API
@@ -82,4 +90,24 @@ public class ParticipantController {
 
     }
 
+
+    /**
+     * 모임 입장하기 API
+     *
+     * @param meetingId 모임 UUID
+     * @param request   입장 요청 DTO (이름, 비밀번호)
+     * @return JWT 토큰
+     */
+    @MeetingApiDocumentation.EnterMeetingDoc
+    @PostMapping("/{meetingId}/enter")
+    public ApiResponse<Object> enterMeeting(
+            @PathVariable("meetingId") UUID meetingId,
+            @Valid @RequestBody EnterMeetingRequest request,
+            HttpServletRequest httprequest) {
+
+        enterMeetingUseCase.execute(meetingId, request, httprequest);
+
+        return ApiResponse.success();
+
+    }
 }

@@ -39,6 +39,7 @@ public enum ErrorCode {
 
     // 사용자 관련 에러
     USER_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "USER_UNAUTHORIZED", "사용자 인증에 실패했습니다."),
+    INVALID_CREDENTIALS(HttpStatus.UNAUTHORIZED, "INVALID_CREDENTIALS", "이름이 이미 존재하거나 비밀번호가 틀렸습니다."),
 
     // 지하철 관련 에러
     STATION_NOT_FOUND(HttpStatus.BAD_REQUEST, "STATION_NOT_FOUND", "유효하지 않은 역 이름입니다.")
