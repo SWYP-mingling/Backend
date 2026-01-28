@@ -77,8 +77,7 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
                 // session 재생성
                 HttpSession newsession = request.getSession();
                 newsession.setAttribute(String.valueOf(meetingId), nickname);
-                newsession.setMaxInactiveInterval(2);
-//                newsession.setMaxInactiveInterval(60 * 60 * 24 * 7);
+                newsession.setMaxInactiveInterval(60 * 60 * 24 * 7);
 
                 return true;
 
