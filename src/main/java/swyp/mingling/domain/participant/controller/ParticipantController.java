@@ -22,6 +22,7 @@ import java.util.UUID;
 
 @Tag(name = "참여자 API", description = "참여자 출발자 입력 및 관리 API")
 @RequiredArgsConstructor
+@RestController
 @RequestMapping("/participant")
 public class ParticipantController {
 
