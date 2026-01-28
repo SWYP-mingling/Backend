@@ -1,13 +1,18 @@
 package swyp.mingling.domain.participant.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import swyp.mingling.domain.participant.dto.request.EnterMeetingRequest;
 import swyp.mingling.domain.participant.dto.request.CreateDepartureRequest;
 import swyp.mingling.domain.participant.dto.request.UpdateDepartureRequest;
 import swyp.mingling.domain.participant.dto.response.CreateDepartureResponse;
 import swyp.mingling.domain.participant.dto.response.UpdateDepartureResponse;
+import swyp.mingling.domain.participant.service.EnterMeetingUseCase;
+import swyp.mingling.global.documentation.MeetingApiDocumentation;
 import swyp.mingling.domain.participant.service.CreateDepartureUseCase;
 import swyp.mingling.domain.participant.service.UpdateDepartureUseCase;
 import swyp.mingling.global.documentation.ParticipantApiDocumentation;
@@ -19,8 +24,10 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/participant")
+@RequiredArgsConstructor
 public class ParticipantController {
 
+    private final EnterMeetingUseCase enterMeetingUseCase;
     private final CreateDepartureUseCase createDepartureUseCase;
     private final UpdateDepartureUseCase updateDepartureUseCase;
 
@@ -62,4 +69,25 @@ public class ParticipantController {
 
     }
 
+
+    /**
+     * 모임 입장하기 API
+     *
+     * @param meetingId 모임 UUID
+     * @param request   입장 요청 DTO (이름, 비밀번호)
+     * @return JWT 토큰
+     */
+    @ParticipantApiDocumentation.EnterMeetingDoc
+    @PostMapping("/{meetingId}/enter")
+    public ApiResponse<Object> enterMeeting(
+            @PathVariable("meetingId") UUID meetingId,
+            @Valid @RequestBody EnterMeetingRequest request,
+            HttpServletRequest httprequest,
+            HttpServletResponse httpresponse) {
+
+        enterMeetingUseCase.execute(meetingId, request, httprequest, httpresponse);
+
+        return ApiResponse.success();
+
+    }
 }

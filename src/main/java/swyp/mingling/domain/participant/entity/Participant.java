@@ -13,6 +13,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import swyp.mingling.domain.meeting.entity.Meeting;
 import swyp.mingling.global.entity.BaseTimeEntity;
 
@@ -24,6 +25,7 @@ import swyp.mingling.global.entity.BaseTimeEntity;
 @Table(name = "participant")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Slf4j
 public class Participant extends BaseTimeEntity {
 
     @Id
@@ -47,7 +49,7 @@ public class Participant extends BaseTimeEntity {
     @Column(name = "time")
     private Integer time;
 
-    @Column(name = "is_deleted", nullable = false)
+    @Column(name = "is_deleted")
     private Boolean isDeleted = false;
 
     @Builder
