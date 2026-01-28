@@ -3,6 +3,7 @@ package swyp.mingling.domain.participant.controller;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -103,9 +104,10 @@ public class ParticipantController {
     public ApiResponse<Object> enterMeeting(
             @PathVariable("meetingId") UUID meetingId,
             @Valid @RequestBody EnterMeetingRequest request,
-            HttpServletRequest httprequest) {
+            HttpServletRequest httprequest,
+            HttpServletResponse httpresponse) {
 
-        enterMeetingUseCase.execute(meetingId, request, httprequest);
+        enterMeetingUseCase.execute(meetingId, request, httprequest, httpresponse);
 
         return ApiResponse.success();
 

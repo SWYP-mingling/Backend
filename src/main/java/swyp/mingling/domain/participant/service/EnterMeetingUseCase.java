@@ -3,12 +3,10 @@ package swyp.mingling.domain.participant.service;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,14 +28,12 @@ public class EnterMeetingUseCase {
     private final MeetingRepository meetingRepository;
     private final ParticipantRepository participantRepository;
 
-    @Autowired
-    private StringRedisTemplate redisTemplate;
-
 
     @Transactional
     public void execute(UUID meetingId,
-                                       EnterMeetingRequest request,
-                                       HttpServletRequest httprequest) {
+                        EnterMeetingRequest request,
+                        HttpServletRequest httprequest,
+                        HttpServletResponse httpresponse) {
 
 
         Meeting meeting = meetingRepository.findById(meetingId).orElseThrow(BusinessException::meetingNotFound);
@@ -56,18 +52,22 @@ public class EnterMeetingUseCase {
         // 세션 추가
         HttpSession session = httprequest.getSession(true);
         String sessionId = session.getId();
-        log.info(sessionId);
-
-
         session.setAttribute(String.valueOf(meetingId), request.getUserId());
-        session.setMaxInactiveInterval(60 * 60 * 24 * 30);
-//        redisTemplate.delete("spring:session:sessions:" + sessionId);
+        session.setMaxInactiveInterval(60 * 60 * 24 * 7); // 7일
 
-        // 쿠키 추가
-        Cookie cookie = new Cookie("JSESSIONID", sessionId);
-        cookie.setPath("/meeting/" + meeting.getInviteUrl());
-        cookie.setHttpOnly(true);
-        cookie.setMaxAge(60 * 60 * 24 * 30); // 30일
+        // 가짜 세션 쿠키 추가
+        Cookie cookie1 = new Cookie("fakeSessionId", sessionId);
+        cookie1.setPath("/meeting/" + meetingId);
+        cookie1.setHttpOnly(true);
+        cookie1.setMaxAge(60 * 60 * 24 * 7); // 7일
+        httpresponse.addCookie(cookie1);
+
+        // username 쿠키 추가
+        Cookie cookie2 = new Cookie("nickname", request.getUserId());
+        cookie2.setPath("/meeting/" + meetingId);
+        cookie2.setHttpOnly(true);
+        cookie2.setMaxAge(60 * 60 * 24 * 7); // 7일
+        httpresponse.addCookie(cookie2);
 
     }
 }
