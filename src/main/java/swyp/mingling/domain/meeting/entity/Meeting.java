@@ -20,9 +20,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.JdbcTypeCode;
 import swyp.mingling.domain.participant.entity.Participant;
 import swyp.mingling.global.entity.BaseTimeEntity;
 
+/**
+ * 모임 엔티티
+ * Schema: meeting
+ */
 @Entity
 @Table(name = "meeting")
 @Getter
@@ -32,16 +37,16 @@ public class Meeting extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id", columnDefinition = "BINARY(16)", nullable = false)
+    @JdbcTypeCode(java.sql.Types.VARCHAR)
+    @Column(name = "id", columnDefinition = "VARCHAR(36)", nullable = false)
     private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "purpose_id", nullable = false)
-    private MeetingPurpose purpose;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "hot_place_id", nullable = false)
+    @JoinColumn(name = "hot_place_id", nullable = true)
     private HotPlace hotPlace;
+
+    @OneToMany(mappedBy = "meeting", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    private List<MeetingPurposeMapping> purposeMappings = new ArrayList<>();
 
     @Column(name = "name", nullable = false, length = 100)
     private String name;
@@ -51,9 +56,6 @@ public class Meeting extends BaseTimeEntity {
 
     @Column(name = "deadline", nullable = false)
     private LocalDateTime deadline;
-
-    @Column(name = "invite_url", nullable = false, length = 255)
-    private String inviteUrl;
 
     @Column(name = "status", nullable = false, length = 20)
     private String status;
@@ -67,12 +69,10 @@ public class Meeting extends BaseTimeEntity {
     @Builder
     public Meeting(MeetingPurpose purpose, HotPlace hotPlace, String name, Integer count,
                    LocalDateTime deadline, String inviteUrl, String status) {
-        this.purpose = purpose;
         this.hotPlace = hotPlace;
         this.name = name;
         this.count = count;
         this.deadline = deadline;
-        this.inviteUrl = inviteUrl;
         this.status = status;
         this.isDeleted = false;
     }
@@ -82,13 +82,6 @@ public class Meeting extends BaseTimeEntity {
      */
     public void updateName(String name) {
         this.name = name;
-    }
-
-    /**
-     * 모임 목적 수정
-     */
-    public void updatePurpose(MeetingPurpose purpose) {
-        this.purpose = purpose;
     }
 
     /**
@@ -110,13 +103,6 @@ public class Meeting extends BaseTimeEntity {
      */
     public void updateDeadline(LocalDateTime deadline) {
         this.deadline = deadline;
-    }
-
-    /**
-     * 초대 URL 수정
-     */
-    public void updateInviteUrl(String inviteUrl) {
-        this.inviteUrl = inviteUrl;
     }
 
     /**

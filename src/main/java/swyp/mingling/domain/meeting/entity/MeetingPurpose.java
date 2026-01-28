@@ -6,10 +6,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
-
 /**
  * 모임 목적 엔티티
+ * Schema: meeting_purpose
  */
 @Entity
 @Table(name = "meeting_purpose")
@@ -18,20 +17,20 @@ import java.util.UUID;
 public class MeetingPurpose {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "purpose_id", columnDefinition = "BINARY(16)", nullable = false)
-    private UUID purposeId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "purpose_id", nullable = false)
+    private Integer purposeId;
 
-    @Column(name = "name", nullable = false, length = 30)
+    @Column(name = "name", nullable = false, length = 30, unique = true)
     private String name;
 
     @Column(name = "is_active", nullable = false)
-    private Boolean isActive;
+    private Boolean isActive = true;
 
     @Builder
     public MeetingPurpose(String name, Boolean isActive) {
         this.name = name;
-        this.isActive = isActive;
+        this.isActive = isActive != null ? isActive : true;
     }
 
     /**

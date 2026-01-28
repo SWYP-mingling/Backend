@@ -9,7 +9,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,6 +19,7 @@ import swyp.mingling.global.entity.BaseTimeEntity;
 
 /**
  * 참여자 엔티티
+ * Schema: participant
  */
 @Entity
 @Table(name = "participant")
@@ -29,9 +29,9 @@ import swyp.mingling.global.entity.BaseTimeEntity;
 public class Participant extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "uuid", columnDefinition = "BINARY(16)", nullable = false)
-    private UUID uuid;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "meeting_id", nullable = false)

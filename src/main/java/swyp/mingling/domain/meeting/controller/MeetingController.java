@@ -3,9 +3,11 @@ package swyp.mingling.domain.meeting.controller;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import swyp.mingling.domain.meeting.dto.request.CreateMeetingRequest;
 import swyp.mingling.domain.meeting.dto.response.*;
+import swyp.mingling.domain.meeting.service.ResultMeetingUseCase;
 import swyp.mingling.global.documentation.MeetingApiDocumentation;
 import swyp.mingling.global.exception.BusinessException;
 import swyp.mingling.global.response.ApiResponse;
@@ -20,7 +22,10 @@ import java.util.UUID;
 @Tag(name = "모임 API", description = "모임 생성 및 관리 API")
 @RestController
 @RequestMapping("/meeting")
+@RequiredArgsConstructor
 public class MeetingController {
+
+    private final ResultMeetingUseCase resultMeetingUseCase;
 
     /**
      * 모임 생성 API
@@ -67,14 +72,14 @@ public class MeetingController {
     /**
      * 모임 결과 공유 API
      *
+     * @param meetingId 모임 UUID
      * @return 생성된 모임 URL 응답
      */
     @MeetingApiDocumentation.ResultMeetingDoc
     @GetMapping("/{meetingId}/result")
-    public ApiResponse<ResultMeetingResponse> resultMeeting(@PathVariable("meetingId") UUID meetingId) {
-        // 목 데이터 응답
-        String mockUrl = "https://mingling.com/meeting/abc123def456";
-        return ApiResponse.success(new ResultMeetingResponse(mockUrl));
+    public ApiResponse<ResultMeetingResponse> resultMeeting(@PathVariable("meetingId") String meetingId) {
+        ResultMeetingResponse response = resultMeetingUseCase.getResultMeetingUrl(meetingId);
+        return ApiResponse.success(response);
     }
 
     /**

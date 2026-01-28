@@ -9,10 +9,10 @@ import lombok.Getter;
 public class UpdateDepartureResponse {
 
     @Schema(description = "사용자 이름", example = "홍길동")
-    private String userName;
+    private String nickname;
 
     @Schema(description = "출발지 이룸", example = "강남역")
-    private String departureName;
+    private String departure;
 
     @Schema(description = "출발지 위도", example = "37.497942")
     private Double latitude;
@@ -20,4 +20,15 @@ public class UpdateDepartureResponse {
     @Schema(description = "출발지 경도", example = "127.027621")
     private Double longitude;
 
+    /**
+     * 정적 팩토리 메서드
+     */
+    public static UpdateDepartureResponse of(
+            String nickname,
+            String departure,
+            Double latitude,
+            Double longitude
+    ) {
+        return new UpdateDepartureResponse(nickname, departure, latitude, longitude);
+    }
 }
