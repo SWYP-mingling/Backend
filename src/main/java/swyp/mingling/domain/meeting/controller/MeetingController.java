@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import swyp.mingling.domain.meeting.dto.request.CreateMeetingRequest;
 import swyp.mingling.domain.meeting.dto.response.*;
+import swyp.mingling.domain.meeting.service.CreateMeetingUseCase;
 import swyp.mingling.domain.meeting.service.ResultMeetingUseCase;
 import swyp.mingling.global.documentation.MeetingApiDocumentation;
 import swyp.mingling.global.exception.BusinessException;
@@ -25,6 +26,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class MeetingController {
 
+    private final CreateMeetingUseCase createMeetingUseCase;
     private final ResultMeetingUseCase resultMeetingUseCase;
 
     /**
@@ -35,9 +37,10 @@ public class MeetingController {
      */
     @MeetingApiDocumentation.CreateMeetingDoc
     @PostMapping
-    public ApiResponse<CreateMeetingResponse> createMeeting(@Valid @RequestBody CreateMeetingRequest request) {
-
-        return ApiResponse.success(new CreateMeetingResponse());
+    public ApiResponse<CreateMeetingResponse> createMeeting(
+            @Valid @RequestBody CreateMeetingRequest request) {
+        CreateMeetingResponse response = createMeetingUseCase.createMeeting(request);
+        return ApiResponse.success(response);
     }
 
     /**

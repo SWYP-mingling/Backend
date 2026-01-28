@@ -11,4 +11,9 @@ import lombok.Getter;
 @AllArgsConstructor
 public class CreateMeetingResponse {
 
+    @Schema(description = "모임 URL", example = "https://mingling.com/meeting/abc123def456")
+    private String meetingUrl;
+
+    @Schema(description = "모임 UUID", example = "abc123def456")
+    private String meetingId;
 }
