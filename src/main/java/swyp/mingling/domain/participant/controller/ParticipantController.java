@@ -1,6 +1,5 @@
 package swyp.mingling.domain.participant.controller;
 
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +9,7 @@ import swyp.mingling.domain.participant.dto.request.UpdateDepartureRequest;
 import swyp.mingling.domain.participant.dto.response.CreateDepartureResponse;
 import swyp.mingling.domain.participant.dto.response.UpdateDepartureResponse;
 import swyp.mingling.domain.participant.service.CreateDepartureUseCase;
+import swyp.mingling.domain.participant.service.UpdateDepartureUseCase;
 import swyp.mingling.global.documentation.ParticipantApiDocumentation;
 import swyp.mingling.global.response.ApiResponse;
 
@@ -22,6 +22,7 @@ import java.util.UUID;
 public class ParticipantController {
 
     private final CreateDepartureUseCase createDepartureUseCase;
+    private final UpdateDepartureUseCase updateDepartureUseCase;
 
     /**
      * 출발역 등록 API
@@ -50,15 +51,14 @@ public class ParticipantController {
      */
     @ParticipantApiDocumentation.UpdateDepartDoc
     @PatchMapping("/{meetingId}/departure")
-    public ApiResponse<UpdateDepartureResponse> updateDeparture(@PathVariable("meetingId") UUID meetingId,
-                                                                @Parameter(hidden = true)
-                                                                @SessionAttribute(name = "userName", required = false) String userName,
-                                                                @Valid @RequestBody UpdateDepartureRequest request) {
+    public ApiResponse<UpdateDepartureResponse> updateDeparture(
+            @PathVariable("meetingId") UUID meetingId,
+            @SessionAttribute(name = "nickname", required = true) String nickname,
+            @Valid @RequestBody UpdateDepartureRequest request) {
 
-        Double mockLatitude = 37.497942;
-        Double mockLongitude = 127.027621;
+        UpdateDepartureResponse response = updateDepartureUseCase.execute(meetingId, nickname, request);
 
-        return ApiResponse.success(new UpdateDepartureResponse(userName, request.getDepartureName(), mockLatitude, mockLongitude));
+        return ApiResponse.success(response);
 
     }
 

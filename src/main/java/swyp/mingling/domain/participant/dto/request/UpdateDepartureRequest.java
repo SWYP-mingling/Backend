@@ -9,5 +9,5 @@ import lombok.Getter;
 public class UpdateDepartureRequest {
 
     @Schema(description = "중간지점 이름", example = "합정역")
-    private String departureName;
+    private String departure;
 }
