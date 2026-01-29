@@ -67,6 +67,6 @@ public class BusinessException extends RuntimeException{
     }
 
     public static BusinessException sessionerror() {
-        return new BusinessException(ErrorCode.USER_UNAUTHORIZED);
+        return new BusinessException(ErrorCode.SESSION_COOKIE_EXPIRED);
     }
 }
