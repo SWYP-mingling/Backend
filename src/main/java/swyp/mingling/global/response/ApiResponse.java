@@ -97,4 +97,12 @@ public class ApiResponse<T> {
     public static <T> ApiResponse<T> error(ErrorCode errorCode) {
         return new ApiResponse<>(false, errorCode.getCode(), errorCode.getMessage(), null, LocalDateTime.now(ZoneId.of("Asia/Seoul")));
     }
+
+    /**
+     * 실패 응답 생성 (상세 데이터 포함)
+     * Validation 에러 상세 등을 보낼 때 사용
+     */
+    public static <T> ApiResponse<T> error(String code, String message, T data) {
+        return new ApiResponse<>(false, code, message, data, LocalDateTime.now(ZoneId.of("Asia/Seoul")));
+    }
 }

@@ -39,6 +39,7 @@ public class BusinessException extends RuntimeException{
      *
      * @return 사용자 인증 실패 예외
      */
+
     public static BusinessException userUnauthorized() {
         return new BusinessException(ErrorCode.USER_UNAUTHORIZED);
     }

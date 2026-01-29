@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
@@ -18,7 +19,28 @@ public class MeetingApiDocumentation {
     @Retention(RetentionPolicy.RUNTIME)
     @Operation(
             summary = "모임 생성 API",
-            description = "새로운 모임을 생성하고 모임 URL을 반환합니다."
+            description = "새로운 모임을 생성하고 모임 URL을 반환합니다. 사용자당 여러 개의 모임 목적을 지정할 수 있습니다.",
+            requestBody = @RequestBody(
+                    description = "모임 생성 요청 정보",
+                    required = true,
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = swyp.mingling.domain.meeting.dto.request.CreateMeetingRequest.class),
+                            examples = @ExampleObject(
+                                    name = "모임 생성 요청 예시",
+                                    description = "여러 개의 모임 목적을 지정한 모임 생성 요청",
+                                    value = """
+                                    {
+                                      "meetingName": "신년회",
+                                      "purposes": ["친목", "회식", "스터디"],
+                                      "purposeCount": 3,
+                                      "capacity": 10,
+                                      "deadline": "2026-01-30T23:59:59"
+                                    }
+                                    """
+                            )
+                    )
+            )
     )
     @ApiResponses({
             // SUCCESS
@@ -35,7 +57,8 @@ public class MeetingApiDocumentation {
                     {
                       "success": true,
                       "data": {
-                        "meetingUrl": "https://mingling.com/meeting/abc123def456"
+                        "meetingUrl": "https://mingling.com/meeting/62db1c35-f7db-4aad-acc8-0ad64f61a312",
+                        "meetingId": "62db1c35-f7db-4aad-acc8-0ad64f61a312"
                       },
                       "timestamp": "2026-01-19T21:30:00"
                     }
@@ -52,26 +75,74 @@ public class MeetingApiDocumentation {
                             mediaType = "application/json",
                             examples = {
                                     @ExampleObject(
-                                            name = "BAD_REQUEST",
-                                            description = "잘못된 요청",
+                                            name = "VALIDATION_ERROR_DEADLINE",
+                                            description = "마감 시간 검증 실패",
                                             value = """
                         {
                           "success": false,
                           "code": "BAD_REQUEST",
-                          "message": "잘못된 요청입니다.",
-                          "timestamp": "2026-01-19T21:30:00"
+                          "message": "마감 시간은 현재 시간 이후여야 합니다.",
+                          "timestamp": "2026-01-29T02:26:25"
                         }
                         """
                                     ),
                                     @ExampleObject(
-                                            name = "VALIDATION_ERROR",
-                                            description = "유효성 검사 실패",
+                                            name = "VALIDATION_ERROR_CAPACITY",
+                                            description = "정원 검증 실패",
                                             value = """
                         {
                           "success": false,
-                          "code": "VALIDATION_ERROR",
+                          "code": "BAD_REQUEST",
+                          "message": "모임 인원은 최소 2명 이상이어야 합니다.",
+                          "timestamp": "2026-01-29T02:26:25"
+                        }
+                        """
+                                    ),
+                                    @ExampleObject(
+                                            name = "VALIDATION_ERROR_NAME",
+                                            description = "모임명 누락",
+                                            value = """
+                        {
+                          "success": false,
+                          "code": "BAD_REQUEST",
                           "message": "모임명은 필수입니다.",
-                          "timestamp": "2026-01-19T21:30:00"
+                          "timestamp": "2026-01-29T02:26:25"
+                        }
+                        """
+                                    ),
+                                    @ExampleObject(
+                                            name = "VALIDATION_ERROR_PURPOSES",
+                                            description = "모임 목적 리스트 누락",
+                                            value = """
+                        {
+                          "success": false,
+                          "code": "BAD_REQUEST",
+                          "message": "모임 목적 리스트는 필수입니다.",
+                          "timestamp": "2026-01-29T02:26:25"
+                        }
+                        """
+                                    ),
+                                    @ExampleObject(
+                                            name = "VALIDATION_ERROR_PURPOSE_COUNT",
+                                            description = "모임 목적 개수 누락",
+                                            value = """
+                        {
+                          "success": false,
+                          "code": "BAD_REQUEST",
+                          "message": "모임 목적 개수는 필수입니다.",
+                          "timestamp": "2026-01-29T02:26:25"
+                        }
+                        """
+                                    ),
+                                    @ExampleObject(
+                                            name = "PURPOSE_NOT_FOUND",
+                                            description = "존재하지 않는 모임 목적",
+                                            value = """
+                        {
+                          "success": false,
+                          "code": "PURPOSE_NOT_FOUND",
+                          "message": "일부 모임 목적을 찾을 수 없습니다.",
+                          "timestamp": "2026-01-29T02:26:25"
                         }
                         """
                                     )
@@ -90,7 +161,7 @@ public class MeetingApiDocumentation {
                   "success": false,
                   "code": "INTERNAL_SERVER_ERROR",
                   "message": "서버 내부 오류가 발생했습니다.",
-                  "timestamp": "2026-01-19T21:30:00"
+                  "timestamp": "2026-01-29T02:26:25"
                 }
                 """)
                     )
@@ -153,6 +224,21 @@ public class MeetingApiDocumentation {
                     )
             ),
             @ApiResponse(
+                    responseCode = "401",
+                    description = "사용자 인증 실패",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject("""
+                {
+                  "success": false,
+                  "code": "USER_UNAUTHORIZED",
+                  "message": "사용자 인증에 실패했습니다.",
+                  "timestamp": "2026-01-29T02:26:25"
+                }
+                """)
+                    )
+            ),
+            @ApiResponse(
                     responseCode = "404",
                     description = "존재하지 않는 모임",
                     content = @Content(
@@ -160,9 +246,9 @@ public class MeetingApiDocumentation {
                             examples = @ExampleObject("""
                 {
                   "success": false,
-                  "code": "NOT_FOUND",
+                  "code": "MEETING_NOT_FOUND",
                   "message": "모임을 찾을 수 없습니다.",
-                  "timestamp": "2026-01-19T21:30:00"
+                  "timestamp": "2026-01-29T02:26:25"
                 }
                 """)
                     )
@@ -178,7 +264,7 @@ public class MeetingApiDocumentation {
                   "success": false,
                   "code": "INTERNAL_SERVER_ERROR",
                   "message": "서버 내부 오류가 발생했습니다.",
-                  "timestamp": "2026-01-19T21:30:00"
+                  "timestamp": "2026-01-29T02:26:25"
                 }
                 """)
                     )
@@ -210,7 +296,7 @@ public class MeetingApiDocumentation {
                 {
                   "success": true,
                   "data": {
-                    "meetingUrl": "https://mingling.com/meeting/abc123def456"
+                    "meetingUrl": "https://mingling.com/meeting/62db1c35-f7db-4aad-acc8-0ad64f61a312"
                   },
                   "timestamp": "2026-01-21T18:00:00"
                 }
@@ -227,9 +313,9 @@ public class MeetingApiDocumentation {
                             examples = @ExampleObject("""
             {
               "success": false,
-              "code": "NOT_FOUND",
+              "code": "MEETING_NOT_FOUND",
               "message": "모임을 찾을 수 없습니다.",
-              "timestamp": "2026-01-21T18:30:00"
+              "timestamp": "2026-01-29T02:26:25"
             }
             """)
                     )
@@ -246,7 +332,7 @@ public class MeetingApiDocumentation {
               "success": false,
               "code": "INTERNAL_SERVER_ERROR",
               "message": "서버 내부 오류가 발생했습니다.",
-              "timestamp": "2026-01-21T19:00:00"
+              "timestamp": "2026-01-29T02:26:25"
             }
             """)
                     )
@@ -292,6 +378,22 @@ public class MeetingApiDocumentation {
                     )
             ),
             @ApiResponse(
+                    responseCode = "401",
+                    description = "사용자 인증 실패",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject("""
+                {
+                  "success": false,
+                  "code": "USER_UNAUTHORIZED",
+                  "message": "사용자 인증에 실패했습니다.",
+                  "data": null,
+                  "timestamp": "2026-01-22T16:30:00"
+                }
+                """)
+                    )
+            ),
+            @ApiResponse(
                     responseCode = "404",
                     description = "존재하지 않는 모임",
                     content = @Content(
@@ -299,8 +401,9 @@ public class MeetingApiDocumentation {
                             examples = @ExampleObject("""
                 {
                   "success": false,
-                  "code": "NOT_FOUND",
+                  "code": "MEETING_NOT_FOUND",
                   "message": "모임을 찾을 수 없습니다.",
+                  "data": null,
                   "timestamp": "2026-01-22T16:30:00"
                 }
                 """)
@@ -317,6 +420,7 @@ public class MeetingApiDocumentation {
                   "success": false,
                   "code": "INTERNAL_SERVER_ERROR",
                   "message": "서버 내부 오류가 발생했습니다.",
+                  "data": null,
                   "timestamp": "2026-01-22T17:00:00"
                 }
                 """)
@@ -375,6 +479,24 @@ public class MeetingApiDocumentation {
             )
         ),
 
+        // UNAUTHORIZED
+        @ApiResponse(
+            responseCode = "401",
+            description = "사용자 인증 실패",
+            content = @Content(
+                mediaType = "application/json",
+                examples = @ExampleObject("""
+                {
+                  "success": false,
+                  "code": "USER_UNAUTHORIZED",
+                  "message": "사용자 인증에 실패했습니다.",
+                  "data": null,
+                  "timestamp": "2026-01-23T23:00:00"
+                }
+                """)
+            )
+        ),
+
         // NOT_FOUND
         @ApiResponse(
             responseCode = "404",
@@ -386,6 +508,7 @@ public class MeetingApiDocumentation {
                   "success": false,
                   "code": "MEETING_NOT_FOUND",
                   "message": "모임을 찾을 수 없습니다.",
+                  "data": null,
                   "timestamp": "2026-01-23T23:00:00"
                 }
                 """)
@@ -403,6 +526,7 @@ public class MeetingApiDocumentation {
                   "success": false,
                   "code": "INTERNAL_SERVER_ERROR",
                   "message": "서버 내부 오류가 발생했습니다.",
+                  "data": null,
                   "timestamp": "2026-01-23T23:00:00"
                 }
                 """)
