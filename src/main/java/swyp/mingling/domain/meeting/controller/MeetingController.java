@@ -16,7 +16,6 @@ import swyp.mingling.domain.meeting.service.CreateMeetingUseCase;
 import swyp.mingling.domain.meeting.service.ResultMeetingUseCase;
 import swyp.mingling.domain.meeting.service.UpdateDepartureUseCase;
 import swyp.mingling.global.documentation.MeetingApiDocumentation;
-import swyp.mingling.global.documentation.ParticipantApiDocumentation;
 import swyp.mingling.global.exception.BusinessException;
 import swyp.mingling.global.response.ApiResponse;
 
@@ -164,7 +163,7 @@ public class MeetingController {
      * @param request 출발역 등록 요청 DTO
      * @return 출발역 등록 응답 DTO
      */
-    @ParticipantApiDocumentation.CreateDepartureDoc
+    @MeetingApiDocumentation.CreateDepartureDoc
     @PostMapping("/{meetingId}/departure")
     public ApiResponse<CreateDepartureResponse> createDeparture(
             @PathVariable("meetingId") UUID meetingId,
@@ -185,7 +184,7 @@ public class MeetingController {
      * @param request 출발역 수정 요청 DTO
      * @return 사용자정보, 출발역 정보
      */
-    @ParticipantApiDocumentation.UpdateDepartDoc
+    @MeetingApiDocumentation.UpdateDepartDoc
     @PatchMapping("/{meetingId}/departure")
     public ApiResponse<UpdateDepartureResponse> updateDeparture(
             @PathVariable("meetingId") UUID meetingId,
