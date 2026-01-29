@@ -31,7 +31,6 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
         Map<String, String> pathVariables = (Map<String, String>) request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
         String meetingId = pathVariables.get("meetingId");
 
-
         if(meetingId == null) {
             throw BusinessException.meetingNotFound();
         }
@@ -43,7 +42,7 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
 
         if (cookies != null) {
             for (Cookie cookie : cookies) {
-                if ("nickname".equals(cookie.getName())) nickname = cookie.getValue();
+                if ("nickname".equals(cookie.getName())) nickname = new String(cookie.getValue().getBytes("ISO-8859-1"));
                 if ("fakeSessionId".equals(cookie.getName())) sessionId = cookie.getValue();
             }
         }
@@ -56,13 +55,8 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
             String sessionNickname = (String) session.getAttribute(meetingId);
 
 
-            log.info(sessionNickname);
-            log.info(nickname);
-
             if (sessionNickname == null || !sessionNickname.equals(nickname)) {
                 // nickname이 존재하지 않거나 meetingId가 없을때
-                log.info("1");
-
 
                 // 세션 삭제
                 session.invalidate();
@@ -95,7 +89,7 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
             }
 
             // 쿠키가 만료 되었을때
-            log.info("2");
+
             // 에러
             throw BusinessException.sessionerror();
         }
