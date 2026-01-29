@@ -55,8 +55,14 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
             // 세션이 있을때
             String sessionNickname = (String) session.getAttribute(meetingId);
 
+
+            log.info(sessionNickname);
+            log.info(nickname);
+
             if (sessionNickname == null || !sessionNickname.equals(nickname)) {
                 // nickname이 존재하지 않거나 meetingId가 없을때
+                log.info("1");
+
 
                 // 세션 삭제
                 session.invalidate();
@@ -89,7 +95,7 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
             }
 
             // 쿠키가 만료 되었을때
-
+            log.info("2");
             // 에러
             throw BusinessException.sessionerror();
         }
