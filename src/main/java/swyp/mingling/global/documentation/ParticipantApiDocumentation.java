@@ -21,7 +21,7 @@ public class ParticipantApiDocumentation {
     @Retention(RetentionPolicy.RUNTIME)
     @Operation(
             summary = "출발지 수정 API",
-            description = "특정 모임(UUID로 구분)에 참여 중인 사용자의 출발지를 수정하고 사용자 정보와 출발지를 반환합니다."
+            description = "로그인된 사용자의 세션(nickname)을 기반으로 특정 모임(UUID로 구분)에 참여 중인 사용자의 출발지를 수정하고 사용자 정보와 출발지를 반환합니다."
     )
     @ApiResponses({
             // SUCCESS
@@ -111,7 +111,7 @@ public class ParticipantApiDocumentation {
     @Retention(RetentionPolicy.RUNTIME)
     @Operation(
         summary = "출발역 등록 API",
-        description = "모임 참여자의 출발역 정보를 등록합니다."
+        description = "로그인된 사용자의 세션(nickname)을 기반으로 모임 참여자의 출발역 정보를 등록합니다."
     )
     @ApiResponses({
         // SUCCESS

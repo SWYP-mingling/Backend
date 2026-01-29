@@ -14,10 +14,6 @@ import lombok.Getter;
 public class CreateDepartureRequest {
 
     @NotBlank
-    @Schema(description = "참여자 이름", example = "김밍글")
-    private String nickname;
-
-    @NotBlank
     @Schema(description = "출발역 이름", example = "구로디지털단지역")
     private String departure;
 

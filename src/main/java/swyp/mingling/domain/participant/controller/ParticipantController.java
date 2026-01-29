@@ -1,19 +1,19 @@
 package swyp.mingling.domain.participant.controller;
 
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import swyp.mingling.domain.participant.dto.request.EnterMeetingRequest;
 import swyp.mingling.domain.participant.dto.request.CreateDepartureRequest;
+import swyp.mingling.domain.participant.dto.request.EnterMeetingRequest;
 import swyp.mingling.domain.participant.dto.request.UpdateDepartureRequest;
 import swyp.mingling.domain.participant.dto.response.CreateDepartureResponse;
 import swyp.mingling.domain.participant.dto.response.UpdateDepartureResponse;
-import swyp.mingling.domain.participant.service.EnterMeetingUseCase;
-import swyp.mingling.global.documentation.MeetingApiDocumentation;
 import swyp.mingling.domain.participant.service.CreateDepartureUseCase;
+import swyp.mingling.domain.participant.service.EnterMeetingUseCase;
 import swyp.mingling.domain.participant.service.UpdateDepartureUseCase;
 import swyp.mingling.global.documentation.ParticipantApiDocumentation;
 import swyp.mingling.global.response.ApiResponse;
@@ -24,7 +24,6 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/participant")
-@RequiredArgsConstructor
 public class ParticipantController {
 
     private final EnterMeetingUseCase enterMeetingUseCase;
@@ -42,7 +41,7 @@ public class ParticipantController {
     @PostMapping("/{meetingId}/departure")
     public ApiResponse<CreateDepartureResponse> createDeparture(
         @PathVariable("meetingId") UUID meetingId,
-        @SessionAttribute(name = "nickname", required = true) String nickname,
+        @Parameter(hidden = true) @SessionAttribute(name = "nickname", required = true) String nickname,
         @Valid @RequestBody CreateDepartureRequest request) {
 
         CreateDepartureResponse response = createDepartureUseCase.execute(meetingId, nickname, request);
@@ -60,7 +59,7 @@ public class ParticipantController {
     @PatchMapping("/{meetingId}/departure")
     public ApiResponse<UpdateDepartureResponse> updateDeparture(
             @PathVariable("meetingId") UUID meetingId,
-            @SessionAttribute(name = "nickname", required = true) String nickname,
+            @Parameter(hidden = true) @SessionAttribute(name = "nickname", required = true) String nickname,
             @Valid @RequestBody UpdateDepartureRequest request) {
 
         UpdateDepartureResponse response = updateDepartureUseCase.execute(meetingId, nickname, request);
