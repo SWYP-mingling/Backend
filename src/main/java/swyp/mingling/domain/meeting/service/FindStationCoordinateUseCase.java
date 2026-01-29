@@ -1,10 +1,10 @@
-package swyp.mingling.domain.participant.service;
+package swyp.mingling.domain.meeting.service;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
-import swyp.mingling.domain.participant.dto.StationCoordinate;
+import swyp.mingling.domain.meeting.dto.StationCoordinate;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
 

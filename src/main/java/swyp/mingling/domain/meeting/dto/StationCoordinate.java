@@ -1,4 +1,4 @@
-package swyp.mingling.domain.participant.dto;
+package swyp.mingling.domain.meeting.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

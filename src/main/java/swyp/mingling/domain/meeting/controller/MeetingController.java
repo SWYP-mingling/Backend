@@ -2,14 +2,21 @@ package swyp.mingling.domain.meeting.controller;
 
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import swyp.mingling.domain.meeting.dto.request.CreateDepartureRequest;
 import swyp.mingling.domain.meeting.dto.request.CreateMeetingRequest;
+import swyp.mingling.domain.meeting.dto.request.UpdateDepartureRequest;
 import swyp.mingling.domain.meeting.dto.response.*;
+import swyp.mingling.domain.meeting.service.CreateDepartureUseCase;
 import swyp.mingling.domain.meeting.service.CreateMeetingUseCase;
 import swyp.mingling.domain.meeting.service.ResultMeetingUseCase;
+import swyp.mingling.domain.meeting.service.UpdateDepartureUseCase;
 import swyp.mingling.global.documentation.MeetingApiDocumentation;
+import swyp.mingling.global.documentation.ParticipantApiDocumentation;
 import swyp.mingling.global.exception.BusinessException;
 import swyp.mingling.global.response.ApiResponse;
 
@@ -20,6 +27,7 @@ import java.util.UUID;
 /**
  * 모임 관련 API 컨트롤러
  */
+@Slf4j
 @Tag(name = "모임 API", description = "모임 생성 및 관리 API")
 @RestController
 @RequestMapping("/meeting")
@@ -28,6 +36,8 @@ public class MeetingController {
 
     private final CreateMeetingUseCase createMeetingUseCase;
     private final ResultMeetingUseCase resultMeetingUseCase;
+    private final CreateDepartureUseCase createDepartureUseCase;
+    private final UpdateDepartureUseCase updateDepartureUseCase;
 
     /**
      * 모임 생성 API
@@ -145,6 +155,50 @@ public class MeetingController {
         );
 
         return ApiResponse.success(response);
+    }
+
+    /**
+     * 출발역 등록 API
+     *
+     * @param meetingId 모임 UUID
+     * @param request 출발역 등록 요청 DTO
+     * @return 출발역 등록 응답 DTO
+     */
+    @ParticipantApiDocumentation.CreateDepartureDoc
+    @PostMapping("/{meetingId}/departure")
+    public ApiResponse<CreateDepartureResponse> createDeparture(
+            @PathVariable("meetingId") UUID meetingId,
+            HttpSession session,
+            @Valid @RequestBody CreateDepartureRequest request) {
+
+        //세션에서 nickname 가져오기
+        String nickname = (String) session.getAttribute(String.valueOf(meetingId));
+
+        CreateDepartureResponse response = createDepartureUseCase.execute(meetingId, nickname, request);
+
+        return ApiResponse.success(response);
+    }
+
+    /**
+     * 출발역 수정 API
+     *
+     * @param request 출발역 수정 요청 DTO
+     * @return 사용자정보, 출발역 정보
+     */
+    @ParticipantApiDocumentation.UpdateDepartDoc
+    @PatchMapping("/{meetingId}/departure")
+    public ApiResponse<UpdateDepartureResponse> updateDeparture(
+            @PathVariable("meetingId") UUID meetingId,
+            HttpSession session,
+            @Valid @RequestBody UpdateDepartureRequest request) {
+
+        //세션에서 nickname 가져오기
+        String nickname = (String) session.getAttribute(String.valueOf(meetingId));
+
+        UpdateDepartureResponse response = updateDepartureUseCase.execute(meetingId, nickname, request);
+
+        return ApiResponse.success(response);
+
     }
 }
 
