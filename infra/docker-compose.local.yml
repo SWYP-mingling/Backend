@@ -1,23 +1,23 @@
 services:
-  mysql:
-    image: mysql:8.0
-    container_name: mingling-mysql
+  mariadb:
+    image: mariadb:11.4
+    container_name: mingling-db
     ports:
-      - "${MYSQL_PORT}:3306"
+      - "${DB_PORT}:3306"
     environment:
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MARIADB_DATABASE: ${DB_NAME}
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MARIADB_USER: ${DB_USER}
+      MARIADB_PASSWORD: ${DB_PASSWORD}
       TZ: Asia/Seoul
     volumes:
-      - mysql-data:/var/lib/mysql
-      - ./init-db:/docker-entrypoint-initdb.d
+      - mariadb-data:/var/lib/mysql
+#      - ./init-db:/docker-entrypoint-initdb.d
     command:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      test: ["CMD", "mariadb-admin", "ping", "-h", "localhost", "-u", "root", "-p${DB_ROOT_PASSWORD}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -41,7 +41,7 @@ services:
       - mingling-network
 
 volumes:
-  mysql-data:
+  mariadb-data:
     driver: local
   redis-data:
     driver: local
