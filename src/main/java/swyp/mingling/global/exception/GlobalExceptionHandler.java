@@ -1,9 +1,5 @@
 package swyp.mingling.global.exception;
 
-import java.nio.file.AccessDeniedException;
-import java.util.HashMap;
-import java.util.Map;
-import javax.naming.AuthenticationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +8,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import swyp.mingling.global.response.ApiResponse;
+
+import javax.naming.AuthenticationException;
+import java.nio.file.AccessDeniedException;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * 글로벌 예외 처리 핸들러
@@ -73,7 +74,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiResponse<Void>> MethodArgumentNotValid(MethodArgumentNotValidException ex) {
 
-        Map<String, String> errors = new HashMap<>();
+        Map<String, String> errors = new LinkedHashMap<>();
 
         ex.getBindingResult()
                 .getFieldErrors()
