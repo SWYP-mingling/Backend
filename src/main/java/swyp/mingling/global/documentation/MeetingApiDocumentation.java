@@ -517,6 +517,7 @@ public class MeetingApiDocumentation {
                       "data": {
                         "totalParticipantCount": 10,
                         "currentParticipantCount": 2,
+                        "pendingParticipantCount": 8,
                         "deadlineAt": "2026-01-23T18:00:00",
                         "participants": [
                           {

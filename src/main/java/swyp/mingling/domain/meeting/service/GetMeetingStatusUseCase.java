@@ -44,6 +44,7 @@ public class GetMeetingStatusUseCase {
         return GetMeetingStatusResponse.of(
             meeting.getCount(),
             participantInfos.size(),
+            meeting.getCount() - participantInfos.size(),
             meeting.getDeadline(),
             participantInfos
         );

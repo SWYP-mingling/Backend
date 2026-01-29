@@ -17,8 +17,11 @@ public class GetMeetingStatusResponse {
     @Schema(description = "전체 참여자 수", example = "10")
     private int totalParticipantCount;
 
-    @Schema(description = "현재 참여자 수", example = "2")
+    @Schema(description = "출발지 입력 참여자 수", example = "2")
     private int currentParticipantCount;
+
+    @Schema(description = "출발지 미입력 참여자 수", example = "8")
+    private int pendingParticipantCount;
 
     @Schema(description = "모임 마감 시간", example = "2026-01-23T23:00:00")
     private LocalDateTime deadlineAt;
@@ -63,10 +66,16 @@ public class GetMeetingStatusResponse {
     public static GetMeetingStatusResponse of(
         int totalParticipantCount,
         int currentParticipantCount,
+        int pendingParticipantCount,
         LocalDateTime deadlineAt,
         List<ParticipantInfo> participants
     ) {
-        return new GetMeetingStatusResponse(totalParticipantCount, currentParticipantCount, deadlineAt, participants);
+        return new GetMeetingStatusResponse(
+            totalParticipantCount,
+            currentParticipantCount,
+            pendingParticipantCount,
+            deadlineAt,
+            participants);
     }
 
 }
