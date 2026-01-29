@@ -274,6 +274,7 @@ public class ParticipantApiDocumentation {
                     )
             ),
 
+
             // MEETING_NOT_FOUND
             @ApiResponse(
                     responseCode = "404",
@@ -295,26 +296,6 @@ public class ParticipantApiDocumentation {
                     )
             ),
 
-            // USER_UNAUTHORIZED
-            @ApiResponse(
-                    responseCode = "401",
-                    description = "세션 오류",
-                    content = @Content(
-                            mediaType = "application/json",
-                            examples = @ExampleObject(
-                                    name = "USER_UNAUTHORIZED",
-                                    value = """
-                {
-                  "success": false,
-                  "code": "USER_UNAUTHORIZED",
-                  "message": "사용자 인증에 실패했습니다.",
-                  "timestamp": "2026-01-24T04:00:00"
-                }
-                """
-                            )
-                    )
-            ),
-
             // BAD_REQUEST
             @ApiResponse(
                     responseCode = "400",
@@ -323,30 +304,39 @@ public class ParticipantApiDocumentation {
                             mediaType = "application/json",
                             examples = {
                                     @ExampleObject(
-                                            name = "BAD_REQUEST",
-                                            description = "잘못된 요청",
-                                            value = """
-                        {
-                          "success": false,
-                          "code": "BAD_REQUEST",
-                          "message": "잘못된 요청입니다.",
-                          "timestamp": "2026-01-19T21:30:00"
-                        }
-                        """
-                                    ),
-                                    @ExampleObject(
                                             name = "VALIDATION_ERROR",
                                             description = "유효성 검사 실패",
                                             value = """
                         {
                           "success": false,
                           "code": "VALIDATION_ERROR",
-                          "message": "출발지는 필수입니다.",
+                          "message": "출발지는 필수입니다. or 비밀번호는 필수입니다.",
                           "timestamp": "2026-01-19T21:30:00"
                         }
                         """
                                     )
                             }
+                    )
+            ),
+
+            // SESSION_COOKIE_EXPIRED
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "세션 및 쿠키 오류",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject(
+                                    name = "SESSION_COOKIE_EXPIRED",
+                                    description = "세션 및 쿠키 만료",
+                                    value = """
+                {
+                  "success": false,
+                  "code": "SESSION_COOKIE_EXPIRED",
+                  "message": "세션 및 쿠키가 만료가 되었습니다.",
+                  "timestamp": "2026-01-24T04:00:00"
+                }
+                """
+                            )
                     )
             ),
 

@@ -72,11 +72,11 @@ public class GlobalExceptionHandler {
      * @return 에러 응답
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiResponse<Void>> MethodArgumentNotValid(MethodArgumentNotValidException ex) {
+    public ResponseEntity<ApiResponse<Void>> MethodArgumentNotValid(MethodArgumentNotValidException e) {
 
         Map<String, String> errors = new LinkedHashMap<>();
 
-        ex.getBindingResult()
+        e.getBindingResult()
                 .getFieldErrors()
                 .forEach(error ->
                         errors.put(
@@ -85,7 +85,7 @@ public class GlobalExceptionHandler {
                         )
                 );
 
-        String message = errors.values().iterator().next();  // "비밀번호는 필수입니다."
+        String message = errors.values().iterator().next();
 
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
