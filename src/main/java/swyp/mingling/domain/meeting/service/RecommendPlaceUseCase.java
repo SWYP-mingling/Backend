@@ -22,16 +22,19 @@ public class RecommendPlaceUseCase {
      *
      * @param midPlace 중간 지점 키워드 (예: "합정역")
      * @param category 모임 목적 카테고리
+     * @param page     조회할 페이지 번호 (1부터 시작)
+     * @param size     조회할 개수 (기본값 10)
      * @return 추천 장소 목록
      */
-    public RecommendResponse execute(String midPlace, String category) {
+    public RecommendResponse execute(String midPlace, String category, int page, int size) {
 
         // 1. 카테고리 한글명을 카카오 카테고리 그룹 코드로 변환
         KakaoCategoryGroupCode categoryGroupCode = KakaoCategoryGroupCode.fromDescription(category);
 
         // 2. 카카오 장소 검색 API 호출
-        KakaoPlaceSearchResponse response = kakaoPlaceClient.search(midPlace, categoryGroupCode);
+        KakaoPlaceSearchResponse response = kakaoPlaceClient.search(midPlace, categoryGroupCode, page, size);
 
+        // 3. 장소 목록 변환
         List<RecommendResponse.PlaceInfo> placeInfos = response.getDocuments().stream()
             .map(doc -> RecommendResponse.PlaceInfo.builder()
                 .placeName(doc.getPlaceName())
@@ -47,11 +50,12 @@ public class RecommendPlaceUseCase {
             )
             .toList();
 
+        // 4. 페이징 메타 생성
         RecommendResponse.SliceInfo sliceInfo =
             RecommendResponse.SliceInfo.builder()
                 .hasNext(!response.getMeta().isEnd())
-//                .page(page)
-//                .size(places.size())
+                .page(page)
+                .size(placeInfos.size())
                 .build();
 
         return RecommendResponse.builder()

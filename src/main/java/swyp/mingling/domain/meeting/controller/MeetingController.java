@@ -2,7 +2,6 @@ package swyp.mingling.domain.meeting.controller;
 
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -116,14 +115,18 @@ public class MeetingController {
      * @param meetingId 모임 UUID
      * @param midPlace  중간 지점 장소 (query param)
      * @param category  모임 목적 (query param)
+     * @param page      조회할 페이지 번호 (1부터 시작)
+     * @param size      조회할 개수 (기본값 10)
      * @return 장소 추천 장소들 목록
      */
     @MeetingApiDocumentation.GetRecommendDoc
     @GetMapping("/{meetingId}/recommend")
     public ApiResponse<RecommendResponse> getRecommend(@PathVariable("meetingId") UUID meetingId,
-                                                             @RequestParam String midPlace,
-                                                             @RequestParam String category) {
-        RecommendResponse response = recommendPlaceUseCase.execute(midPlace, category);
+                                                       @RequestParam String midPlace,
+                                                       @RequestParam String category,
+                                                       @RequestParam(defaultValue = "1") int page,
+                                                       @RequestParam(defaultValue = "10") int size) {
+        RecommendResponse response = recommendPlaceUseCase.execute(midPlace, category, page, size);
         return ApiResponse.success(response);
     }
 

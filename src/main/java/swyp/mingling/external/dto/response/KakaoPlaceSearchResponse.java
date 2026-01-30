@@ -1,6 +1,7 @@
 package swyp.mingling.external.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +16,6 @@ import tools.jackson.databind.annotation.JsonNaming;
 @Getter
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class KakaoPlaceSearchResponse {
 
     /**
@@ -56,10 +56,11 @@ public class KakaoPlaceSearchResponse {
     @Getter
     @NoArgsConstructor
     @JsonIgnoreProperties(ignoreUnknown = true)
-    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public static class Meta {
 
+        @JsonProperty("is_end")
         private boolean isEnd;
+
         private int pageableCount;
         private int totalCount;
     }

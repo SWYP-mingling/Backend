@@ -20,16 +20,18 @@ public class KakaoPlaceClient {
      *
      * @param query 검색 키워드 (예: "합정역")
      * @param categoryGroupCode categoryGroupCode 카카오 카테고리 그룹 코드
+     * @param page 조회할 페이지 번호 (1부터 시작)
+     * @param size 조회할 개수
      * @return 카카오 장소 검색 응답
      */
-    public KakaoPlaceSearchResponse search(String query, KakaoCategoryGroupCode categoryGroupCode) {
+    public KakaoPlaceSearchResponse search(String query, KakaoCategoryGroupCode categoryGroupCode, int page, int size) {
         return webClient.get()
             .uri(uriBuilder -> uriBuilder
                 .path("/v2/local/search/keyword.json")
                 .queryParam("query", query)
                 .queryParam("category_group_code", categoryGroupCode.getCode())
-//                .queryParam("page", page)
-//                .queryParam("size", size)
+                .queryParam("page", page)
+                .queryParam("size", size)
                 .build()
             )
             .retrieve()
