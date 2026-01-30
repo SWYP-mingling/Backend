@@ -1,4 +1,3 @@
-<<<<<<< Updated upstream
 DELETE FROM `hot_place`;
 INSERT INTO `hot_place` (`hot_place_id`, `name`, `latitude`, `longitude`) VALUES
                                                                               (1, '강남역', 37.4979502, 127.0276368),
@@ -21,15 +20,6 @@ INSERT INTO `meeting_purpose` (`purpose_id`, `name`, `is_active`) VALUES
                                                                       (5, '술집', 1),
                                                                       (8, '카페', 1),
                                                                       (10, '놀거리', 1);;
-=======
-INSERT INTO mingling_dev.meeting_purpose (name, is_active) VALUES
-                                                               ('친목', TRUE),
-                                                               ('회의', TRUE),
-                                                               ('맛집', TRUE),
-                                                               ('술집', TRUE),
-                                                               ('카페', TRUE),
-                                                               ('놀거리', TRUE);
->>>>>>> Stashed changes
 
 
 DELETE FROM `meeting_purpose_mapping`;
@@ -42,7 +32,6 @@ INSERT INTO `meeting_purpose_mapping` (`id`, `meeting_id`, `purpose_id`, `create
                                                                                                    (6, '1c14d9ce-186b-41b3-971c-1f0d3dacecbc', 1, '2026-01-27 16:23:44', '2026-01-27 16:23:44'),
                                                                                                    (7, '1c14d9ce-186b-41b3-971c-1f0d3dacecbc', 2, '2026-01-27 16:23:44', '2026-01-27 16:23:44');
 
-<<<<<<< Updated upstream
 DELETE FROM `participant`;
 INSERT INTO `participant` (`id`, `meeting_id`, `nickname`, `password`, `departure`, `time`, `is_deleted`, `created_at`, `updated_at`) VALUES
                         (2, '556453cb-a84e-486d-8079-9fa11585ab58', '강남피플', '1234', '양재역', 15, 0, '2026-01-28 01:33:34', '2026-01-28 01:33:34'),
@@ -70,4 +59,3 @@ INSERT INTO mingling_dev.participant (meeting_id, nickname, password, departure,
 INSERT INTO mingling_dev.participant (meeting_id, nickname, password, departure, time) VALUES
                        ('4014864efb7511f094663a9f417233ce', '임준식', '1234', '송파역', 10),
                        ('4014864efb7511f094663a9f417233ce', '안가연', '1234', '수원역', 60);
->>>>>>> Stashed changes
