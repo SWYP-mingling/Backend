@@ -39,6 +39,11 @@ spring:
       host: ${LOCAL_REDIS_HOST}
       port: ${LOCAL_REDIS_PORT}
 
+kakao:
+  rest-api-key: ${KAKAO_REST_API_KEY}
+  local:
+    base-url: https://dapi.kakao.com
+
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
