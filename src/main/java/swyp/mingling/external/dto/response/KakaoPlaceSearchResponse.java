@@ -61,7 +61,10 @@ public class KakaoPlaceSearchResponse {
         @JsonProperty("is_end")
         private boolean isEnd;
 
+        @JsonProperty("pageable_count")
         private int pageableCount;
+
+        @JsonProperty("total_count")
         private int totalCount;
     }
 }

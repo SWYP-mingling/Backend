@@ -1,5 +1,6 @@
 package swyp.mingling.external;
 
+import java.time.Duration;
 import java.util.logging.Logger;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,6 +43,7 @@ public class KakaoPlaceClient {
                 )
                 .retrieve()
                 .bodyToMono(KakaoPlaceSearchResponse.class)
+                .timeout(Duration.ofSeconds(10))
                 .block();
         } catch (Exception e) {
             log.error("Kakao place search API call failed. query: {}, category: {}, page: {}, size: {}",

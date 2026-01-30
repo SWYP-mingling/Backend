@@ -36,7 +36,7 @@ public class RecommendPlaceUseCase {
     )
     public RecommendResponse execute(String midPlace, String category, int page, int size) {
 
-        log.info("[CACHE MISS] Call Kakao place search API - midPlace: {}, category: {}, page: {}, size: {},"
+        log.info("[CACHE MISS] Call Kakao place search API - midPlace: {}, category: {}, page: {}, size: {}"
             , midPlace, category, page, size);
 
         // 1. 카테고리 한글명을 카카오 카테고리 그룹 코드로 변환
