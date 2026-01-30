@@ -120,10 +120,10 @@ public class MeetingController {
      */
     @MeetingApiDocumentation.GetRecommendDoc
     @GetMapping("/{meetingId}/recommend")
-    public ApiResponse<List<RecommendResponse>> getRecommend(@PathVariable("meetingId") UUID meetingId,
+    public ApiResponse<RecommendResponse> getRecommend(@PathVariable("meetingId") UUID meetingId,
                                                              @RequestParam String midPlace,
                                                              @RequestParam String category) {
-        List<RecommendResponse> response = recommendPlaceUseCase.execute(midPlace, category);
+        RecommendResponse response = recommendPlaceUseCase.execute(midPlace, category);
         return ApiResponse.success(response);
     }
 

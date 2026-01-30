@@ -24,7 +24,7 @@ public class RecommendPlaceUseCase {
      * @param category 모임 목적 카테고리
      * @return 추천 장소 목록
      */
-    public List<RecommendResponse> execute(String midPlace, String category) {
+    public RecommendResponse execute(String midPlace, String category) {
 
         // 1. 카테고리 한글명을 카카오 카테고리 그룹 코드로 변환
         KakaoCategoryGroupCode categoryGroupCode = KakaoCategoryGroupCode.fromDescription(category);
@@ -32,12 +32,31 @@ public class RecommendPlaceUseCase {
         // 2. 카카오 장소 검색 API 호출
         KakaoPlaceSearchResponse response = kakaoPlaceClient.search(midPlace, categoryGroupCode);
 
-        // 3. 카카오 응답을 API 응답 DTO로 변환
-        return response.getDocuments().stream()
-            .map(doc -> new RecommendResponse(
-                doc.getPlaceName(),
-                doc.getRoadAddressName()
-            ))
+        List<RecommendResponse.PlaceInfo> placeInfos = response.getDocuments().stream()
+            .map(doc -> RecommendResponse.PlaceInfo.builder()
+                .placeName(doc.getPlaceName())
+                .categoryName(doc.getCategoryName())
+                .categoryGroupName(doc.getCategoryGroupName())
+                .phone(doc.getPhone())
+                .addressName(doc.getAddressName())
+                .roadAddressName(doc.getRoadAddressName())
+                .placeUrl(doc.getPlaceUrl())
+                .x(doc.getX())
+                .y(doc.getY())
+                .build()
+            )
             .toList();
+
+        RecommendResponse.SliceInfo sliceInfo =
+            RecommendResponse.SliceInfo.builder()
+                .hasNext(!response.getMeta().isEnd())
+//                .page(page)
+//                .size(places.size())
+                .build();
+
+        return RecommendResponse.builder()
+            .placeInfos(placeInfos)
+            .sliceInfo(sliceInfo)
+            .build();
     }
 }
