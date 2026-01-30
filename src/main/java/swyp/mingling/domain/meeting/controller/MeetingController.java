@@ -31,6 +31,7 @@ import swyp.mingling.domain.meeting.dto.response.UpdateDepartureResponse;
 import swyp.mingling.domain.meeting.service.CreateDepartureUseCase;
 import swyp.mingling.domain.meeting.service.CreateMeetingUseCase;
 import swyp.mingling.domain.meeting.service.GetMeetingStatusUseCase;
+import swyp.mingling.domain.meeting.service.RecommendPlaceUseCase;
 import swyp.mingling.domain.meeting.service.ResultMeetingUseCase;
 import swyp.mingling.domain.meeting.service.UpdateDepartureUseCase;
 import swyp.mingling.global.documentation.MeetingApiDocumentation;
@@ -51,6 +52,7 @@ public class MeetingController {
     private final CreateDepartureUseCase createDepartureUseCase;
     private final UpdateDepartureUseCase updateDepartureUseCase;
     private final GetMeetingStatusUseCase getMeetingStatusUseCase;
+    private final RecommendPlaceUseCase recommendPlaceUseCase;
 
     /**
      * 모임 생성 API
@@ -121,13 +123,8 @@ public class MeetingController {
     public ApiResponse<List<RecommendResponse>> getRecommend(@PathVariable("meetingId") UUID meetingId,
                                                              @RequestParam String midPlace,
                                                              @RequestParam String category) {
-
-        List<RecommendResponse> recommendResponses = List.of(
-                new RecommendResponse("카페1", "서울 동작구 동작대로..."),
-                new RecommendResponse("카페2", "서울 서초구 방배천로...")
-        );
-
-        return ApiResponse.success(recommendResponses);
+        List<RecommendResponse> response = recommendPlaceUseCase.execute(midPlace, category);
+        return ApiResponse.success(response);
     }
 
     /**

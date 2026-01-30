@@ -24,7 +24,7 @@ public class KakaoWebClientConfig {
     /**
      * 카카오 REST API Key
      */
-    @Value("${kakao.rest-api-key:}")
+    @Value("${kakao.rest-api-key}")
     private String restApiKey;
 
     /**
