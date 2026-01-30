@@ -22,7 +22,7 @@ public class WebConfig implements WebMvcConfigurer {
                                                                 "/v3/api-docs",
                                                                 "/api-docs/**",
                                                                 "/api/status",
-                                                                "actuator/health");
+                                                                "/actuator/health");
 
     }
 
