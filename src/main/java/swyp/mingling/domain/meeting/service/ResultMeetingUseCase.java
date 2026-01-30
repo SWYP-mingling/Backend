@@ -26,7 +26,7 @@ public class ResultMeetingUseCase {
                 .orElseThrow(BusinessException::meetingNotFound);
 
         // 공유 URL 생성
-        String meetingUrl = "https://mingling.com/meeting/" + meeting.getId();
+        String meetingUrl = "https://mingling.kr/meeting/" + meeting.getId();
 
         return new ResultMeetingResponse(meetingUrl);
     }

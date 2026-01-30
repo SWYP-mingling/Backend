@@ -57,7 +57,7 @@ public class MeetingApiDocumentation {
                     {
                       "success": true,
                       "data": {
-                        "meetingUrl": "https://mingling.com/meeting/62db1c35-f7db-4aad-acc8-0ad64f61a312",
+                        "meetingUrl": "https://mingling.kr/meeting/62db1c35-f7db-4aad-acc8-0ad64f61a312",
                         "meetingId": "62db1c35-f7db-4aad-acc8-0ad64f61a312"
                       },
                       "timestamp": "2026-01-19T21:30:00"
@@ -316,7 +316,7 @@ public class MeetingApiDocumentation {
                 {
                   "success": true,
                   "data": {
-                    "meetingUrl": "https://mingling.com/meeting/62db1c35-f7db-4aad-acc8-0ad64f61a312"
+                    "meetingUrl": "https://mingling.kr/meeting/62db1c35-f7db-4aad-acc8-0ad64f61a312"
                   },
                   "timestamp": "2026-01-21T18:00:00"
                 }
