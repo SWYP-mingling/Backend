@@ -60,7 +60,7 @@ public class CreateMeetingUseCase {
         }
 
         // 5. 모임 URL 반환
-        String meetingUrl = "https://mingling.com/meeting/" + savedMeeting.getId();
+        String meetingUrl = "https://mingling.kr/meeting/" + savedMeeting.getId();
         String meetingId = savedMeeting.getId().toString();
 
         return new CreateMeetingResponse(meetingUrl, meetingId);

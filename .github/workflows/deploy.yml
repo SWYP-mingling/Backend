@@ -17,20 +17,35 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+
       - name: Build with Gradle
         run: ./gradlew clean build -x test
 
-      # 2. NCR 로그인 및 푸시
+      # 2. Docker Buildx 설정
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # 3. NCR 로그인
       - name: Login to NCR
-        run: |
-          docker login ${{ secrets.NCR_ENDPOINT }} -u ${{ secrets.NCP_ACCESS_KEY }} -p ${{ secrets.NCP_SECRET_KEY }}
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ secrets.NCR_ENDPOINT }}
+          username: ${{ secrets.NCP_ACCESS_KEY }}
+          password: ${{ secrets.NCP_SECRET_KEY }}
 
+      # 4. Build and Push with Cache
       - name: Build and Push to NCR
-        run: |
-          docker build -t ${{ secrets.NCR_ENDPOINT }}/mingling-app:latest .
-          docker push ${{ secrets.NCR_ENDPOINT }}/mingling-app:latest
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.NCR_ENDPOINT }}/mingling-app:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
-      # 3. NCP 서버 접속 및 앱 교체
+      # 5. NCP 서버 접속 및 앱 교체
       - name: SSH Deploy & Health Check
         uses: appleboy/ssh-action@master
         with:
@@ -52,6 +67,7 @@ jobs:
               -e SPRING_DATASOURCE_USERNAME="${{ secrets.DB_USERNAME }}" \
               -e SPRING_DATASOURCE_PASSWORD="${{ secrets.DB_PASSWORD }}" \
               -e SPRING_DATA_REDIS_HOST="${{ secrets.REDIS_HOST }}" \
+              -e SPRING_SERVER_URL="${{ secrets.SPRING_SERVER_URL }}" \
               ${{ secrets.NCR_ENDPOINT }}/mingling-app:latest
             
             echo "Health check starting..."
