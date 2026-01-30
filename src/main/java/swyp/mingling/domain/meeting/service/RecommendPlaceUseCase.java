@@ -2,6 +2,8 @@ package swyp.mingling.domain.meeting.service;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import swyp.mingling.domain.meeting.dto.response.RecommendResponse;
 import swyp.mingling.external.KakaoPlaceClient;
@@ -11,6 +13,7 @@ import swyp.mingling.global.enums.KakaoCategoryGroupCode;
 /**
  * 장소 추천 UseCase
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class RecommendPlaceUseCase {
@@ -26,7 +29,15 @@ public class RecommendPlaceUseCase {
      * @param size     조회할 개수 (기본값 10)
      * @return 추천 장소 목록
      */
+    @Cacheable(
+        cacheNames = "place-recommend",
+        cacheManager = "placeCacheManager",
+        key = "'recommend:' + #midPlace + ':' + #category + ':' + #page + ':' + #size"
+    )
     public RecommendResponse execute(String midPlace, String category, int page, int size) {
+
+        log.info("[CACHE MISS] Call Kakao place search API - midPlace: {}, category: {}, page: {}, size: {},"
+            , midPlace, category, page, size);
 
         // 1. 카테고리 한글명을 카카오 카테고리 그룹 코드로 변환
         KakaoCategoryGroupCode categoryGroupCode = KakaoCategoryGroupCode.fromDescription(category);

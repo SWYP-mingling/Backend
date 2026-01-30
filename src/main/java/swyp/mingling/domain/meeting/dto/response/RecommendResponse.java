@@ -3,9 +3,11 @@ package swyp.mingling.domain.meeting.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 /**
  * 장소 추천 응답 DTO
@@ -13,6 +15,7 @@ import lombok.Getter;
 @Getter
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
 @Schema(description = "장소 추천 응답")
 public class RecommendResponse {
 
@@ -27,6 +30,8 @@ public class RecommendResponse {
      */
     @Getter
     @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
     @Schema(description = "추천 장소 정보")
     public static class PlaceInfo {
 
@@ -63,6 +68,8 @@ public class RecommendResponse {
      */
     @Getter
     @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
     @Schema(description = "무한 스크롤 정보")
     public static class SliceInfo {
 
