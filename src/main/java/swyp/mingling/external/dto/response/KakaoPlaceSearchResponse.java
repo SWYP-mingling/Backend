@@ -3,6 +3,8 @@ package swyp.mingling.external.dto.response;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import tools.jackson.databind.PropertyNamingStrategies;
@@ -15,6 +17,7 @@ import tools.jackson.databind.annotation.JsonNaming;
  */
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class KakaoPlaceSearchResponse {
 
@@ -32,6 +35,8 @@ public class KakaoPlaceSearchResponse {
      * 개별 장소 정보 DTO
      */
     @Getter
+    @Builder
+    @AllArgsConstructor
     @NoArgsConstructor
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -54,7 +59,9 @@ public class KakaoPlaceSearchResponse {
      * 검색 결과 메타 정보
      */
     @Getter
+    @Builder
     @NoArgsConstructor
+    @AllArgsConstructor
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Meta {
 
