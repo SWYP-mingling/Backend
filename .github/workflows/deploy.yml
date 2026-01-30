@@ -67,7 +67,7 @@ jobs:
               -e SPRING_DATASOURCE_USERNAME="${{ secrets.DB_USERNAME }}" \
               -e SPRING_DATASOURCE_PASSWORD="${{ secrets.DB_PASSWORD }}" \
               -e SPRING_DATA_REDIS_HOST="${{ secrets.REDIS_HOST }}" \
-              -e SPRING_SEVER_URL="${{ secrets.SPRING_SEVER_URL }}" \
+              -e SPRING_SERVER_URL="${{ secrets.SPRING_SERVER_URL }}" \
               ${{ secrets.NCR_ENDPOINT }}/mingling-app:latest
             
             echo "Health check starting..."

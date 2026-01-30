@@ -39,7 +39,7 @@ spring:
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
-    servers-url:  ${SPRING_SEVER_URL}
+    servers-url:  ${SPRING_SERVER_URL}
   api-docs:
     path: /api-docs
   show-actuator: true

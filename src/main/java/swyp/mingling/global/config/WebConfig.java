@@ -29,7 +29,9 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("https://mingling.kr/", "http://localhost:3000/") // 리액트 주소
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH");
+                .allowedOrigins("https://mingling.kr", "http://localhost:3000") // 리액트 주소
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH")
+                .allowedHeaders("*")
+                .allowCredentials(true);
     }
 }
