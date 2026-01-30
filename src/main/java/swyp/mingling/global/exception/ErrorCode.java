@@ -45,9 +45,10 @@ public enum ErrorCode {
     SESSION_COOKIE_EXPIRED(HttpStatus.UNAUTHORIZED, "SESSION_COOKIE_EXPIRED", "세션 및 쿠키가 만료가 되었습니다."),
 
     // 지하철 관련 에러
-    STATION_NOT_FOUND(HttpStatus.BAD_REQUEST, "STATION_NOT_FOUND", "유효하지 않은 역 이름입니다.");
+    STATION_NOT_FOUND(HttpStatus.BAD_REQUEST, "STATION_NOT_FOUND", "유효하지 않은 역 이름입니다."),
 
-
+    // 카카오 관련 에러
+    INVALID_KAKAO_CATEGORY(HttpStatus.BAD_REQUEST,"INVALID_KAKAO_CATEGORY", "지원하지 않는 카카오 카테고리입니다.");
     /**
      * 상태 코드
      */
