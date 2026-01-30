@@ -11,6 +11,7 @@ import swyp.mingling.domain.meeting.dto.response.GetMeetingStatusResponse;
 import swyp.mingling.domain.meeting.dto.response.GetMeetingStatusResponse.ParticipantInfo;
 import swyp.mingling.domain.meeting.entity.Meeting;
 import swyp.mingling.domain.meeting.repository.MeetingQueryRepository;
+import swyp.mingling.domain.participant.entity.Participant;
 import swyp.mingling.global.exception.BusinessException;
 
 @Slf4j
@@ -27,8 +28,13 @@ public class GetMeetingStatusUseCase {
         Meeting meeting = meetingQueryRepository.findMeetingStatusById(meetingId)
             .orElseThrow(() -> BusinessException.meetingNotFound());
 
-        // 2. DTO 변환
-        List<ParticipantInfo> participantInfos = meeting.getParticipants().stream()
+        // 2. 출발지 설정된 참여자
+        List<Participant> confirmedParticipants = meeting.getParticipants().stream()
+            .filter(p -> p.getDeparture() != null)
+            .toList();
+
+        // 3. DTO 변환
+        List<ParticipantInfo> participantInfos = confirmedParticipants.stream()
             .map(p -> {
                 StationCoordinate coordinate = findStationCoordinateUseCase.excute(p.getDeparture());
 

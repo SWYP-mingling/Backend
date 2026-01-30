@@ -20,7 +20,7 @@ public class MeetingQueryRepository {
         return em.createQuery("""
             select distinct m
             from Meeting m
-            join fetch m.participants
+            left join fetch m.participants
             where m.id = :meetingId
             and m.isDeleted = false
             """, Meeting.class)
