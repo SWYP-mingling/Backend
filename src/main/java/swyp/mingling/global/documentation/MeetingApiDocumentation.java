@@ -388,95 +388,161 @@ public class MeetingApiDocumentation {
     @Retention(RetentionPolicy.RUNTIME)
     @Operation(
             summary = "장소 추천 API",
-            description = "주변 추천 장소를 조회합니다."
+            description = "중간 지점과 카테고리를 기준으로 주변 추천 장소 목록을 조회합니다."
     )
     @ApiResponses({
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "장소 추천 조회 성공",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = swyp.mingling.global.response.ApiResponse.class),
-                            examples = @ExampleObject(
-                                    name = "SUCCESS",
-                                    value = """
-                {
-                  "success": true,
-                  "data": [
-                      {
-                        "title": "카페1",
-                        "roadAddress": "서울 동작구 동작대로..."
-                      },
-                      {
-                        "title": "카페2",
-                        "roadAddress": "서울 서초구 방배천로..."
-                      }
-                  ],
-                  "timestamp": "2026-01-22T16:00:00"
-                }
+        @ApiResponse(
+            responseCode = "200",
+            description = "장소 추천 조회 성공",
+            content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = swyp.mingling.global.response.ApiResponse.class),
+                examples = @ExampleObject(
+                    name = "SUCCESS",
+                    value = """
+                    {
+                        "success": true,
+                        "data": {
+                            "placeInfos": [
+                                {
+                                    "placeName": "두쫀쿠하우스",
+                                    "categoryName": "음식점 > 카페",
+                                    "categoryGroupName": "카페",
+                                    "phone": "02-1234-4568",
+                                    "addressName": "서울 마포구 합정동 123-45",
+                                    "roadAddressName": "서울 마포구 월드컵로1길 12",
+                                    "placeUrl": "http://place.map.kakao.com/0000000000",
+                                    "x": "126.000000000000",
+                                    "y": "37.0000000000000"
+                                },
+                                {
+                                    "placeName": "두쫀쿠마켓",
+                                    "categoryName": "음식점 > 카페",
+                                    "categoryGroupName": "카페",
+                                    "phone": "02-9123-4567",
+                                    "addressName": "서울 마포구 서교동 456-789",
+                                    "roadAddressName": "서울 마포구 양화로12길 3",
+                                    "placeUrl": "http://place.map.kakao.com/00000001",
+                                    "x": "126.0000000001",
+                                    "y": "37.0000000000001"
+                                },
+                                {
+                                    "placeName": "두쫀쿠커피",
+                                    "categoryName": "음식점 > 카페 > 커피전문점",
+                                    "categoryGroupName": "카페",
+                                    "phone": "02-891-2345",
+                                    "addressName": "서울 마포구 합정동 123-4",
+                                    "roadAddressName": "서울 마포구 동교로 1",
+                                    "placeUrl": "http://place.map.kakao.com/0000000002",
+                                    "x": "126.0000000000002",
+                                    "y": "37.0000000000002"
+                                }
+                            ],
+                            "sliceInfo": {
+                                "hasNext": false,
+                                "page": 5,
+                                "size": 3
+                            }
+                        },
+                        "timestamp": "2026-01-31T05:00:00"
+                    }
                 """
-                            )
-                    )
-            ),
-            @ApiResponse(
-                    responseCode = "401",
-                    description = "사용자 인증 실패",
-                    content = @Content(
-                            mediaType = "application/json",
-                            examples = @ExampleObject("""
-                {
-                  "success": false,
-                  "code": "USER_UNAUTHORIZED",
-                  "message": "사용자 인증에 실패했습니다.",
-                  "data": null,
-                  "timestamp": "2026-01-22T16:30:00"
-                }
-                """)
-                    )
-            ),
-            // SESSION_COOKIE_EXPIRED
-            @ApiResponse(
-                    responseCode = "401",
-                    description = "세션 및 쿠키 오류",
-                    content = @Content(
-                            mediaType = "application/json",
-                            examples = @ExampleObject(
-                                    name = "SESSION_COOKIE_EXPIRED",
-                                    description = "세션 및 쿠키 만료",
-                                    value = """
-                {
-                  "success": false,
-                  "code": "SESSION_COOKIE_EXPIRED",
-                  "message": "세션 및 쿠키가 만료가 되었습니다.",
-                  "timestamp": "2026-01-24T04:00:00"
-                }
-                """
-                            )
-                    )
-            ),
-            @ApiResponse(
-                    responseCode = "404",
-                    description = "존재하지 않는 모임",
-                    content = @Content(
-                            mediaType = "application/json",
-                            examples = @ExampleObject("""
+                )
+            )
+        ),
+        @ApiResponse(
+            responseCode = "400",
+            description = "지원하지 않는 카카오 카테고리",
+            content = @Content(
+                mediaType = "application/json",
+                examples = @ExampleObject(
+                    name = "INVALID_KAKAO_CATEGORY",
+                    value = """
+            {
+              "success": false,
+              "code": "INVALID_KAKAO_CATEGORY",
+              "message": "지원하지 않는 카카오 카테고리입니다.",
+              "data": null,
+              "timestamp": "2026-01-31T05:00:00"
+            }
+            """
+                )
+            )
+        ),
+        @ApiResponse(
+                responseCode = "401",
+                description = "사용자 인증 실패",
+                content = @Content(
+                        mediaType = "application/json",
+                        examples = @ExampleObject("""
+            {
+              "success": false,
+              "code": "USER_UNAUTHORIZED",
+              "message": "사용자 인증에 실패했습니다.",
+              "data": null,
+              "timestamp": "2026-01-22T16:30:00"
+            }
+            """)
+                )
+        ),
+        // SESSION_COOKIE_EXPIRED
+        @ApiResponse(
+                responseCode = "401",
+                description = "세션 및 쿠키 오류",
+                content = @Content(
+                        mediaType = "application/json",
+                        examples = @ExampleObject(
+                                name = "SESSION_COOKIE_EXPIRED",
+                                description = "세션 및 쿠키 만료",
+                                value = """
+            {
+              "success": false,
+              "code": "SESSION_COOKIE_EXPIRED",
+              "message": "세션 및 쿠키가 만료가 되었습니다.",
+              "timestamp": "2026-01-24T04:00:00"
+            }
+            """
+                        )
+                )
+        ),
+        // NOT_FOUND
+        @ApiResponse(
+            responseCode = "404",
+            description = "존재하지 않는 모임",
+            content = @Content(
+                mediaType = "application/json",
+                examples = @ExampleObject("""
                 {
                   "success": false,
                   "code": "MEETING_NOT_FOUND",
                   "message": "모임을 찾을 수 없습니다.",
                   "data": null,
-                  "timestamp": "2026-01-22T16:30:00"
+                  "timestamp": "2026-01-23T23:00:00"
                 }
                 """)
-                    )
-            ),
-            // INTERNAL_SERVER_ERROR
-            @ApiResponse(
-                    responseCode = "500",
-                    description = "서버 내부 오류",
-                    content = @Content(
-                            mediaType = "application/json",
-                            examples = @ExampleObject("""
+            )
+        ),
+        @ApiResponse(
+            responseCode = "500",
+            description = "서버 오류",
+            content = @Content(
+                mediaType = "application/json",
+                examples = {
+                    @ExampleObject(
+                        name = "EXTERNAL_API_ERROR",
+                        value = """
+                {
+                  "success": false,
+                  "code": "EXTERNAL_API_ERROR",
+                  "message": "외부 API 호출 중 오류가 발생했습니다.",
+                  "data": null,
+                  "timestamp": "2026-01-30T10:05:00"
+                }
+                """
+                    ),
+                    @ExampleObject(
+                        name = "INTERNAL_SERVER_ERROR",
+                        value = """
                 {
                   "success": false,
                   "code": "INTERNAL_SERVER_ERROR",
@@ -484,9 +550,11 @@ public class MeetingApiDocumentation {
                   "data": null,
                   "timestamp": "2026-01-22T17:00:00"
                 }
-                """)
+                """
                     )
+                }
             )
+        )
     })
     public @interface GetRecommendDoc {}
 
