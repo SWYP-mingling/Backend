@@ -121,7 +121,7 @@ class GetMeetingStatusUseCaseTest {
      * [성공 케이스]
      */
     @Test
-    @DisplayName("출발지 없는 참가자는 현황에서 제외된다")
+    @DisplayName("출발지 없는 참가자는 현황에서 제외된다.")
     void success_filterWithoutDeparture() {
         // given
         UUID meetingId = UUID.randomUUID();
