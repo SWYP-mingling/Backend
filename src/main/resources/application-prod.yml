@@ -1,7 +1,18 @@
 server:
   port: 8080
+  servlet:
+    session:
+      cookie:
+        same-site: none
+        secure: true
 
 spring:
+  session:
+    store-type: redis
+    redis:
+      namespace: spring:session:prod # prod용 네임스페이스 분리 권장
+    timeout: 30m
+
   jpa:
     hibernate:
       ddl-auto: none
@@ -18,11 +29,19 @@ spring:
       host: ${SPRING_DATA_REDIS_HOST}
       port: ${SPRING_DATA_REDIS_PORT:6379}
 
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    servers-url:  ${SPRING_SEVER_URL}
+  api-docs:
+    path: /api-docs
+  show-actuator: true
+
 management:
   endpoints:
     web:
       exposure:
-        include: health
+        include: health, info
   endpoint:
     health:
       show-details: never
