@@ -77,4 +77,13 @@ public class BusinessException extends RuntimeException{
     public static BusinessException invalidKakaoCategory() {
         return new BusinessException(ErrorCode.INVALID_KAKAO_CATEGORY);
     }
+
+    /**
+     * 외부 API 호출 중 오류가 발생한 경우 사용하는 정적 팩토리 메서드
+     *
+     * @return 외부 API 호출 오류 예외
+     */
+    public static BusinessException externalApiError() {
+        return new BusinessException(ErrorCode.EXTERNAL_API_ERROR);
+    }
 }

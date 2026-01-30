@@ -48,7 +48,8 @@ public enum ErrorCode {
     STATION_NOT_FOUND(HttpStatus.BAD_REQUEST, "STATION_NOT_FOUND", "유효하지 않은 역 이름입니다."),
 
     // 카카오 관련 에러
-    INVALID_KAKAO_CATEGORY(HttpStatus.BAD_REQUEST,"INVALID_KAKAO_CATEGORY", "지원하지 않는 카카오 카테고리입니다.");
+    INVALID_KAKAO_CATEGORY(HttpStatus.BAD_REQUEST,"INVALID_KAKAO_CATEGORY", "지원하지 않는 카카오 카테고리입니다."),
+    EXTERNAL_API_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "EXTERNAL_API_ERROR", "외부 API 호출 중 오류가 발생했습니다.");
     /**
      * 상태 코드
      */

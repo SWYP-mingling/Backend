@@ -1,14 +1,18 @@
 package swyp.mingling.external;
 
+import java.util.logging.Logger;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import swyp.mingling.external.dto.response.KakaoPlaceSearchResponse;
 import swyp.mingling.global.enums.KakaoCategoryGroupCode;
+import swyp.mingling.global.exception.BusinessException;
 
 /**
  * 카카오 장소 검색 API 호출을 담당하는 Client 클래스
  */
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class KakaoPlaceClient {
@@ -25,17 +29,25 @@ public class KakaoPlaceClient {
      * @return 카카오 장소 검색 응답
      */
     public KakaoPlaceSearchResponse search(String query, KakaoCategoryGroupCode categoryGroupCode, int page, int size) {
-        return webClient.get()
-            .uri(uriBuilder -> uriBuilder
-                .path("/v2/local/search/keyword.json")
-                .queryParam("query", query)
-                .queryParam("category_group_code", categoryGroupCode.getCode())
-                .queryParam("page", page)
-                .queryParam("size", size)
-                .build()
-            )
-            .retrieve()
-            .bodyToMono(KakaoPlaceSearchResponse.class)
-            .block();
+
+        try {
+            return webClient.get()
+                .uri(uriBuilder -> uriBuilder
+                    .path("/v2/local/search/keyword.json")
+                    .queryParam("query", query)
+                    .queryParam("category_group_code", categoryGroupCode.getCode())
+                    .queryParam("page", page)
+                    .queryParam("size", size)
+                    .build()
+                )
+                .retrieve()
+                .bodyToMono(KakaoPlaceSearchResponse.class)
+                .block();
+        } catch (Exception e) {
+            log.error("Kakao place search API call failed. query: {}, category: {}, page: {}, size: {}",
+                query, categoryGroupCode, page, size, e);
+            throw BusinessException.externalApiError();
+        }
+
     }
 }
