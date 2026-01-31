@@ -9,7 +9,7 @@ server:
 spring:
   config:
     activate:
-      on-profile: test
+      on-profile: prod
   session:
     store-type: redis
     redis:
