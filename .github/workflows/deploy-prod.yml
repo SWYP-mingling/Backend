@@ -2,7 +2,7 @@ name: Production Deploy to NCP
 
 on:
   push:
-    branches: [ "feature/SW-61-recommend-places-api-on-sever" ]
+    branches: [ "main" ]
 
 jobs:
   deploy:
