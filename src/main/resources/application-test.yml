@@ -34,7 +34,7 @@ spring:
   data:
     redis:
       host: ${SPRING_DATA_REDIS_HOST}
-      port: ${6379}
+      port: 6379
 
 kakao:
   rest-api-key: ${KAKAO_REST_API_KEY}
