@@ -32,11 +32,15 @@ public class HotPlace {
     @Column(name = "longitude", nullable = false, precision = 10, scale = 7)
     private BigDecimal longitude;
 
+    @Column(name = "line", length = 20)
+    private String line;
+
     @Builder
-    public HotPlace(String name, BigDecimal latitude, BigDecimal longitude) {
+    public HotPlace(String name, BigDecimal latitude, BigDecimal longitude, String line) {
         this.name = name;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.line = line;
     }
 
     /**
