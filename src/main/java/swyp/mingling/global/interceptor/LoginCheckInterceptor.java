@@ -12,6 +12,8 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.HandlerMapping;
 import swyp.mingling.global.exception.BusinessException;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 
@@ -42,7 +44,7 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
 
         if (cookies != null) {
             for (Cookie cookie : cookies) {
-                if ("nickname".equals(cookie.getName())) nickname = new String(cookie.getValue().getBytes("ISO-8859-1"));
+                if ("nickname".equals(cookie.getName())) nickname = URLDecoder.decode(cookie.getValue(), StandardCharsets.UTF_8);
                 if ("fakeSessionId".equals(cookie.getName())) sessionId = cookie.getValue();
             }
         }

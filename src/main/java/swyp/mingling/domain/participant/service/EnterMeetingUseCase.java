@@ -16,6 +16,8 @@ import swyp.mingling.domain.participant.dto.request.EnterMeetingRequest;
 import swyp.mingling.domain.participant.repository.ParticipantRepository;
 import swyp.mingling.global.exception.BusinessException;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 @Service
@@ -49,6 +51,9 @@ public class EnterMeetingUseCase {
             participantRepository.save(request.toEntity(meeting));
         }
 
+        String encodedNickname =
+                URLEncoder.encode(request.getUserId(), StandardCharsets.UTF_8);
+
         // 세션 추가
         HttpSession session = httprequest.getSession(true);
         String sessionId = session.getId();
@@ -63,7 +68,7 @@ public class EnterMeetingUseCase {
         httpresponse.addCookie(cookie1);
 
         // username 쿠키 추가
-        Cookie cookie2 = new Cookie("nickname", request.getUserId());
+        Cookie cookie2 = new Cookie("nickname", encodedNickname);
         cookie2.setPath("/meeting/" + meetingId);
         cookie2.setHttpOnly(true);
         cookie2.setMaxAge(60 * 60 * 24 * 7); // 7일
