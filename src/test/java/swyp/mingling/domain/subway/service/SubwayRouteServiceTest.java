@@ -19,9 +19,6 @@ import static org.assertj.core.api.Assertions.assertThat;
  * - API 키 환경변수 설정 필요 (SEOUL_METRO_API_KEY)
  * - API 호출 제한에 유의
  */
-@TestPropertySource(properties = {
-        "seoul.metro.api-key=4569585948737379313138635468706d",
-})
 @SpringBootTest
 @ActiveProfiles("test")
 class SubwayRouteServiceTest {
