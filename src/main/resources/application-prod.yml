@@ -44,6 +44,11 @@ kakao:
   local:
     base-url: https://dapi.kakao.com
 
+seoul:
+  metro:
+    base-url: http://openapi.seoul.go.kr:8088
+    api-key: ${SEOUL_METRO_API_KEY}
+
 springdoc:
   swagger-ui:
     path: /swagger-ui.html

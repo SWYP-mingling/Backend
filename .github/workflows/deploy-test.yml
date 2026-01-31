@@ -69,6 +69,7 @@ jobs:
               -e SPRING_DATA_REDIS_HOST="${{ secrets.TEST_REDIS_HOST }}" \
               -e SPRING_SERVER_URL="${{ secrets.TEST_SPRING_SERVER_URL }}" \
               -e KAKAO_REST_API_KEY="${{ secrets.KAKAO_REST_API_KEY }}" \
+              -e SEOUL_METRO_API_KEY="${{ secrets.SEOUL_METRO_API_KEY }}" \
               ${{ secrets.NCR_ENDPOINT }}/mingling-app:test
             
             echo "Health check starting..."
