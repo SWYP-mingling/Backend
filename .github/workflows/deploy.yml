@@ -2,7 +2,7 @@ name: Production Deploy to NCP
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "develop" ]
 
 jobs:
   deploy:
@@ -62,7 +62,7 @@ jobs:
             
             docker run -d --name spring-app \
               -p 8080:8080 \
-              -e SPRING_PROFILES_ACTIVE=prod \
+              -e SPRING_PROFILES_ACTIVE=test \
               -e SPRING_DATASOURCE_URL="${{ secrets.DB_URL }}" \
               -e SPRING_DATASOURCE_USERNAME="${{ secrets.DB_USERNAME }}" \
               -e SPRING_DATASOURCE_PASSWORD="${{ secrets.DB_PASSWORD }}" \
