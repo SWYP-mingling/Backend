@@ -32,7 +32,7 @@ public class MeetingApiDocumentation {
                                     value = """
                                     {
                                       "meetingName": "신년회",
-                                      "purposes": ["친목", "회식", "스터디"],
+                                      "purposes": ["맛집", "술집"],
                                       "purposeCount": 3,
                                       "capacity": 10,
                                       "deadline": "2026-01-30T23:59:59"
