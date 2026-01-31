@@ -194,30 +194,50 @@ public class MeetingApiDocumentation {
                                                           "data": {
                                                             "midpoints": [
                                                               {
-                                                            "name": "합정역",
-                                                            "latitude": 37.5484757,
-                                                            "longitude": 126.912071,
-                                                            "avgTravelTime": 30,
-                                                            "transferPath": "버스 > 1호선 > 2호선"
+                                                                "name": "합정역",
+                                                                "latitude": 37.5484757,
+                                                                "longitude": 126.912071,
+                                                                "avgTravelTime": 30,
+                                                                "transferPath": "2호선 > 6호선"
+                                                              },
+                                                              {
+                                                                "name": "서울역",
+                                                                "latitude": 37.554648,
+                                                                "longitude": 126.972559,
+                                                                "avgTravelTime": 35,
+                                                                "transferPath": "1호선 > 4호선"
+                                                              },
+                                                              {
+                                                                "name": "용산역",
+                                                                "latitude": 37.529844,
+                                                                "longitude": 126.964804,
+                                                                "avgTravelTime": 32,
+                                                                "transferPath": "경의중앙선 > 1호선"
+                                                              }
+                                                            ],
+                                                            "participantPaths": [
+                                                              {
+                                                                "userName": "사용자A",
+                                                                "departureStation": "구로디지털단지역",
+                                                                "transferPath": "2호선 > 6호선",
+                                                                "travelTime": 25
+                                                              },
+                                                              {
+                                                                "userName": "사용자B",
+                                                                "departureStation": "강남역",
+                                                                "transferPath": "2호선 > 6호선",
+                                                                "travelTime": 20
+                                                              },
+                                                              {
+                                                                "userName": "사용자C",
+                                                                "departureStation": "신림역",
+                                                                "transferPath": "2호선",
+                                                                "travelTime": 35
+                                                              }
+                                                            ]
                                                           },
-                                                          {
-                                                            "name": "서울역",
-                                                            "latitude": 37.554648,
-                                                            "longitude": 126.972559,
-                                                            "avgTravelTime": 35,
-                                                            "transferPath": "1호선 > 4호선"
-                                                          },
-                                                          {
-                                                            "name": "용산역",
-                                                            "latitude": 37.529844,
-                                                            "longitude": 126.964804,
-                                                            "avgTravelTime": 32,
-                                                            "transferPath": "경의중앙선 > 1호선"
-                                                          }
-                                                        ]
-                                                      },
-                                                      "timestamp": "2026-01-21T15:15:00"
-                                                    }
+                                                          "timestamp": "2026-01-21T15:15:00"
+                                                        }
                                                     """
                                     )
 

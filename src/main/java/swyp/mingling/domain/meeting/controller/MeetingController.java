@@ -84,14 +84,57 @@ public class MeetingController {
         // 3. 중간 지점 이름과 위도 경도, 로그인한 참여자의 출발 위치부터 중간지점 까지의 경로 전달
 
         List<GetMidpointResponse.MidpointDto> mockMidpoints = List.of(
-                new GetMidpointResponse.MidpointDto("합정역", 37.5484757, 126.912071, 30, "2호선 > 6호선"),
-                new GetMidpointResponse.MidpointDto("서울역", 37.554648, 126.972559, 35, "1호선 > 4호선"),
-                new GetMidpointResponse.MidpointDto("용산역", 37.529844, 126.964804, 32, "경의중앙선 > 1호선")
+                GetMidpointResponse.MidpointDto.builder()
+                        .name("합정역")
+                        .latitude(37.5484757)
+                        .longitude(126.912071)
+                        .avgTravelTime(30)
+                        .transferPath("2호선 > 6호선")
+                        .build(),
+                GetMidpointResponse.MidpointDto.builder()
+                        .name("서울역")
+                        .latitude(37.554648)
+                        .longitude(126.972559)
+                        .avgTravelTime(35)
+                        .transferPath("1호선 > 4호선")
+                        .build(),
+                GetMidpointResponse.MidpointDto.builder()
+                        .name("용산역")
+                        .latitude(37.529844)
+                        .longitude(126.964804)
+                        .avgTravelTime(32)
+                        .transferPath("경의중앙선 > 1호선")
+                        .build()
         );
 
+        List<GetMidpointResponse.ParticipantPath> mockParticipantPaths = List.of(
+                GetMidpointResponse.ParticipantPath.builder()
+                        .userName("사용자A")
+                        .departureStation("구로디지털단지역")
+                        .transferPath("2호선 > 6호선")
+                        .travelTime(25)
+                        .stationNames(List.of("구로디지털단지", "신도림", "영등포구청", "당산", "합정"))
+                        .build(),
+                GetMidpointResponse.ParticipantPath.builder()
+                        .userName("사용자B")
+                        .departureStation("강남역")
+                        .transferPath("2호선 > 6호선")
+                        .travelTime(20)
+                        .stationNames(List.of("강남", "역삼", "선릉", "삼성", "종합운동장", "합정"))
+                        .build(),
+                GetMidpointResponse.ParticipantPath.builder()
+                        .userName("사용자C")
+                        .departureStation("신림역")
+                        .transferPath("2호선")
+                        .travelTime(35)
+                        .stationNames(List.of("신림", "봉천", "서울대입구", "낙성대", "사당", "방배", "서초", "교대", "강남", "역삼", "선릉"))
+                        .build()
+        );
 
-
-        GetMidpointResponse response = new GetMidpointResponse(mockMidpoints);
+        GetMidpointResponse response = GetMidpointResponse.builder()
+                .midpoints(mockMidpoints)
+                .participantPaths(mockParticipantPaths)
+                .build();
 
         return ApiResponse.success(response);
     }
