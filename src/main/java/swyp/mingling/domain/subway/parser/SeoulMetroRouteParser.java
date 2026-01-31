@@ -7,7 +7,6 @@ import swyp.mingling.external.dto.response.SeoulMetroRouteResponse;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * 서울시 지하철 API 응답을 파싱하여 필요한 정보만 추출하는 Parser
