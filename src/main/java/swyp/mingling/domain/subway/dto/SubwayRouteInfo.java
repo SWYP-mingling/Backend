@@ -20,7 +20,8 @@ public class SubwayRouteInfo {
     private final String endStation;
     private final Integer totalTravelTime;
     private final Double totalDistance;
-    private final String transferPath;
+    private final Integer transferCount;
+    private final List<TransferInfo> transferPath;
     private final List<StationInfo> stations; // 이 부분이 Parser에서 사용됨
 
     /**
@@ -45,5 +46,17 @@ public class SubwayRouteInfo {
         private final Integer travelTime;
         private final boolean isTransfer;
         private final String transferStationName;
+    }
+
+    /**
+     * 환승 정보를 담는 내부 클래스
+     * 환승이 일어나는 역과 환승 후 타는 호선 정보
+     */
+    @Getter
+    @Builder
+    @ToString
+    public static class TransferInfo {
+        private final String stationName;  // 환승역 이름
+        private final String lineName;      // 환승 후 타는 호선
     }
 }

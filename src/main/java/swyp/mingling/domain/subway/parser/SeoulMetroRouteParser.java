@@ -44,8 +44,11 @@ public class SeoulMetroRouteParser {
         Integer totalDistanceInMeters = response.getBody().getTotalDstc();
         Double totalDistance = totalDistanceInMeters != null ? totalDistanceInMeters / 1000.0 : 0.0;
 
-        // 환승 경로 생성 (예: "2호선 > 6호선")
-        String transferPath = buildTransferPath(pathList);
+        // 환승 횟수
+        Integer transferCount = response.getBody().getTrsitNmtm();
+
+        // 환승 경로 생성 (환승역과 호선 정보)
+        List<SubwayRouteInfo.TransferInfo> transferPath = buildTransferPath(pathList);
 
         // 역별 상세 정보
         List<SubwayRouteInfo.StationInfo> stations = buildStationInfoList(pathList);
@@ -55,6 +58,7 @@ public class SeoulMetroRouteParser {
                 .endStation(endStation)
                 .totalTravelTime(totalTime)
                 .totalDistance(totalDistance)
+                .transferCount(transferCount)
                 .transferPath(transferPath)
                 .stations(stations)
                 .build();
@@ -99,35 +103,38 @@ public class SeoulMetroRouteParser {
     }
 
     /**
-     * 환승 경로 문자열 생성
-     * 예: "신분당선 > 2호선 > 1호선"
+     * 환승 정보 리스트 생성
+     * 환승이 일어나는 역과 환승 후 타는 호선 정보를 리스트로 반환
+     * 예: [[강남역, 9호선], [고속터미널역, 3호선]]
      *
      * @param pathList 경로 정보 리스트
-     * @return 환승 경로 문자열
+     * @return 환승 정보 리스트
      */
-    private String buildTransferPath(List<SeoulMetroRouteResponse.PathInfo> pathList) {
-        List<String> lines = new ArrayList<>();
+    private List<SubwayRouteInfo.TransferInfo> buildTransferPath(List<SeoulMetroRouteResponse.PathInfo> pathList) {
+        List<SubwayRouteInfo.TransferInfo> transferInfoList = new ArrayList<>();
         String currentLine = null;
 
-        // 첫 번째 경로의 출발역 호선 추가
+        // 첫 번째 경로의 출발역 호선을 현재 호선으로 설정
         if (!pathList.isEmpty()) {
-            String firstLine = pathList.get(0).getDptreStn().getLineNm();
-            lines.add(formatLineNumber(firstLine));
-            currentLine = firstLine;
+            currentLine = pathList.get(0).getDptreStn().getLineNm();
         }
 
-        // 각 경로의 도착역 호선 확인하여 변경 시 추가
+        // 각 경로의 도착역 호선 확인하여 변경 시 환승 정보 추가
         for (SeoulMetroRouteResponse.PathInfo path : pathList) {
-            String line = path.getArvlStn().getLineNm();
+            String arrivalLine = path.getArvlStn().getLineNm();
+            String arrivalStation = path.getArvlStn().getStnNm();
 
-            // 호선이 변경되었을 때만 추가 (중복 제거)
-            if (!line.equals(currentLine)) {
-                lines.add(formatLineNumber(line));
-                currentLine = line;
+            // 호선이 변경되었을 때 = 환승이 발생한 경우
+            if (!arrivalLine.equals(currentLine)) {
+                transferInfoList.add(SubwayRouteInfo.TransferInfo.builder()
+                        .stationName(arrivalStation)
+                        .lineName(formatLineNumber(arrivalLine))
+                        .build());
+                currentLine = arrivalLine;
             }
         }
 
-        return String.join(" > ", lines);
+        return transferInfoList;
     }
 
     /**

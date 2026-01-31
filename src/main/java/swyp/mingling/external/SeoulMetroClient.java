@@ -23,15 +23,13 @@ public class SeoulMetroClient {
     public SeoulMetroRouteResponse searchRoute(String startStationName, String endStationName) {
         String start = startStationName.replaceAll("역$", "");
         String end = endStationName.replaceAll("역$", "");
-        String now = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-
         return webClient.get()
                 .uri(uriBuilder -> {
                     var uri = uriBuilder
                             .pathSegment("getShtrmPath", "1", "5", start, end, now)
+                            .queryParam("schInclYn", "N")
                             .build();
 
-                    // [핵심] 여기서 최종 완성된 전체 주소를 로그로 찍습니다.
                     log.info("최종 API 요청 URL: {}", uri);
                     return uri;
                 })

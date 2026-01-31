@@ -46,6 +46,12 @@ public enum ErrorCode {
 
     // 지하철 관련 에러
     STATION_NOT_FOUND(HttpStatus.BAD_REQUEST, "STATION_NOT_FOUND", "유효하지 않은 역 이름입니다."),
+    SUBWAY_ROUTE_NOT_FOUND(HttpStatus.NOT_FOUND, "SUBWAY_ROUTE_NOT_FOUND", "해당하는 지하철 경로 데이터가 없습니다."),
+    SUBWAY_API_INVALID_KEY(HttpStatus.UNAUTHORIZED, "SUBWAY_API_INVALID_KEY", "서울시 지하철 API 인증키가 유효하지 않습니다."),
+    SUBWAY_API_MISSING_PARAMETER(HttpStatus.BAD_REQUEST, "SUBWAY_API_MISSING_PARAMETER", "필수 요청 값이 누락되었습니다."),
+    SUBWAY_API_SERVICE_NOT_FOUND(HttpStatus.BAD_REQUEST, "SUBWAY_API_SERVICE_NOT_FOUND", "해당하는 서비스를 찾을 수 없습니다."),
+    SUBWAY_API_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "SUBWAY_API_SERVER_ERROR", "서울시 지하철 API 서버 오류가 발생했습니다."),
+    SUBWAY_API_DB_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "SUBWAY_API_DB_ERROR", "서울시 지하철 API 데이터베이스 연결 오류가 발생했습니다."),
 
     // 카카오 관련 에러
     INVALID_KAKAO_CATEGORY(HttpStatus.BAD_REQUEST,"INVALID_KAKAO_CATEGORY", "지원하지 않는 카카오 카테고리입니다."),
