@@ -10,7 +10,7 @@ spring:
   session:
     store-type: redis
     redis:
-      namespace: spring:session:prod # prod용 네임스페이스 분리 권장
+      namespace: spring:session:test # prod용 네임스페이스 분리 권장
     timeout: 30m
 
   jpa:
@@ -34,7 +34,12 @@ spring:
   data:
     redis:
       host: ${SPRING_DATA_REDIS_HOST}
-      port: ${SPRING_DATA_REDIS_PORT:6379}
+      port: ${6379}
+
+kakao:
+  rest-api-key: ${KAKAO_REST_API_KEY}
+  local:
+    base-url: https://dapi.kakao.com
 
 springdoc:
   swagger-ui:
