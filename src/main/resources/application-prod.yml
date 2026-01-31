@@ -9,11 +9,11 @@ server:
 spring:
   config:
     activate:
-      on-profile: test
+      on-profile: prod
   session:
     store-type: redis
     redis:
-      namespace: spring:session:test # prod용 네임스페이스 분리 권장
+      namespace: spring:session:prod
     timeout: 30m
 
   jpa:

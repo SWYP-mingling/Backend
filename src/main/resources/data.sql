@@ -39,13 +39,6 @@ INSERT INTO `participant` (`id`, `meeting_id`, `nickname`, `password`, `departur
                         (3, '1c14d9ce-186b-41b3-971c-1f0d3dacecbc', '홍대짱', '5678', '신촌역', 10, 0, '2026-01-28 01:33:34', '2026-01-28 01:33:34'),
                         (4, 'eca30e6d-6d00-4c9d-8fb4-875d6ac5c80d', '산책러', '9012', '송파역', 20, 0, '2026-01-28 01:33:34', '2026-01-28 01:37:09');
 
-INSERT INTO mingling_dev.hot_place (name, latitude, longitude) VALUES
-                                                                   ('강남역', 37.4979502, 127.0276368),
-                                                                   ('홍대입구역', 37.5572229, 126.9239067),
-                                                                   ('서울역', 37.554648, 126.972559),
-                                                                   ('잠실역', 37.5133016, 127.1000575),
-                                                                   ('합정역', 37.5484757, 126.912071);
-
 -- 1번째 모임 참여자
 INSERT INTO mingling_dev.participant (meeting_id, nickname, password, departure, time) VALUES
                        ('40148038fb7511f094663a9f417233ce', '심세영', '1234', '양재역', 10),

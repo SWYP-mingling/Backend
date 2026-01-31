@@ -2,7 +2,7 @@ name: Production Deploy to NCP
 
 on:
   push:
-    branches: [ "develop" ]
+    branches: [ "main" ]
 
 jobs:
   deploy:
@@ -41,7 +41,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ secrets.NCR_ENDPOINT }}/mingling-app:latest
+          tags: ${{ secrets.NCR_ENDPOINT }}/mingling-app:prod
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -49,7 +49,7 @@ jobs:
       - name: SSH Deploy & Health Check
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.NCP_SERVER_IP }}
+          host: ${{ secrets.PROD_NCP_SERVER_IP }}
           username: root
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
@@ -58,18 +58,18 @@ jobs:
             docker stop spring-app || true
             docker rm spring-app || true
             
-            docker pull ${{ secrets.NCR_ENDPOINT }}/mingling-app:latest
+            docker pull ${{ secrets.NCR_ENDPOINT }}/mingling-app:prod
             
             docker run -d --name spring-app \
               -p 8080:8080 \
-              -e SPRING_PROFILES_ACTIVE=test \
-              -e SPRING_DATASOURCE_URL="${{ secrets.DB_URL }}" \
-              -e SPRING_DATASOURCE_USERNAME="${{ secrets.DB_USERNAME }}" \
-              -e SPRING_DATASOURCE_PASSWORD="${{ secrets.DB_PASSWORD }}" \
-              -e SPRING_DATA_REDIS_HOST="${{ secrets.REDIS_HOST }}" \
-              -e SPRING_SERVER_URL="${{ secrets.SPRING_SERVER_URL }}" \
+              -e SPRING_PROFILES_ACTIVE=prod \
+              -e SPRING_DATASOURCE_URL="${{ secrets.PROD_DB_URL }}" \
+              -e SPRING_DATASOURCE_USERNAME="${{ secrets.PROD_DB_USERNAME }}" \
+              -e SPRING_DATASOURCE_PASSWORD="${{ secrets.PROD_DB_PASSWORD }}" \
+              -e SPRING_DATA_REDIS_HOST="${{ secrets.PROD_REDIS_HOST }}" \
+              -e SPRING_SERVER_URL="${{ secrets.PROD_SPRING_SERVER_URL }}" \
               -e KAKAO_REST_API_KEY="${{ secrets.KAKAO_REST_API_KEY }}" \
-              ${{ secrets.NCR_ENDPOINT }}/mingling-app:latest
+              ${{ secrets.NCR_ENDPOINT }}/mingling-app:prod
             
             echo "Health check starting..."
             for i in {1..20}; do
