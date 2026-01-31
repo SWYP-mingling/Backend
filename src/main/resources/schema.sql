@@ -15,7 +15,8 @@ CREATE TABLE IF NOT EXISTS mingling_dev.hot_place (
     hot_place_id INT AUTO_INCREMENT PRIMARY KEY COMMENT '핫플레이스 ID',
     name VARCHAR(50) NOT NULL COMMENT '장소명',
     latitude DECIMAL(10, 7) NOT NULL COMMENT '위도',
-    longitude DECIMAL(10, 7) NOT NULL COMMENT '경도'
+    longitude DECIMAL(10, 7) NOT NULL COMMENT '경도',
+    line VARCHAR(20) COMMENT '지하철 호선'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='핫플레이스';
 
 -- 3. 모임 테이블 (BaseTimeEntity 상속)
@@ -65,3 +66,5 @@ CREATE TABLE IF NOT EXISTS mingling_dev.participant (
     INDEX idx_meeting_id (meeting_id),
     INDEX idx_is_deleted (is_deleted)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='참여자';
+;
+
