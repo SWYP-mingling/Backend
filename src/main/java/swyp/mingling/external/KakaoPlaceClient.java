@@ -4,6 +4,7 @@ import java.time.Duration;
 import java.util.logging.Logger;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import swyp.mingling.external.dto.response.KakaoPlaceSearchResponse;
@@ -15,10 +16,13 @@ import swyp.mingling.global.exception.BusinessException;
  */
 @Slf4j
 @Component
-@RequiredArgsConstructor
 public class KakaoPlaceClient {
 
     private final WebClient webClient;
+
+    public KakaoPlaceClient(@Qualifier("kakaoWebClient") WebClient webClient) {
+        this.webClient = webClient;
+    }
 
     /**
      * 키워드 장소 검색
