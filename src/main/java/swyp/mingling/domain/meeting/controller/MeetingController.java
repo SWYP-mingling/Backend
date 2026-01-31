@@ -2,7 +2,6 @@ package swyp.mingling.domain.meeting.controller;
 
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -31,6 +30,7 @@ import swyp.mingling.domain.meeting.dto.response.UpdateDepartureResponse;
 import swyp.mingling.domain.meeting.service.CreateDepartureUseCase;
 import swyp.mingling.domain.meeting.service.CreateMeetingUseCase;
 import swyp.mingling.domain.meeting.service.GetMeetingStatusUseCase;
+import swyp.mingling.domain.meeting.service.RecommendPlaceUseCase;
 import swyp.mingling.domain.meeting.service.ResultMeetingUseCase;
 import swyp.mingling.domain.meeting.service.UpdateDepartureUseCase;
 import swyp.mingling.global.documentation.MeetingApiDocumentation;
@@ -51,6 +51,7 @@ public class MeetingController {
     private final CreateDepartureUseCase createDepartureUseCase;
     private final UpdateDepartureUseCase updateDepartureUseCase;
     private final GetMeetingStatusUseCase getMeetingStatusUseCase;
+    private final RecommendPlaceUseCase recommendPlaceUseCase;
 
     /**
      * 모임 생성 API
@@ -114,20 +115,19 @@ public class MeetingController {
      * @param meetingId 모임 UUID
      * @param midPlace  중간 지점 장소 (query param)
      * @param category  모임 목적 (query param)
+     * @param page      조회할 페이지 번호 (1부터 시작)
+     * @param size      조회할 개수 (기본값 10)
      * @return 장소 추천 장소들 목록
      */
     @MeetingApiDocumentation.GetRecommendDoc
     @GetMapping("/{meetingId}/recommend")
-    public ApiResponse<List<RecommendResponse>> getRecommend(@PathVariable("meetingId") UUID meetingId,
-                                                             @RequestParam String midPlace,
-                                                             @RequestParam String category) {
-
-        List<RecommendResponse> recommendResponses = List.of(
-                new RecommendResponse("카페1", "서울 동작구 동작대로..."),
-                new RecommendResponse("카페2", "서울 서초구 방배천로...")
-        );
-
-        return ApiResponse.success(recommendResponses);
+    public ApiResponse<RecommendResponse> getRecommend(@PathVariable("meetingId") UUID meetingId,
+                                                       @RequestParam String midPlace,
+                                                       @RequestParam String category,
+                                                       @RequestParam(defaultValue = "1") int page,
+                                                       @RequestParam(defaultValue = "10") int size) {
+        RecommendResponse response = recommendPlaceUseCase.execute(midPlace, category, page, size);
+        return ApiResponse.success(response);
     }
 
     /**
