@@ -68,6 +68,7 @@ jobs:
               -e SPRING_DATASOURCE_PASSWORD="${{ secrets.DB_PASSWORD }}" \
               -e SPRING_DATA_REDIS_HOST="${{ secrets.REDIS_HOST }}" \
               -e SPRING_SERVER_URL="${{ secrets.SPRING_SERVER_URL }}" \
+              -e KAKAO_REST_API_KEY="${{ secrets.KAKAO_REST_API_KEY }}" \
               ${{ secrets.NCR_ENDPOINT }}/mingling-app:latest
             
             echo "Health check starting..."

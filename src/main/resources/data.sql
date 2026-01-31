@@ -14,12 +14,13 @@ INSERT INTO `meeting` (`id`, `name`, `count`, `deadline`, `status`, `is_deleted`
 
 DELETE FROM `meeting_purpose`;
 INSERT INTO `meeting_purpose` (`purpose_id`, `name`, `is_active`) VALUES
-                                                                      (1, '친목', 1),
-                                                                      (2, '회의', 1),
-                                                                      (3, '맛집', 1),
-                                                                      (5, '술집', 1),
-                                                                      (8, '카페', 1),
-                                                                      (10, '놀거리', 1);;
+                                                                      (1, '맛집', 1),
+                                                                      (2, '술집', 1),
+                                                                      (3, '카페', 1),
+                                                                      (4, '놀거리', 1),
+                                                                      (5, '스터디카페', 1),
+                                                                      (7, '장소대여', 1);
+
 
 
 DELETE FROM `meeting_purpose_mapping`;
@@ -37,7 +38,7 @@ INSERT INTO `participant` (`id`, `meeting_id`, `nickname`, `password`, `departur
                         (2, '556453cb-a84e-486d-8079-9fa11585ab58', '강남피플', '1234', '양재역', 15, 0, '2026-01-28 01:33:34', '2026-01-28 01:33:34'),
                         (3, '1c14d9ce-186b-41b3-971c-1f0d3dacecbc', '홍대짱', '5678', '신촌역', 10, 0, '2026-01-28 01:33:34', '2026-01-28 01:33:34'),
                         (4, 'eca30e6d-6d00-4c9d-8fb4-875d6ac5c80d', '산책러', '9012', '송파역', 20, 0, '2026-01-28 01:33:34', '2026-01-28 01:37:09');
-=======
+
 INSERT INTO mingling_dev.hot_place (name, latitude, longitude) VALUES
                                                                    ('강남역', 37.4979502, 127.0276368),
                                                                    ('홍대입구역', 37.5572229, 126.9239067),
