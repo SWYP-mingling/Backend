@@ -1,0 +1,62 @@
+server:
+  port: 8080
+  servlet:
+    session:
+      cookie:
+        same-site: none
+        secure: true
+
+spring:
+  config:
+    activate:
+      on-profile: test
+  session:
+    store-type: redis
+    redis:
+      namespace: spring:session:prod
+    timeout: 30m
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+
+  sql:
+    init:
+      mode: never
+      schema-locations: classpath:schema.sql
+      data-locations: classpath:data.sql
+      encoding: utf-8
+
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    driver-class-name: org.mariadb.jdbc.Driver
+
+  data:
+    redis:
+      host: ${SPRING_DATA_REDIS_HOST}
+      port: 6379
+
+kakao:
+  rest-api-key: ${KAKAO_REST_API_KEY}
+  local:
+    base-url: https://dapi.kakao.com
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    servers-url:  ${SPRING_SERVER_URL}
+  api-docs:
+    path: /api-docs
+  show-actuator: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+  endpoint:
+    health:
+      show-details: never
