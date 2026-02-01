@@ -4,37 +4,19 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-import java.util.List;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.annotation.*;
 import swyp.mingling.domain.meeting.dto.request.CreateDepartureRequest;
 import swyp.mingling.domain.meeting.dto.request.CreateMeetingRequest;
 import swyp.mingling.domain.meeting.dto.request.UpdateDepartureRequest;
-import swyp.mingling.domain.meeting.dto.response.CreateDepartureResponse;
-import swyp.mingling.domain.meeting.dto.response.CreateMeetingResponse;
-import swyp.mingling.domain.meeting.dto.response.GetMeetingStatusResponse;
-import swyp.mingling.domain.meeting.dto.response.GetMidpointResponse;
-import swyp.mingling.domain.meeting.dto.response.RecommendResponse;
-import swyp.mingling.domain.meeting.dto.response.ResultMeetingResponse;
-import swyp.mingling.domain.meeting.dto.response.UpdateDepartureResponse;
-import swyp.mingling.domain.meeting.service.CreateDepartureUseCase;
-import swyp.mingling.domain.meeting.service.CreateMeetingUseCase;
-import swyp.mingling.domain.meeting.service.GetMeetingStatusUseCase;
-import swyp.mingling.domain.meeting.service.RecommendPlaceUseCase;
-import swyp.mingling.domain.meeting.service.ResultMeetingUseCase;
-import swyp.mingling.domain.meeting.service.UpdateDepartureUseCase;
+import swyp.mingling.domain.meeting.dto.response.*;
+import swyp.mingling.domain.meeting.service.*;
 import swyp.mingling.global.documentation.MeetingApiDocumentation;
 import swyp.mingling.global.response.ApiResponse;
+
+import java.util.List;
+import java.util.UUID;
 
 /**
  * 모임 관련 API 컨트롤러
@@ -42,7 +24,7 @@ import swyp.mingling.global.response.ApiResponse;
 @Slf4j
 @Tag(name = "모임 API", description = "모임 생성 및 관리 API")
 @RestController
-@RequestMapping("/api/meeting")
+@RequestMapping("/meeting")
 @RequiredArgsConstructor
 public class MeetingController {
 
