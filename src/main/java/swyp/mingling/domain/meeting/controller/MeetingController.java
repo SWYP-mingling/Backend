@@ -42,7 +42,7 @@ import swyp.mingling.global.response.ApiResponse;
 @Slf4j
 @Tag(name = "모임 API", description = "모임 생성 및 관리 API")
 @RestController
-@RequestMapping("/meeting")
+@RequestMapping("/api/meeting")
 @RequiredArgsConstructor
 public class MeetingController {
 
