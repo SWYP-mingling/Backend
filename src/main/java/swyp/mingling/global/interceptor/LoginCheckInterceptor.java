@@ -31,6 +31,13 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
 
         // meetingid 가져오기
         Map<String, String> pathVariables = (Map<String, String>) request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
+
+        // meetingId가 없는 경로(예: POST /meeting 생성)라면 검증을 생략하고 통과 - 방어로직
+        if (pathVariables == null || !pathVariables.containsKey("meetingId")) {
+            log.info("meetingId가 없는 경로이므로 인터셉터를 통과합니다. URI: {}", request.getRequestURI());
+            return true;
+        }
+
         String meetingId = pathVariables.get("meetingId");
 
         if(meetingId == null) {
