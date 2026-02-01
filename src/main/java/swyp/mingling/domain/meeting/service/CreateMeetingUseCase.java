@@ -14,10 +14,11 @@ import swyp.mingling.global.exception.BusinessException;
 import swyp.mingling.global.exception.ErrorCode;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class CreateMeetingUseCase {
 
     private final MeetingRepository meetingRepository;
@@ -34,8 +35,15 @@ public class CreateMeetingUseCase {
         List<MeetingPurpose> purposes = meetingPurposeRepository.findByNameIn(request.getPurposes());
 
         if (purposes.size() != request.getPurposes().size()) {
-            // 정의되지 않은 목적명이 포함된 경우 BusinessException 발생
-            throw new BusinessException(ErrorCode.PURPOSE_NOT_FOUND);
+            // '회의', '친목'은 에러를 발생시키지 않고 pass (방어 로직)
+            List<String> validPurposes = request.getPurposes().stream()
+                    .filter(p -> !p.equals("회의") && !p.equals("친목"))
+                    .collect(Collectors.toList());
+
+            // '회의', '친목'을 제외한 나머지 목적명들 중 정의되지 않은 것이 있으면 예외 발생
+            if (purposes.size() != validPurposes.size()) {
+                throw new BusinessException(ErrorCode.PURPOSE_NOT_FOUND);
+            }
         }
 
         // 2. Meeting 엔티티 생성
