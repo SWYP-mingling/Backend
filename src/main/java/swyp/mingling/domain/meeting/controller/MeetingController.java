@@ -128,7 +128,7 @@ public class MeetingController {
      * @return 생성된 모임 URL 응답
      */
     @MeetingApiDocumentation.ResultMeetingDoc
-    @GetMapping("/{meetingId}/result")
+    @GetMapping("/result/{meetingId}")
     public ApiResponse<ResultMeetingResponse> resultMeeting(@PathVariable("meetingId") String meetingId) {
         ResultMeetingResponse response = resultMeetingUseCase.getResultMeetingUrl(meetingId);
         return ApiResponse.success(response);
