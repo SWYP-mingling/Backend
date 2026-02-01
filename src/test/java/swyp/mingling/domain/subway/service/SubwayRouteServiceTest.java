@@ -20,7 +20,6 @@ import static org.assertj.core.api.Assertions.assertThat;
  * - API 호출 제한에 유의
  */
 @TestPropertySource(properties = {
-        "seoul.metro.api-key=지하철 API 키 입력",
 })
 @SpringBootTest
 @ActiveProfiles("test")
@@ -45,17 +44,29 @@ class SubwayRouteServiceTest {
         assertThat(routeInfo).isNotNull();
         assertThat(routeInfo.getTotalTravelTime()).isGreaterThan(0);
         assertThat(routeInfo.getTotalDistance()).isGreaterThan(0.0);
-        assertThat(routeInfo.getTransferPath()).isNotEmpty();
+        assertThat(routeInfo.getTransferCount()).isNotNull();
+        assertThat(routeInfo.getTransferCount()).isGreaterThanOrEqualTo(0);
+        assertThat(routeInfo.getTransferPath()).isNotNull();
         assertThat(routeInfo.getStations()).isNotEmpty();
         assertThat(routeInfo.getStationNames()).isNotEmpty();
 
         // 결과 출력
-        log.info("====== 강남역 → 신사역 경로 정보 ======");
+        log.info("====== 강남역 → 마곡역 경로 정보 ======");
         log.info("출발역: {}", routeInfo.getStartStation());
         log.info("도착역: {}", routeInfo.getEndStation());
         log.info("소요시간: {}분", routeInfo.getTotalTravelTime());
         log.info("이동거리: {}km", routeInfo.getTotalDistance());
-        log.info("환승경로: {}", routeInfo.getTransferPath());
+        log.info("환승횟수: {}회", routeInfo.getTransferCount());
+
+        // 환승 정보 출력
+        log.info("====== 환승 정보 ======");
+        if (routeInfo.getTransferPath().isEmpty()) {
+            log.info("환승 없음 (직통)");
+        } else {
+            routeInfo.getTransferPath().forEach(transfer ->
+                log.info("환승역: {}, 호선: {}", transfer.getStationName(), transfer.getLineName())
+            );
+        }
 
         // 경유 역 리스트 출력
         log.info("====== 경유 역 리스트 ======");

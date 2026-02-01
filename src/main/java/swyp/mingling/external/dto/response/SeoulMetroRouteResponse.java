@@ -179,6 +179,73 @@ public class SeoulMetroRouteResponse {
     }
 
     /**
+     * API 응답 에러 코드 반환
+     *
+     * @return 에러 코드 (헤더가 없으면 null)
+     */
+    public String getErrorCode() {
+        return header != null ? header.getResultCode() : null;
+    }
+
+    /**
+     * API 응답 에러 메시지 반환
+     *
+     * @return 에러 메시지 (헤더가 없으면 null)
+     */
+    public String getErrorMessage() {
+        return header != null ? header.getResultMsg() : null;
+    }
+
+    /**
+     * 데이터 없음 여부 확인 (INFO-200)
+     *
+     * @return 데이터 없음 시 true
+     */
+    public boolean isNoData() {
+        return header != null && "INFO-200".equals(header.getResultCode());
+    }
+
+    /**
+     * 인증키 오류 여부 확인 (INFO-100)
+     *
+     * @return 인증키 오류 시 true
+     */
+    public boolean isInvalidApiKey() {
+        return header != null && "INFO-100".equals(header.getResultCode());
+    }
+
+    /**
+     * 필수 값 누락 오류 여부 확인 (ERROR-300)
+     *
+     * @return 필수 값 누락 시 true
+     */
+    public boolean isMissingParameter() {
+        return header != null && "ERROR-300".equals(header.getResultCode());
+    }
+
+    /**
+     * 서비스 없음 오류 여부 확인 (ERROR-310)
+     *
+     * @return 서비스 없음 시 true
+     */
+    public boolean isServiceNotFound() {
+        return header != null && "ERROR-310".equals(header.getResultCode());
+    }
+
+    /**
+     * 서버 오류 여부 확인 (ERROR-500, ERROR-600, ERROR-601)
+     *
+     * @return 서버 오류 시 true
+     */
+    public boolean isServerError() {
+        if (header == null) {
+            return false;
+        }
+        String code = header.getResultCode();
+        return "ERROR-500".equals(code) || "ERROR-600".equals(code) || "ERROR-601".equals(code);
+    }
+
+    /**
      * 경로 정보 목록 반환
      *
      * @return 경로 정보 리스트 (없으면 빈 리스트)
