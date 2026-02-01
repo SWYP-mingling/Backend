@@ -150,7 +150,7 @@ public class MeetingController {
                                                        @RequestParam String midPlace,
                                                        @RequestParam String category,
                                                        @RequestParam(defaultValue = "1") int page,
-                                                       @RequestParam(defaultValue = "10") int size) {
+                                                       @RequestParam(defaultValue = "15") int size) {
         RecommendResponse response = recommendPlaceUseCase.execute(midPlace, category, page, size);
         return ApiResponse.success(response);
     }
