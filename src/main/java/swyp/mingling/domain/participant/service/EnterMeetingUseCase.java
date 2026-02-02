@@ -1,12 +1,12 @@
 package swyp.mingling.domain.participant.service;
 
 
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseCookie;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -61,18 +61,25 @@ public class EnterMeetingUseCase {
         session.setMaxInactiveInterval(60 * 60 * 24 * 7); // 7일
 
         // 가짜 세션 쿠키 추가
-        Cookie cookie1 = new Cookie("fakeSessionId", sessionId);
-        cookie1.setPath("/meeting/" + meetingId);
-        cookie1.setHttpOnly(true);
-        cookie1.setMaxAge(60 * 60 * 24 * 7); // 7일
-        httpresponse.addCookie(cookie1);
+        ResponseCookie fakeSessionCookie = ResponseCookie.from("fakeSessionId", sessionId)
+                .path("/meeting/" + meetingId)
+                .sameSite("Lax")
+                .secure(false)
+                .httpOnly(true)
+                .maxAge(60 * 60 * 24 * 7)     // 7일
+                .build();
 
         // username 쿠키 추가
-        Cookie cookie2 = new Cookie("nickname", encodedNickname);
-        cookie2.setPath("/meeting/" + meetingId);
-        cookie2.setHttpOnly(true);
-        cookie2.setMaxAge(60 * 60 * 24 * 7); // 7일
-        httpresponse.addCookie(cookie2);
+        ResponseCookie nicknameCookie = ResponseCookie.from("nickname", encodedNickname)
+                .path("/meeting/" + meetingId)
+                .sameSite("Lax")
+                .secure(false)
+                .httpOnly(true)
+                .maxAge(60 * 60 * 24 * 7)
+                .build();
+
+        httpresponse.addHeader(org.springframework.http.HttpHeaders.SET_COOKIE, fakeSessionCookie.toString());
+        httpresponse.addHeader(org.springframework.http.HttpHeaders.SET_COOKIE, nicknameCookie.toString());
 
     }
 }
