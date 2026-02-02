@@ -59,10 +59,5 @@ springdoc:
   default-consumes-media-type: application/json
   default-produces-media-type: application/json
 
-mingling:
-  api:
-    test-api: ${TEST_API_URL}
-    prod-api: ${PROD_API_URL}
-
 server:
   port: 8888
