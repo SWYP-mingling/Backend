@@ -1,7 +1,6 @@
 package swyp.mingling.global.config;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -13,12 +12,6 @@ import swyp.mingling.global.interceptor.LoginCheckInterceptor;
 public class WebConfig implements WebMvcConfigurer {
 
     private final LoginCheckInterceptor interceptor;
-
-    @Value("${mingling.api.test-api}")
-    private String testapi;
-
-    @Value("${mingling.api.prod-api}")
-    private String prodapi;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -38,7 +31,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("https://mingling.kr", "http://localhost:3000","https://www.mingling.kr",testapi, prodapi)
+                .allowedOrigins("https://mingling.kr", "http://localhost:3000","https://www.mingling.kr")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true);
