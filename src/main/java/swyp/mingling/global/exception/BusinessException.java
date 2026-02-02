@@ -86,4 +86,13 @@ public class BusinessException extends RuntimeException{
     public static BusinessException externalApiError() {
         return new BusinessException(ErrorCode.EXTERNAL_API_ERROR);
     }
+
+    /**
+     * 모임 목적 카테고리를 찾을 수 없는 경우 사용하는 정적 팩토리 메서드
+     *
+     * @return 모임 목적 카테고리 미존재 예외
+     */
+    public static BusinessException purposeNotFound() {
+        return new BusinessException(ErrorCode.PURPOSE_NOT_FOUND);
+    }
 }

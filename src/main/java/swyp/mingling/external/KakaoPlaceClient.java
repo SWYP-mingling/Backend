@@ -1,14 +1,12 @@
 package swyp.mingling.external;
 
 import java.time.Duration;
-import java.util.logging.Logger;
-import lombok.RequiredArgsConstructor;
+import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import swyp.mingling.external.dto.response.KakaoPlaceSearchResponse;
-import swyp.mingling.global.enums.KakaoCategoryGroupCode;
 import swyp.mingling.global.exception.BusinessException;
 
 /**
@@ -17,6 +15,8 @@ import swyp.mingling.global.exception.BusinessException;
 @Slf4j
 @Component
 public class KakaoPlaceClient {
+
+    private static final int API_TIMEOUT_SECONDS = 5;
 
     private final WebClient webClient;
 
@@ -33,21 +33,21 @@ public class KakaoPlaceClient {
      * @param size 조회할 개수
      * @return 카카오 장소 검색 응답
      */
-    public KakaoPlaceSearchResponse search(String query, KakaoCategoryGroupCode categoryGroupCode, int page, int size) {
+    public KakaoPlaceSearchResponse search(String query, String categoryGroupCode, int page, int size) {
 
         try {
             return webClient.get()
                 .uri(uriBuilder -> uriBuilder
                     .path("/v2/local/search/keyword.json")
                     .queryParam("query", query)
-                    .queryParam("category_group_code", categoryGroupCode.getCode())
+                    .queryParamIfPresent("category_group_code", Optional.ofNullable(categoryGroupCode))
                     .queryParam("page", page)
                     .queryParam("size", size)
                     .build()
                 )
                 .retrieve()
                 .bodyToMono(KakaoPlaceSearchResponse.class)
-                .timeout(Duration.ofSeconds(10))
+                .timeout(Duration.ofSeconds(API_TIMEOUT_SECONDS))
                 .block();
         } catch (Exception e) {
             log.error("Kakao place search API call failed. query: {}, category: {}, page: {}, size: {}",
