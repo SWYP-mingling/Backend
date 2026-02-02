@@ -70,8 +70,6 @@ jobs:
               -e SPRING_SERVER_URL="${{ secrets.TEST_SPRING_SERVER_URL }}" \
               -e KAKAO_REST_API_KEY="${{ secrets.KAKAO_REST_API_KEY }}" \
               -e SEOUL_METRO_API_KEY="${{ secrets.SEOUL_METRO_API_KEY }}" \
-              -e TEST_API_URL="${{ secrets.TEST_API_URL }}" \
-              -e PROD_API_URL="${{ secrets.PROD_API_URL }}" \
               ${{ secrets.NCR_ENDPOINT }}/mingling-app:test
             
             echo "Health check starting..."
