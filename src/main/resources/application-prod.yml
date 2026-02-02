@@ -65,3 +65,8 @@ management:
   endpoint:
     health:
       show-details: never
+
+mingling:
+  api:
+    test-api: ${TEST_API_URL}
+    prod-api: ${PROD_API_URL}
