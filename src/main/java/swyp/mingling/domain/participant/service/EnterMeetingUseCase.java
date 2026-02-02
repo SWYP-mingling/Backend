@@ -64,7 +64,7 @@ public class EnterMeetingUseCase {
         ResponseCookie fakeSessionCookie = ResponseCookie.from("fakeSessionId", sessionId)
                 .path("/meeting/" + meetingId)
                 .sameSite("None")
-                .secure(false)
+                .secure(true)
                 .httpOnly(true)
                 .maxAge(60 * 60 * 24 * 7)     // 7일
                 .build();
@@ -73,7 +73,7 @@ public class EnterMeetingUseCase {
         ResponseCookie nicknameCookie = ResponseCookie.from("nickname", encodedNickname)
                 .path("/meeting/" + meetingId)
                 .sameSite("None")
-                .secure(false)
+                .secure(true)
                 .httpOnly(true)
                 .maxAge(60 * 60 * 24 * 7)
                 .build();
