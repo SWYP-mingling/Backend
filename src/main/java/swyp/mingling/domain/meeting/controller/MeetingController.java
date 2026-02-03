@@ -10,6 +10,7 @@ import swyp.mingling.domain.meeting.dto.request.CreateDepartureRequest;
 import swyp.mingling.domain.meeting.dto.request.CreateMeetingRequest;
 import swyp.mingling.domain.meeting.dto.request.UpdateDepartureRequest;
 import swyp.mingling.domain.meeting.dto.response.*;
+import swyp.mingling.domain.meeting.dto.response.midpoint.StationPathResponse;
 import swyp.mingling.domain.meeting.service.*;
 import swyp.mingling.domain.subway.dto.SubwayRouteInfo;
 import swyp.mingling.global.documentation.MeetingApiDocumentation;
@@ -61,9 +62,9 @@ public class MeetingController {
     @GetMapping("/{meetingId}/midpoint")
     public ApiResponse<Object> getMidpoint(@PathVariable("meetingId") UUID meetingId) {
 
-        midPointUseCase.execute(meetingId);
+        List<StationPathResponse> execute = midPointUseCase.execute(meetingId);
 
-        return ApiResponse.success();
+        return ApiResponse.success(execute);
     }
 
     /**
