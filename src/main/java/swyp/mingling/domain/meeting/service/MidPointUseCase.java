@@ -26,7 +26,7 @@ public class MidPointUseCase {
     private final HotPlaceRepository hotPlaceRepository;
     private final SubwayRouteService subwayRouteService;
 
-    public List<RecommendedMeetingDto> execute(UUID meetingId) {
+    public List<GetMidPointResponse> execute(UUID meetingId) {
 
         // 위도 경도 상 중간 지점 찾기
         List<DepartureListResponse> departurelists = meetingRepository.findDeparturesAndNicknameByMeetingId(meetingId);
@@ -96,7 +96,7 @@ public class MidPointUseCase {
                 .toList();
 
         // 1. 결과 데이터를 담을 리스트
-        List<RecommendedMeetingDto> finalResult = midlist.stream()
+        List<GetMidPointResponse> finalResult = midlist.stream()
                 .map(routeList -> {
                     // 이 그룹의 공통 목적지 추출
                     String endStationName = routeList.get(0).getEndStation();
@@ -111,8 +111,8 @@ public class MidPointUseCase {
 
                                 return UserRouteDto.builder()
                                         .nickname(nickname)
-                                        .startStationLine(route.getStartStationLine())
                                         .startStation(route.getStartStation())
+                                        .startStationLine(route.getStartStationLine())
                                         .latitude(findStationCoordinateUseCase.excute(route.getStartStation()).getLatitude())
                                         .longitude(findStationCoordinateUseCase.excute(route.getStartStation()).getLongitude())
                                         .travelTime(route.getTotalTravelTime())
@@ -135,7 +135,7 @@ public class MidPointUseCase {
                             .toList();
 
                     // 3. 최종 추천 장소 객체 생성
-                    return RecommendedMeetingDto.builder()
+                    return GetMidPointResponse.builder()
                             .endStationLine(endStationLine)
                             .endStation(endStationName)
                             .latitude(findStationCoordinateUseCase.excute(endStationName).getLatitude())

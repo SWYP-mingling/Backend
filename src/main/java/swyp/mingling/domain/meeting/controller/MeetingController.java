@@ -10,9 +10,8 @@ import swyp.mingling.domain.meeting.dto.request.CreateDepartureRequest;
 import swyp.mingling.domain.meeting.dto.request.CreateMeetingRequest;
 import swyp.mingling.domain.meeting.dto.request.UpdateDepartureRequest;
 import swyp.mingling.domain.meeting.dto.response.*;
-import swyp.mingling.domain.meeting.dto.response.midpoint.RecommendedMeetingDto;
+import swyp.mingling.domain.meeting.dto.response.midpoint.GetMidPointResponse;
 import swyp.mingling.domain.meeting.service.*;
-import swyp.mingling.domain.subway.dto.SubwayRouteInfo;
 import swyp.mingling.global.documentation.MeetingApiDocumentation;
 import swyp.mingling.global.response.ApiResponse;
 
@@ -61,7 +60,7 @@ public class MeetingController {
     @GetMapping("/{meetingId}/midpoint")
     public ApiResponse<Object> getMidpoint(@PathVariable("meetingId") UUID meetingId) {
 
-        List<RecommendedMeetingDto> execute = midPointUseCase.execute(meetingId);
+        List<GetMidPointResponse> execute = midPointUseCase.execute(meetingId);
 
 
         return ApiResponse.success(execute);
