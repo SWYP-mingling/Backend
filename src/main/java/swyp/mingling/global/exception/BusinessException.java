@@ -70,6 +70,15 @@ public class BusinessException extends RuntimeException{
     }
 
     /**
+     * 모임 인원이 초과된 경우 사용하는 정적 팩토리 메서드
+     *
+     * @return 모임 인원 초과 예외
+     */
+    public static BusinessException capacityExceeded() {
+        return new BusinessException(ErrorCode.CAPACITY_EXCEEDED);
+    }
+
+    /**
      * 지원하지 않는 카카오 장소 카테고리가 입력된 경우 사용하는 정적 팩토리 메서드
      *
      * @return 지원하지 않는 카카오 카테고리 예외
