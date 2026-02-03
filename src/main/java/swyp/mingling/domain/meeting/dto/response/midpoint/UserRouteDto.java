@@ -10,13 +10,14 @@ import java.util.List;
 @Builder
 
 // 1. 개별 사용자의 경로 요약 정보
-@JsonPropertyOrder({ "nickname", "startStation", "latitude", "longitude", "travelTime", "transferPath", "stations" })
+@JsonPropertyOrder({ "nickname", "startStation", "startStationLine", "latitude", "longitude", "travelTime", "transferPath", "stations" })
 public class UserRouteDto {
-    String nickname;
-    String startStation;
+    private String nickname;
+    private String startStation;
+    private String startStationLine;
     private double latitude;
     private double longitude;
-    int travelTime;
-    List<StationPathResponse> transferPath;
-    List<StationPathResponse> stations;
+    private int travelTime;
+    private List<StationPathResponse> transferPath;
+    private List<StationPathResponse> stations;
 }

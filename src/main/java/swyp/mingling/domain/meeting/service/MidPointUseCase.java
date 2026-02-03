@@ -100,6 +100,7 @@ public class MidPointUseCase {
                 .map(routeList -> {
                     // 이 그룹의 공통 목적지 추출
                     String endStationName = routeList.get(0).getEndStation();
+                    String endStationLine = routeList.get(0).getEndStationLine();
 
                     // 2. 인덱스를 활용해 사용자별 닉네임과 경로 정보를 매핑 (IntStream 사용)
                     List<UserRouteDto> userRouteDtos = IntStream.range(0, routeList.size())
@@ -110,6 +111,7 @@ public class MidPointUseCase {
 
                                 return UserRouteDto.builder()
                                         .nickname(nickname)
+                                        .startStationLine(route.getStartStationLine())
                                         .startStation(route.getStartStation())
                                         .latitude(findStationCoordinateUseCase.excute(route.getStartStation()).getLatitude())
                                         .longitude(findStationCoordinateUseCase.excute(route.getStartStation()).getLongitude())
@@ -134,6 +136,7 @@ public class MidPointUseCase {
 
                     // 3. 최종 추천 장소 객체 생성
                     return RecommendedMeetingDto.builder()
+                            .endStationLine(endStationLine)
                             .endStation(endStationName)
                             .latitude(findStationCoordinateUseCase.excute(endStationName).getLatitude())
                             .longitude(findStationCoordinateUseCase.excute(endStationName).getLongitude())

@@ -9,7 +9,9 @@ import java.util.List;
 @Builder
 // 2. 하나의 추천 장소에 대한 전체 요약 (최종 결과용)
 public class RecommendedMeetingDto {
-    String endStation;
+
+    private String endStationLine;
+    private String endStation;
     private double latitude;
     private double longitude;
     List<UserRouteDto> userRoutes;

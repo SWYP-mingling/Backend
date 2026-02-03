@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * - API 호출 제한에 유의
  */
 @TestPropertySource(properties = {
-       "seoul.metro.api-key=4569585948737379313138635468706d"
+       "seoul.metro.api-key=지하철 API 키 입력"
 })
 @SpringBootTest(classes = {
         SubwayRouteService.class,
