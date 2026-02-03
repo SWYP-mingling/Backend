@@ -5,17 +5,18 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import swyp.mingling.domain.meeting.dto.RecommendedMeetingDto;
 import swyp.mingling.domain.meeting.dto.StationCoordinate;
+import swyp.mingling.domain.meeting.dto.UserRouteDto;
 import swyp.mingling.domain.meeting.dto.response.midpoint.DepartureListResponse;
 import swyp.mingling.domain.meeting.dto.response.midpoint.HotPlaceCategoryResponse;
-import swyp.mingling.domain.meeting.dto.response.midpoint.StationPathResponse;
 import swyp.mingling.domain.meeting.repository.HotPlaceRepository;
 import swyp.mingling.domain.meeting.repository.MeetingRepository;
 import swyp.mingling.domain.subway.dto.SubwayRouteInfo;
 import swyp.mingling.domain.subway.service.SubwayRouteService;
 
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Service
 @Transactional(readOnly = true)
@@ -28,7 +29,7 @@ public class MidPointUseCase {
     private final HotPlaceRepository hotPlaceRepository;
     private final SubwayRouteService subwayRouteService;
 
-    public List<StationPathResponse> execute(UUID meetingId) {
+    public List<RecommendedMeetingDto> execute(UUID meetingId) {
 
         // 위도 경도 상 중간 지점 찾기
         List<DepartureListResponse> departurelists = meetingRepository.findDeparturesAndNicknameByMeetingId(meetingId);
@@ -97,19 +98,51 @@ public class MidPointUseCase {
                 .map(Map.Entry::getKey)
                 .toList();
 
-        List<StationPathResponse> stationPathResponses = midlist.stream() // List<List<Route>>
-                .flatMap(List::stream) // Route 리스트를 풀어서 Stream<Route>
-                .flatMap(route -> route.getStations().stream() // 각 Route의 stations 풀기
-                        .map(station -> StationPathResponse.from(
-                                station.getLineNumber(),  // lineNumber
-                                station.getStationName(), // stationName
-                                findStationCoordinateUseCase.excute(station.getStationName()).getLatitude(), // 위도 계산 메서드
-                                findStationCoordinateUseCase.excute(station.getStationName()).getLongitude() // 경도 계산 메서드
-                        ))
-                )
-                .collect(Collectors.toList());
+//        List<StationPathResponse> stationPathResponses = midlist.stream() // List<List<Route>>
+//                .flatMap(List::stream) // Route 리스트를 풀어서 Stream<Route>
+//                .flatMap(route -> route.getStations().stream() // 각 Route의 stations 풀기
+//                        .map(station -> StationPathResponse.from(
+//                                station.getLineNumber(),  // lineNumber
+//                                station.getStationName(), // stationName
+//                                findStationCoordinateUseCase.excute(station.getStationName()).getLatitude(), // 위도 계산 메서드
+//                                findStationCoordinateUseCase.excute(station.getStationName()).getLongitude() // 경도 계산 메서드
+//                        ))
+//                )
+//                .collect(Collectors.toList());
 
-        return stationPathResponses;
+        // 1. 결과 데이터를 담을 리스트
+        List<RecommendedMeetingDto> finalResult = midlist.stream()
+                .map(routeList -> {
+                    // 이 그룹의 공통 목적지 추출
+                    String endStationName = routeList.get(0).getEndStation();
+
+                    // 2. 인덱스를 활용해 사용자별 닉네임과 경로 정보를 매핑 (IntStream 사용)
+                    List<UserRouteDto> userRouteDtos = IntStream.range(0, routeList.size())
+                            .mapToObj(i -> {
+                                SubwayRouteInfo route = routeList.get(i);
+                                // 기존 참여자 리스트(departurelists)에서 같은 순서의 닉네임을 가져옴
+                                String nickname = departurelists.get(i).getNickname();
+
+                                return UserRouteDto.builder()
+                                        .nickname(nickname)
+                                        .startStation(route.getStartStation())
+                                        .travelTime(route.getTotalTravelTime())
+                                        .stations(route.getStations())
+                                        .build();
+                            })
+                            .toList();
+
+                    // 3. 최종 추천 장소 객체 생성
+                    return RecommendedMeetingDto.builder()
+                            .endStation(endStationName)
+                            .userRoutes(userRouteDtos)
+                            .build();
+                })
+                .toList();
+
+        System.out.println(finalResult);
+
+        return finalResult;
 
     }
 
@@ -128,5 +161,9 @@ public class MidPointUseCase {
 
         return R * c; // km 단위
     }
+
+
+
+
 
 }

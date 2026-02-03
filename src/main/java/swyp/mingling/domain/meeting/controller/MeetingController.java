@@ -6,18 +6,16 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import swyp.mingling.domain.meeting.dto.RecommendedMeetingDto;
 import swyp.mingling.domain.meeting.dto.request.CreateDepartureRequest;
 import swyp.mingling.domain.meeting.dto.request.CreateMeetingRequest;
 import swyp.mingling.domain.meeting.dto.request.UpdateDepartureRequest;
 import swyp.mingling.domain.meeting.dto.response.*;
-import swyp.mingling.domain.meeting.dto.response.midpoint.StationPathResponse;
 import swyp.mingling.domain.meeting.service.*;
-import swyp.mingling.domain.subway.dto.SubwayRouteInfo;
 import swyp.mingling.global.documentation.MeetingApiDocumentation;
 import swyp.mingling.global.response.ApiResponse;
 
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -62,7 +60,7 @@ public class MeetingController {
     @GetMapping("/{meetingId}/midpoint")
     public ApiResponse<Object> getMidpoint(@PathVariable("meetingId") UUID meetingId) {
 
-        List<StationPathResponse> execute = midPointUseCase.execute(meetingId);
+        List<RecommendedMeetingDto> execute = midPointUseCase.execute(meetingId);
 
         return ApiResponse.success(execute);
     }
