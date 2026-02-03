@@ -52,6 +52,13 @@ public class EnterMeetingUseCase {
                 throw BusinessException.meetingUser();
             }
         } else {
+            // 새로운 참여자인 경우, 실제 참여자 수 체크
+            long currentParticipantCount = participantRepository.countByMeetingAndIsDeletedFalse(meeting);
+
+            if(currentParticipantCount >= 10) { // 참여자 MAX 값
+                throw BusinessException.capacityExceeded();
+            }
+
             participantRepository.save(request.toEntity(meeting));
         }
 

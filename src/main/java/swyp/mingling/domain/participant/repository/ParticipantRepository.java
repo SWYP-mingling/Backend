@@ -19,8 +19,10 @@ public interface ParticipantRepository extends JpaRepository<Participant, Intege
 
     boolean existsByMeetingAndNickname(Meeting meeting,
                                       String nickname);
-                                      
+
     Optional<Participant> findByMeetingIdAndNickname(UUID meetingId, String nickname);
+
+    long countByMeetingAndIsDeletedFalse(Meeting meeting);
 
 
 }
