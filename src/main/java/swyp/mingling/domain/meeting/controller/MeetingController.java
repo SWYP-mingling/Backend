@@ -1,6 +1,5 @@
 package swyp.mingling.domain.meeting.controller;
 
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -12,10 +11,12 @@ import swyp.mingling.domain.meeting.dto.request.CreateMeetingRequest;
 import swyp.mingling.domain.meeting.dto.request.UpdateDepartureRequest;
 import swyp.mingling.domain.meeting.dto.response.*;
 import swyp.mingling.domain.meeting.service.*;
+import swyp.mingling.domain.subway.dto.SubwayRouteInfo;
 import swyp.mingling.global.documentation.MeetingApiDocumentation;
 import swyp.mingling.global.response.ApiResponse;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -34,6 +35,7 @@ public class MeetingController {
     private final UpdateDepartureUseCase updateDepartureUseCase;
     private final GetMeetingStatusUseCase getMeetingStatusUseCase;
     private final RecommendPlaceUseCase recommendPlaceUseCase;
+    private final MidPointUseCase midPointUseCase;
 
     /**
      * 모임 생성 API
@@ -57,68 +59,11 @@ public class MeetingController {
      */
     @MeetingApiDocumentation.GetMidpointDoc
     @GetMapping("/{meetingId}/midpoint")
-    public ApiResponse<GetMidpointResponse> getMidpoint(@PathVariable("meetingId") UUID meetingId,
-                                                        @Parameter(hidden = true)
-                                                        @SessionAttribute(value = "userName") String userName) {
-        // TODO: 실제 로직 구현 필요
-        // 1. meetingId로 모임 존재 여부 확인
-        // 2. name + meetingId로 기존 참여자 조회(확인필요)
-        // 3. 중간 지점 이름과 위도 경도, 로그인한 참여자의 출발 위치부터 중간지점 까지의 경로 전달
+    public ApiResponse<Object> getMidpoint(@PathVariable("meetingId") UUID meetingId) {
 
-        List<GetMidpointResponse.MidpointDto> mockMidpoints = List.of(
-                GetMidpointResponse.MidpointDto.builder()
-                        .name("합정역")
-                        .latitude(37.5484757)
-                        .longitude(126.912071)
-                        .avgTravelTime(30)
-                        .transferPath("2호선 > 6호선")
-                        .build(),
-                GetMidpointResponse.MidpointDto.builder()
-                        .name("서울역")
-                        .latitude(37.554648)
-                        .longitude(126.972559)
-                        .avgTravelTime(35)
-                        .transferPath("1호선 > 4호선")
-                        .build(),
-                GetMidpointResponse.MidpointDto.builder()
-                        .name("용산역")
-                        .latitude(37.529844)
-                        .longitude(126.964804)
-                        .avgTravelTime(32)
-                        .transferPath("경의중앙선 > 1호선")
-                        .build()
-        );
+        midPointUseCase.execute(meetingId);
 
-        List<GetMidpointResponse.ParticipantPath> mockParticipantPaths = List.of(
-                GetMidpointResponse.ParticipantPath.builder()
-                        .userName("사용자A")
-                        .departureStation("구로디지털단지역")
-                        .transferPath("2호선 > 6호선")
-                        .travelTime(25)
-                        .stationNames(List.of("구로디지털단지", "신도림", "영등포구청", "당산", "합정"))
-                        .build(),
-                GetMidpointResponse.ParticipantPath.builder()
-                        .userName("사용자B")
-                        .departureStation("강남역")
-                        .transferPath("2호선 > 6호선")
-                        .travelTime(20)
-                        .stationNames(List.of("강남", "역삼", "선릉", "삼성", "종합운동장", "합정"))
-                        .build(),
-                GetMidpointResponse.ParticipantPath.builder()
-                        .userName("사용자C")
-                        .departureStation("신림역")
-                        .transferPath("2호선")
-                        .travelTime(35)
-                        .stationNames(List.of("신림", "봉천", "서울대입구", "낙성대", "사당", "방배", "서초", "교대", "강남", "역삼", "선릉"))
-                        .build()
-        );
-
-        GetMidpointResponse response = GetMidpointResponse.builder()
-                .midpoints(mockMidpoints)
-                .participantPaths(mockParticipantPaths)
-                .build();
-
-        return ApiResponse.success(response);
+        return ApiResponse.success();
     }
 
     /**

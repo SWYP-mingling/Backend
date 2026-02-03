@@ -2,8 +2,14 @@
 -- 엔티티 기준 스키마 (2026-01-28)
 -- ============================================
 
+DROP TABLE IF EXISTS participant;
+DROP TABLE IF EXISTS meeting_purpose_mapping;
+DROP TABLE IF EXISTS meeting;
+DROP TABLE IF EXISTS hot_place;
+DROP TABLE IF EXISTS meeting_purpose;
+
 -- 1. 모임 목적 테이블 (BaseTimeEntity 상속 안 함)
-CREATE TABLE IF NOT EXISTS mingling_dev.meeting_purpose (
+CREATE TABLE IF NOT EXISTS meeting_purpose (
     purpose_id INT AUTO_INCREMENT PRIMARY KEY COMMENT '모임 목적 ID',
     name VARCHAR(30) NOT NULL UNIQUE COMMENT '모임 목적명 (중복 방지)',
     is_active BOOLEAN NOT NULL DEFAULT TRUE COMMENT '활성화 여부',
@@ -11,16 +17,16 @@ CREATE TABLE IF NOT EXISTS mingling_dev.meeting_purpose (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='모임 목적';
 
 -- 2. 핫플레이스 테이블 (BaseTimeEntity 상속 안 함)
-CREATE TABLE IF NOT EXISTS mingling_dev.hot_place (
+CREATE TABLE IF NOT EXISTS hot_place (
     hot_place_id INT AUTO_INCREMENT PRIMARY KEY COMMENT '핫플레이스 ID',
     name VARCHAR(50) NOT NULL COMMENT '장소명',
-    latitude DECIMAL(10, 7) NOT NULL COMMENT '위도',
-    longitude DECIMAL(10, 7) NOT NULL COMMENT '경도',
+    latitude DOUBLE NOT NULL COMMENT '위도',
+    longitude DOUBLE NOT NULL COMMENT '경도',
     line VARCHAR(20) COMMENT '지하철 호선'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='핫플레이스';
 
 -- 3. 모임 테이블 (BaseTimeEntity 상속)
-CREATE TABLE IF NOT EXISTS mingling_dev.meeting (
+CREATE TABLE IF NOT EXISTS meeting (
     id VARCHAR(36) PRIMARY KEY COMMENT '모임 UUID',
     hot_place_id INT COMMENT '핫플레이스 ID (nullable)',
     name VARCHAR(100) NOT NULL COMMENT '모임명',
@@ -38,7 +44,7 @@ CREATE TABLE IF NOT EXISTS mingling_dev.meeting (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='모임';
 
 -- 4. 모임-목적 매핑 테이블 (BaseTimeEntity 상속, 다대다 관계)
-CREATE TABLE IF NOT EXISTS mingling_dev.meeting_purpose_mapping (
+CREATE TABLE IF NOT EXISTS meeting_purpose_mapping (
     id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '매핑 ID',
     meeting_id VARCHAR(36) NOT NULL COMMENT '모임 UUID',
     purpose_id INT NOT NULL COMMENT '모임 목적 ID',
@@ -52,7 +58,7 @@ CREATE TABLE IF NOT EXISTS mingling_dev.meeting_purpose_mapping (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='모임-목적 매핑';
 
 -- 5. 참여자 테이블 (BaseTimeEntity 상속)
-CREATE TABLE IF NOT EXISTS mingling_dev.participant (
+CREATE TABLE IF NOT EXISTS participant (
     id INT AUTO_INCREMENT PRIMARY KEY COMMENT '참여자 ID',
     meeting_id VARCHAR(36) NOT NULL COMMENT '모임 UUID',
     nickname VARCHAR(30) NOT NULL COMMENT '닉네임',
