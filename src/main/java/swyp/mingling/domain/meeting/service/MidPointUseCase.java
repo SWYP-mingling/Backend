@@ -5,11 +5,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import swyp.mingling.domain.meeting.dto.RecommendedMeetingDto;
+import swyp.mingling.domain.meeting.dto.response.midpoint.*;
 import swyp.mingling.domain.meeting.dto.StationCoordinate;
-import swyp.mingling.domain.meeting.dto.UserRouteDto;
-import swyp.mingling.domain.meeting.dto.response.midpoint.DepartureListResponse;
-import swyp.mingling.domain.meeting.dto.response.midpoint.HotPlaceCategoryResponse;
 import swyp.mingling.domain.meeting.repository.HotPlaceRepository;
 import swyp.mingling.domain.meeting.repository.MeetingRepository;
 import swyp.mingling.domain.subway.dto.SubwayRouteInfo;
@@ -98,18 +95,6 @@ public class MidPointUseCase {
                 .map(Map.Entry::getKey)
                 .toList();
 
-//        List<StationPathResponse> stationPathResponses = midlist.stream() // List<List<Route>>
-//                .flatMap(List::stream) // Route 리스트를 풀어서 Stream<Route>
-//                .flatMap(route -> route.getStations().stream() // 각 Route의 stations 풀기
-//                        .map(station -> StationPathResponse.from(
-//                                station.getLineNumber(),  // lineNumber
-//                                station.getStationName(), // stationName
-//                                findStationCoordinateUseCase.excute(station.getStationName()).getLatitude(), // 위도 계산 메서드
-//                                findStationCoordinateUseCase.excute(station.getStationName()).getLongitude() // 경도 계산 메서드
-//                        ))
-//                )
-//                .collect(Collectors.toList());
-
         // 1. 결과 데이터를 담을 리스트
         List<RecommendedMeetingDto> finalResult = midlist.stream()
                 .map(routeList -> {
@@ -126,8 +111,23 @@ public class MidPointUseCase {
                                 return UserRouteDto.builder()
                                         .nickname(nickname)
                                         .startStation(route.getStartStation())
+                                        .latitude(findStationCoordinateUseCase.excute(route.getStartStation()).getLatitude())
+                                        .longitude(findStationCoordinateUseCase.excute(route.getStartStation()).getLongitude())
                                         .travelTime(route.getTotalTravelTime())
-                                        .stations(route.getStations())
+                                        .transferPath(route.getTransferPath().stream().
+                                                map(transfer -> StationPathResponse.from(
+                                                        transfer.getLineName(),
+                                                        transfer.getStationName(),
+                                                        findStationCoordinateUseCase.excute(transfer.getStationName()).getLatitude(),
+                                                        findStationCoordinateUseCase.excute(transfer.getStationName()).getLongitude())).toList())
+
+
+                                        .stations(route.getStations().stream().
+                                                map(station -> StationPathResponse.from(
+                                                        station.getLineNumber(),
+                                                        station.getStationName(),
+                                                        findStationCoordinateUseCase.excute(station.getStationName()).getLatitude(),
+                                                        findStationCoordinateUseCase.excute(station.getStationName()).getLongitude())).toList())
                                         .build();
                             })
                             .toList();
@@ -135,12 +135,12 @@ public class MidPointUseCase {
                     // 3. 최종 추천 장소 객체 생성
                     return RecommendedMeetingDto.builder()
                             .endStation(endStationName)
+                            .latitude(findStationCoordinateUseCase.excute(endStationName).getLatitude())
+                            .longitude(findStationCoordinateUseCase.excute(endStationName).getLongitude())
                             .userRoutes(userRouteDtos)
                             .build();
                 })
                 .toList();
-
-        System.out.println(finalResult);
 
         return finalResult;
 

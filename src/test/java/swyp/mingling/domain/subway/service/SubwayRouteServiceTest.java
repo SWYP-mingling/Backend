@@ -20,6 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * - API 호출 제한에 유의
  */
 @TestPropertySource(properties = {
+        "seoul.metro.api-key=4569585948737379313138635468706d",
 })
 @SpringBootTest
 @ActiveProfiles("test")
@@ -35,7 +36,7 @@ class SubwayRouteServiceTest {
     void testGetRoute_RealAPI() {
         // Given
         String startStation = "강남역";
-        String endStation = "마곡역";
+        String endStation = "수원역";
 
         // When
         SubwayRouteInfo routeInfo = subwayRouteService.getRoute(startStation, endStation);
