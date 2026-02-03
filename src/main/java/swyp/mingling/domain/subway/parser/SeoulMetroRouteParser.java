@@ -32,9 +32,11 @@ public class SeoulMetroRouteParser {
 
         // 출발역 = 첫 번째 경로의 출발역
         String startStation = pathList.get(0).getDptreStn().getStnNm();
+        String startStationLine = formatLineNumber(pathList.get(0).getDptreStn().getLineNm());
 
         // 도착역 = 마지막 경로의 도착역
         String endStation = pathList.get(pathList.size() - 1).getArvlStn().getStnNm();
+        String endStationLine = formatLineNumber(pathList.get(pathList.size() - 1).getArvlStn().getLineNm());
 
         // 총 이동 시간 (초 → 분 변환)
         Integer totalTimeInSeconds = response.getBody().getTotalreqHr();
@@ -55,7 +57,9 @@ public class SeoulMetroRouteParser {
 
         return SubwayRouteInfo.builder()
                 .startStation(startStation)
+                .startStationLine(startStationLine)
                 .endStation(endStation)
+                .endStationLine(endStationLine)
                 .totalTravelTime(totalTime)
                 .totalDistance(totalDistance)
                 .transferCount(transferCount)

@@ -17,7 +17,9 @@ import java.util.stream.Collectors;
 public class SubwayRouteInfo {
 
     private final String startStation;
+    private final String startStationLine;
     private final String endStation;
+    private final String endStationLine;
     private final Integer totalTravelTime;
     private final Double totalDistance;
     private final Integer transferCount;
