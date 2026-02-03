@@ -8,12 +8,14 @@ import org.springframework.transaction.annotation.Transactional;
 import swyp.mingling.domain.meeting.dto.StationCoordinate;
 import swyp.mingling.domain.meeting.dto.response.midpoint.DepartureListResponse;
 import swyp.mingling.domain.meeting.dto.response.midpoint.HotPlaceCategoryResponse;
+import swyp.mingling.domain.meeting.dto.response.midpoint.StationPathResponse;
 import swyp.mingling.domain.meeting.repository.HotPlaceRepository;
 import swyp.mingling.domain.meeting.repository.MeetingRepository;
 import swyp.mingling.domain.subway.dto.SubwayRouteInfo;
 import swyp.mingling.domain.subway.service.SubwayRouteService;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -26,7 +28,7 @@ public class MidPointUseCase {
     private final HotPlaceRepository hotPlaceRepository;
     private final SubwayRouteService subwayRouteService;
 
-    public void execute(UUID meetingId) {
+    public List<StationPathResponse> execute(UUID meetingId) {
 
         // 위도 경도 상 중간 지점 찾기
         List<DepartureListResponse> departurelists = meetingRepository.findDeparturesAndNicknameByMeetingId(meetingId);
@@ -95,6 +97,19 @@ public class MidPointUseCase {
                 .map(Map.Entry::getKey)
                 .toList();
 
+        List<StationPathResponse> stationPathResponses = midlist.stream() // List<List<Route>>
+                .flatMap(List::stream) // Route 리스트를 풀어서 Stream<Route>
+                .flatMap(route -> route.getStations().stream() // 각 Route의 stations 풀기
+                        .map(station -> StationPathResponse.from(
+                                station.getLineNumber(),  // lineNumber
+                                station.getStationName(), // stationName
+                                findStationCoordinateUseCase.excute(station.getStationName()).getLatitude(), // 위도 계산 메서드
+                                findStationCoordinateUseCase.excute(station.getStationName()).getLongitude() // 경도 계산 메서드
+                        ))
+                )
+                .collect(Collectors.toList());
+
+        return stationPathResponses;
 
     }
 
