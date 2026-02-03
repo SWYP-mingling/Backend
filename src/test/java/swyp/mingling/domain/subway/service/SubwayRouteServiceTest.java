@@ -20,9 +20,14 @@ import static org.assertj.core.api.Assertions.assertThat;
  * - API 호출 제한에 유의
  */
 @TestPropertySource(properties = {
-        "seoul.metro.api-key=4569585948737379313138635468706d",
+       "seoul.metro.api-key=4569585948737379313138635468706d"
 })
-@SpringBootTest
+@SpringBootTest(classes = {
+        SubwayRouteService.class,
+        swyp.mingling.external.SeoulMetroClient.class,
+        swyp.mingling.domain.subway.parser.SeoulMetroRouteParser.class,
+        swyp.mingling.global.config.SeoulMetroWebClientConfig.class
+})
 @ActiveProfiles("test")
 class SubwayRouteServiceTest {
 
@@ -32,7 +37,7 @@ class SubwayRouteServiceTest {
     private SubwayRouteService subwayRouteService;
 
     @Test
-    @DisplayName("실제 API 호출 - 강남역에서 서울역까지 전체 경로 조회")
+    @DisplayName("실제 API 호출 - 출발역-도착역 경로 조회")
     void testGetRoute_RealAPI() {
         // Given
         String startStation = "강남역";
@@ -43,6 +48,10 @@ class SubwayRouteServiceTest {
 
         // Then
         assertThat(routeInfo).isNotNull();
+        assertThat(routeInfo.getStartStation()).isNotEmpty();
+        assertThat(routeInfo.getStartStationLine()).isNotEmpty();
+        assertThat(routeInfo.getEndStation()).isNotEmpty();
+        assertThat(routeInfo.getEndStationLine()).isNotEmpty();
         assertThat(routeInfo.getTotalTravelTime()).isGreaterThan(0);
         assertThat(routeInfo.getTotalDistance()).isGreaterThan(0.0);
         assertThat(routeInfo.getTransferCount()).isNotNull();
@@ -52,9 +61,9 @@ class SubwayRouteServiceTest {
         assertThat(routeInfo.getStationNames()).isNotEmpty();
 
         // 결과 출력
-        log.info("====== 강남역 → 마곡역 경로 정보 ======");
-        log.info("출발역: {}", routeInfo.getStartStation());
-        log.info("도착역: {}", routeInfo.getEndStation());
+        log.info("====== {} → {} 경로 정보 ======", startStation, endStation);
+        log.info("출발역: {} ({})", routeInfo.getStartStation(), routeInfo.getStartStationLine());
+        log.info("도착역: {} ({})", routeInfo.getEndStation(), routeInfo.getEndStationLine());
         log.info("소요시간: {}분", routeInfo.getTotalTravelTime());
         log.info("이동거리: {}km", routeInfo.getTotalDistance());
         log.info("환승횟수: {}회", routeInfo.getTransferCount());
