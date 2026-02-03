@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,9 @@ public class EnterMeetingUseCase {
 
     private final MeetingRepository meetingRepository;
     private final ParticipantRepository participantRepository;
+
+    @Value("${mingling.cookie.path}")
+    private String cookiePath;
 
 
     @Transactional
@@ -62,7 +66,7 @@ public class EnterMeetingUseCase {
 
         // 가짜 세션 쿠키 추가
         ResponseCookie fakeSessionCookie = ResponseCookie.from("fakeSessionId", sessionId)
-                .path("/api/meeting/" + meetingId)
+                .path(cookiePath + meetingId)
                 .sameSite("None")
                 .secure(true)
                 .httpOnly(true)
@@ -71,7 +75,7 @@ public class EnterMeetingUseCase {
 
         // username 쿠키 추가
         ResponseCookie nicknameCookie = ResponseCookie.from("nickname", encodedNickname)
-                .path("/api/meeting/" + meetingId)
+                .path(cookiePath + meetingId)
                 .sameSite("None")
                 .secure(true)
                 .httpOnly(true)
