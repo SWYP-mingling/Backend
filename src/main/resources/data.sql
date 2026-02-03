@@ -77,7 +77,7 @@ INSERT INTO `meeting_purpose` (`purpose_id`, `name`, `is_active`) VALUES
                                                                       (4, '놀거리', 1),
                                                                       (5, '스터디 카페', 1),
                                                                       (7, '장소 대여', 1),
-                                                                      (8, '공공 서비스', 1),;
+                                                                      (8, '공공 서비스', 1);
 
 
 
