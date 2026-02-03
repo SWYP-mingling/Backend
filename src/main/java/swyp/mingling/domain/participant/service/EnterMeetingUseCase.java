@@ -62,7 +62,7 @@ public class EnterMeetingUseCase {
 
         // 가짜 세션 쿠키 추가
         ResponseCookie fakeSessionCookie = ResponseCookie.from("fakeSessionId", sessionId)
-                .path("/meeting/" + meetingId)
+                .path("/api/meeting/" + meetingId)
                 .sameSite("None")
                 .secure(true)
                 .httpOnly(true)
@@ -71,7 +71,7 @@ public class EnterMeetingUseCase {
 
         // username 쿠키 추가
         ResponseCookie nicknameCookie = ResponseCookie.from("nickname", encodedNickname)
-                .path("/meeting/" + meetingId)
+                .path("/api/meeting/" + meetingId)
                 .sameSite("None")
                 .secure(true)
                 .httpOnly(true)
