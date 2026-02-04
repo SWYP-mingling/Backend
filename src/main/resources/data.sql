@@ -71,7 +71,7 @@ INSERT INTO `meeting` (`id`, `name`, `count`, `deadline`, `status`, `is_deleted`
 
 DELETE FROM `meeting_purpose`;
 INSERT INTO `meeting_purpose` (`purpose_id`, `name`, `is_active`) VALUES
-                                                                      (1, '맛집', 1),
+                                                                      (1, '식당', 1),
                                                                       (2, '술집', 1),
                                                                       (3, '카페', 1),
                                                                       (4, '놀거리', 1),
