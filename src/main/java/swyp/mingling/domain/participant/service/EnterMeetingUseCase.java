@@ -6,7 +6,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.ResponseCookie;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 import org.springframework.stereotype.Service;
@@ -20,6 +23,7 @@ import swyp.mingling.global.exception.BusinessException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @Transactional(readOnly = true)
@@ -34,13 +38,15 @@ public class EnterMeetingUseCase {
     @Value("${mingling.cookie.path}")
     private String cookiePath;
 
+    @Autowired
+    private StringRedisTemplate redisTemplate;
+
 
     @Transactional
     public void execute(UUID meetingId,
                         EnterMeetingRequest request,
                         HttpServletRequest httprequest,
                         HttpServletResponse httpresponse) {
-
 
         Meeting meeting = meetingRepository.findById(meetingId).orElseThrow(BusinessException::meetingNotFound);
 
@@ -62,25 +68,30 @@ public class EnterMeetingUseCase {
             participantRepository.save(request.toEntity(meeting));
         }
 
-        String encodedNickname =
-                URLEncoder.encode(request.getUserId(), StandardCharsets.UTF_8);
-
         // 세션 추가
         HttpSession session = httprequest.getSession(true);
         String sessionId = session.getId();
         session.setAttribute(String.valueOf(meetingId), request.getUserId());
-        session.setMaxInactiveInterval(60 * 60 * 24 * 7); // 7일
+        session.setMaxInactiveInterval(60 * 60); // 1시간
 
         // 가짜 세션 쿠키 추가
-        ResponseCookie fakeSessionCookie = ResponseCookie.from("fakeSessionId", sessionId)
+        String randomValue = UUID.randomUUID().toString();
+
+        ValueOperations<String, String> ops = redisTemplate.opsForValue();
+        ops.set(randomValue, sessionId, 1, TimeUnit.HOURS);
+
+        ResponseCookie fakeSessionCookie = ResponseCookie.from("fakeSessionId", randomValue)
                 .path(cookiePath + meetingId)
                 .sameSite("None")
                 .secure(true)
                 .httpOnly(true)
-                .maxAge(60 * 60 * 24 * 7)     // 7일
+                .maxAge(60 * 60) // 1시간
                 .build();
 
         // username 쿠키 추가
+        String encodedNickname =
+                URLEncoder.encode(request.getUserId(), StandardCharsets.UTF_8);
+
         ResponseCookie nicknameCookie = ResponseCookie.from("nickname", encodedNickname)
                 .path(cookiePath + meetingId)
                 .sameSite("None")
