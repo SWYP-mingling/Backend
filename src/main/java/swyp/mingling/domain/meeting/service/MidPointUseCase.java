@@ -62,7 +62,7 @@ public class MidPointUseCase {
                 .toList();
 
         // 편차가 작은 번화가 3개 추출
-        Map<List<SubwayRouteInfo>, Integer> resultWithDeviation = new HashMap<>();
+        List<MidPointCandidate> candidates = new ArrayList<>();
 
         for (HotPlaceCategoryResponse fivehotlist : fivehotlists) {
 
@@ -77,9 +77,13 @@ public class MidPointUseCase {
                     // 같은 장소면 직접 생성
                     route = SubwayRouteInfo.builder()
                             .startStation(departurelist.getDeparture())
+                            .startStationLine(fivehotlist.getLine())
                             .endStation(fivehotlist.getName())
+                            .endStationLine(fivehotlist.getLine())
                             .totalTravelTime(0)
                             .transferCount(0)
+                            .transferPath(List.of())
+                            .stations(List.of())
                             .build();
                 } else {
                     // 다르면 API 호출
@@ -102,15 +106,27 @@ public class MidPointUseCase {
 
             int deviation = max - min;
 
-            // JSON 리스트 자체를 key로 저장
-            resultWithDeviation.put(routes, deviation);
+            int sum = 0;
+            for (SubwayRouteInfo route : routes) {
+                sum += route.getTotalTravelTime();
+            }
+
+            int avgTime = sum / routes.size();
+
+            candidates.add(
+                    new MidPointCandidate(routes, deviation, avgTime)
+            );
         }
 
-        List<List<SubwayRouteInfo>> midlist = resultWithDeviation.entrySet().stream()
-                .sorted(Map.Entry.comparingByValue())
-                .limit(3)
-                .map(Map.Entry::getKey)
-                .toList();
+        List<List<SubwayRouteInfo>> midlist =
+                candidates.stream()
+                        .sorted(
+                                Comparator.comparing(MidPointCandidate::getDeviation)
+                                        .thenComparing(MidPointCandidate::getAvgTime)
+                        )
+                        .limit(3)
+                        .map(MidPointCandidate::getRoutes)
+                        .toList();
 
         // 1. 결과 데이터를 담을 리스트
         List<GetMidPointResponse> finalResult = midlist.stream()
