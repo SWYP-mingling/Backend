@@ -1,6 +1,10 @@
 package swyp.mingling.domain.meeting.service;
 
 
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,7 +30,16 @@ public class MidPointUseCase {
     private final HotPlaceRepository hotPlaceRepository;
     private final SubwayRouteService subwayRouteService;
 
+
+    // 병렬 작업용 고정 스레드 풀
+    private static final int THREAD_POOL_SIZE = 5;
+    private final ExecutorService executorService = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
+
     public List<GetMidPointResponse> execute(UUID meetingId) {
+
+        // TODO: 삭제예정
+        long totalStart = System.currentTimeMillis();
+        log.info("[MidPoint] execute start meetingId={}", meetingId);
 
         // 위도 경도 상 중간 지점 찾기
         List<DepartureListResponse> departurelists = meetingRepository.findDeparturesAndNicknameByMeetingId(meetingId);
@@ -52,48 +65,68 @@ public class MidPointUseCase {
 
         // 중간 지점과 가까운 순으로 5개 번화가 추출
         List<HotPlaceCategoryResponse> fivehotlists = hotPlaceRepository.findAll().stream()
-                .map(HotPlaceCategoryResponse::from)
-                .sorted((h1, h2) -> {
-                    double d1 = calculateDistance(finalMidLat, finalMidLon, h1.getLatitude(), h1.getLongitude());
-                    double d2 = calculateDistance(finalMidLat, finalMidLon, h2.getLatitude(), h2.getLongitude());
-                    return Double.compare(d1, d2);
-                })
-                .limit(5)
-                .toList();
+            .map(HotPlaceCategoryResponse::from)
+            .sorted((h1, h2) -> {
+                double d1 = calculateDistance(finalMidLat, finalMidLon, h1.getLatitude(), h1.getLongitude());
+                double d2 = calculateDistance(finalMidLat, finalMidLon, h2.getLatitude(), h2.getLongitude());
+                return Double.compare(d1, d2);
+            })
+            .limit(5)
+            .toList();
 
         // 편차가 작은 번화가 3개 추출
         List<MidPointCandidate> candidates = new ArrayList<>();
 
         for (HotPlaceCategoryResponse fivehotlist : fivehotlists) {
 
-            List<SubwayRouteInfo> routes = new ArrayList<>();
+            // TODO: 삭제예정
+            log.info("[MidPoint] route calc start target={}", fivehotlist.getName());
 
-            for (DepartureListResponse departurelist : departurelists) {
+//            List<SubwayRouteInfo> routes = new ArrayList<>();
 
-                SubwayRouteInfo route;
+            // 병렬호출
+            List<CompletableFuture<SubwayRouteInfo>> futures =
+                departurelists.stream()
+                    .map(d ->
+                        CompletableFuture.supplyAsync(() -> {
 
-                // @@@@@@@@@@@@ 추가 확인 필요 @@@@@@@@@@@
-                if(departurelist.getDeparture().equals(fivehotlist.getName())) {
-                    // 같은 장소면 직접 생성
-                    route = SubwayRouteInfo.builder()
-                            .startStation(departurelist.getDeparture())
-                            .startStationLine(fivehotlist.getLine())
-                            .endStation(fivehotlist.getName())
-                            .endStationLine(fivehotlist.getLine())
-                            .totalTravelTime(0)
-                            .transferCount(0)
-                            .transferPath(List.of())
-                            .stations(List.of())
-                            .build();
-                } else {
-                    // 다르면 API 호출
-                    route = subwayRouteService.getRoute(
-                            departurelist.getDeparture(),
-                            fivehotlist.getName()
-                    );
-                }
-                routes.add(route);
-            }
+                            long apiStart = System.currentTimeMillis();
+
+                            try {
+                                // 출발지와 도착지가 같은 경우
+                                if (d.getDeparture().equals(fivehotlist.getName())) {
+                                    return SubwayRouteInfo.builder()
+                                        .startStation(d.getDeparture())
+                                        .startStationLine(fivehotlist.getLine())
+                                        .endStation(fivehotlist.getName())
+                                        .endStationLine(fivehotlist.getLine())
+                                        .totalTravelTime(0)
+                                        .transferCount(0)
+                                        .transferPath(List.of())
+                                        .stations(List.of())
+                                        .build();
+                                }
+
+                                // 출발지와 도착지가 다른 경우
+                                return subwayRouteService.getRoute(
+                                    d.getDeparture(),
+                                    fivehotlist.getName()
+                                );
+                            } finally {
+                                log.info(
+                                    "[RouteAPI] {} -> {} time={}ms thread={}",
+                                    d.getDeparture(),
+                                    fivehotlist.getName(),
+                                    System.currentTimeMillis() - apiStart,
+                                    Thread.currentThread().getName()
+                                );
+                            }
+                        }, executorService).orTimeout(2, TimeUnit.SECONDS)
+                    ).toList();
+
+            List<SubwayRouteInfo> routes = futures.stream()
+                .map(CompletableFuture::join)
+                .toList();
 
             int min = Integer.MAX_VALUE;
             int max = Integer.MIN_VALUE;
