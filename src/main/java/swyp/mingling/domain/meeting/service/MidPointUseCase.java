@@ -33,7 +33,7 @@ public class MidPointUseCase {
 
         double midLat = 0.0;
         double midLon = 0.0;
-
+        
         Set<String> sets = new HashSet<>();
 
         for (DepartureListResponse departurelist : departurelists) {
