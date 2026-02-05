@@ -21,15 +21,28 @@ public class SeoulMetroClient {
     }
 
     public SeoulMetroRouteResponse searchRoute(String startStationName, String endStationName) {
-        String start = startStationName.replaceAll("역$", "");
-        String end = endStationName.replaceAll("역$", "");
+
+        String start = startStationName;
+        String end = endStationName;
+
+        if(start != null && !"서울역".equals(start)){
+            start = start.replaceAll("역$", "");
+        }
+
+        if(end != null && !"서울역".equals(end)){
+            end = end.replaceAll("역$", "");
+        }
+
+        String finalStart = start;
+        String finalEnd = end;
+
         String now = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         // 지하철 운행시간 종료 후
 //        String now = "2026-06-06 12:00:00";
         return webClient.get()
                 .uri(uriBuilder -> {
                     var uri = uriBuilder
-                            .pathSegment("getShtrmPath", "1", "5", start, end, now)
+                            .pathSegment("getShtrmPath", "1", "5", finalStart, finalEnd, now)
                             .queryParam("schInclYn", "N")
                             .build();
 
