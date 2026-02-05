@@ -33,7 +33,7 @@ public class MidPointUseCase {
 
         double midLat = 0.0;
         double midLon = 0.0;
-        
+
         Set<String> sets = new HashSet<>();
 
         for (DepartureListResponse departurelist : departurelists) {
@@ -69,8 +69,25 @@ public class MidPointUseCase {
             List<SubwayRouteInfo> routes = new ArrayList<>();
 
             for (DepartureListResponse departurelist : departurelists) {
-                SubwayRouteInfo route =
-                        subwayRouteService.getRoute(departurelist.getDeparture(), fivehotlist.getName());
+
+                SubwayRouteInfo route;
+
+                // @@@@@@@@@@@@ 추가 확인 필요 @@@@@@@@@@@
+                if(departurelist.getDeparture().equals(fivehotlist.getName())) {
+                    // 같은 장소면 직접 생성
+                    route = SubwayRouteInfo.builder()
+                            .startStation(departurelist.getDeparture())
+                            .endStation(fivehotlist.getName())
+                            .totalTravelTime(0)
+                            .transferCount(0)
+                            .build();
+                } else {
+                    // 다르면 API 호출
+                    route = subwayRouteService.getRoute(
+                            departurelist.getDeparture(),
+                            fivehotlist.getName()
+                    );
+                }
                 routes.add(route);
             }
 
