@@ -1,6 +1,7 @@
 package swyp.mingling.domain.meeting.service;
 
 
+import jakarta.annotation.PreDestroy;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -35,11 +36,20 @@ public class MidPointUseCase {
     private static final int THREAD_POOL_SIZE = 5;
     private final ExecutorService executorService = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
 
+    /**
+     * 애플리케이션 종료 시
+     * 직접 생성한 ExecutorService 를 정상 종료하기 위한 처리
+     */
+    @PreDestroy
+    public void shutdown() {
+        executorService.shutdown();
+    }
+
     public List<GetMidPointResponse> execute(UUID meetingId) {
 
         // TODO: 삭제예정
         long totalStart = System.currentTimeMillis();
-        log.info("[MidPoint] execute start meetingId={}", meetingId);
+        log.info("[MidPoint] execute start meetingId: {}", meetingId);
 
         // 위도 경도 상 중간 지점 찾기
         List<DepartureListResponse> departurelists = meetingRepository.findDeparturesAndNicknameByMeetingId(meetingId);
@@ -80,7 +90,8 @@ public class MidPointUseCase {
         for (HotPlaceCategoryResponse fivehotlist : fivehotlists) {
 
             // TODO: 삭제예정
-            log.info("[MidPoint] route calc start target={}", fivehotlist.getName());
+            long destinationCalcStartTime = System.currentTimeMillis();
+            log.info("[MidPoint] route calc start destination: {}", fivehotlist.getName());
 
 //            List<SubwayRouteInfo> routes = new ArrayList<>();
 
@@ -114,7 +125,7 @@ public class MidPointUseCase {
                                 );
                             } finally {
                                 log.info(
-                                    "[RouteAPI] {} -> {} time={}ms thread={}",
+                                    "[MidPoint] route api end departure: {} destination: {} time: {}ms thread: {}",
                                     d.getDeparture(),
                                     fivehotlist.getName(),
                                     System.currentTimeMillis() - apiStart,
@@ -127,6 +138,12 @@ public class MidPointUseCase {
             List<SubwayRouteInfo> routes = futures.stream()
                 .map(CompletableFuture::join)
                 .toList();
+
+            log.info(
+                "[MidPoint] route calc end destination: {} totalTime: {}ms",
+                fivehotlist.getName(),
+                System.currentTimeMillis() - destinationCalcStartTime
+            );
 
             int min = Integer.MAX_VALUE;
             int max = Integer.MIN_VALUE;
@@ -210,6 +227,10 @@ public class MidPointUseCase {
                             .build();
                 })
                 .toList();
+
+        log.info("[MidPoint] execute end meetingId: {}, totalTime: {}ms",
+            meetingId,
+            System.currentTimeMillis() - totalStart);
 
         return finalResult;
 
