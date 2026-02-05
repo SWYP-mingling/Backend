@@ -19,11 +19,14 @@ public class HotPlaceCategoryResponse {
     @Schema(description = "경도", example = "126.9236")
     private double longitude;
 
+    private String line;
+
     public static HotPlaceCategoryResponse from(HotPlace hotPlace) {
         return HotPlaceCategoryResponse.builder()
                 .name(hotPlace.getName())
                 .latitude(hotPlace.getLatitude())
                 .longitude(hotPlace.getLongitude())
+                .line(hotPlace.getLine())
                 .build();
     }
 }
