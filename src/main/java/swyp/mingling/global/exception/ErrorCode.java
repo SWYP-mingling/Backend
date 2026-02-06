@@ -38,6 +38,7 @@ public enum ErrorCode {
     MEETING_CLOSED(HttpStatus.CONFLICT, "MEETING_CLOSED", "이미 마감된 모임입니다."),
     PURPOSE_NOT_FOUND(HttpStatus.BAD_REQUEST, "PURPOSE_NOT_FOUND", "일부 모임 목적을 찾을 수 없습니다."),
     HOT_PLACE_NOT_FOUND(HttpStatus.INTERNAL_SERVER_ERROR, "HOT_PLACE_NOT_FOUND", "핫플레이스 정보를 찾을 수 없습니다."),
+    DEPARTURE_NOT_FOUND(HttpStatus.NOT_FOUND, "DEPARTURE_NOT_FOUND", "사용자의 출발지가 등록되지 않았습니다"),
 
     // 사용자 관련 에러
     USER_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "USER_UNAUTHORIZED", "사용자 인증에 실패했습니다."),
