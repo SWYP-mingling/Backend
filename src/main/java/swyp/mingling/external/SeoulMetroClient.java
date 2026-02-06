@@ -35,7 +35,7 @@ public class SeoulMetroClient {
 
 //        String now = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         // 지하철 운행시간 종료 후
-        String now = "2026-06-06 12:00:00";
+        String now = "2026-06-06 01:00:00";
         return webClient.get()
                 .uri(uriBuilder -> {
                     var uri = uriBuilder
