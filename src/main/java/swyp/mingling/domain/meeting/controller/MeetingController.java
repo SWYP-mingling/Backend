@@ -32,6 +32,7 @@ public class MeetingController {
     private final ResultMeetingUseCase resultMeetingUseCase;
     private final CreateDepartureUseCase createDepartureUseCase;
     private final UpdateDepartureUseCase updateDepartureUseCase;
+    private final DeleteDepartureUseCase deleteDepartureUseCase;
     private final GetMeetingStatusUseCase getMeetingStatusUseCase;
     private final RecommendPlaceUseCase recommendPlaceUseCase;
     private final MidPointUseCase midPointUseCase;
@@ -154,6 +155,26 @@ public class MeetingController {
         UpdateDepartureResponse response = updateDepartureUseCase.execute(meetingId, nickname, request);
 
         return ApiResponse.success(response);
+
+    }
+
+    /**
+     * 출발역 삭제 API
+     *
+     * @return 사용자 닉네임
+     */
+    @MeetingApiDocumentation.DeleteDepartDoc
+    @DeleteMapping("/{meetingId}/departure")
+    public ApiResponse<String> updateDeparture(
+            @PathVariable("meetingId") UUID meetingId,
+            HttpSession session) {
+
+        //세션에서 nickname 가져오기
+        String nickname = (String) session.getAttribute(String.valueOf(meetingId));
+
+        String deletedNickname = deleteDepartureUseCase.execute(meetingId, nickname);
+
+        return ApiResponse.success(deletedNickname);
 
     }
 }
