@@ -1721,9 +1721,8 @@ public class MeetingApiDocumentation {
                                     description = "출발지 수정 성공",
                                     value = """
                     {
-                    
                       "success": true,
-                      "data": "홍길동"
+                      "data": "홍길동",
                       "timestamp": "2026-01-19T21:30:00"
                     }
                     """
