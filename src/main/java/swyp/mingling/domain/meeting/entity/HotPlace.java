@@ -26,17 +26,21 @@ public class HotPlace {
     @Column(name = "name", nullable = false, length = 50)
     private String name;
 
-    @Column(name = "latitude", nullable = false, precision = 10, scale = 7)
-    private BigDecimal latitude;
+    @Column(name = "latitude", nullable = false)
+    private double latitude;
 
-    @Column(name = "longitude", nullable = false, precision = 10, scale = 7)
-    private BigDecimal longitude;
+    @Column(name = "longitude", nullable = false)
+    private double longitude;
+
+    @Column(name = "line", length = 20)
+    private String line;
 
     @Builder
-    public HotPlace(String name, BigDecimal latitude, BigDecimal longitude) {
+    public HotPlace(String name, double latitude, double longitude, String line) {
         this.name = name;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.line = line;
     }
 
     /**
@@ -49,7 +53,7 @@ public class HotPlace {
     /**
      * 위치 정보 수정
      */
-    public void updateLocation(BigDecimal latitude, BigDecimal longitude) {
+    public void updateLocation(double latitude, double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
     }

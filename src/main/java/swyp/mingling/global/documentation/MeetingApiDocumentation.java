@@ -32,7 +32,7 @@ public class MeetingApiDocumentation {
                                     value = """
                                     {
                                       "meetingName": "신년회",
-                                      "purposes": ["친목", "회식", "스터디"],
+                                      "purposes": ["맛집", "술집"],
                                       "purposeCount": 3,
                                       "capacity": 10,
                                       "deadline": "2026-01-30T23:59:59"
@@ -189,55 +189,779 @@ public class MeetingApiDocumentation {
                                     @ExampleObject(
                                             name = "응답",
                                             value = """
-                                                        {
-                                                          "success": true,
-                                                          "data": {
-                                                            "midpoints": [
-                                                              {
-                                                            "name": "합정역",
-                                                            "latitude": 37.5484757,
-                                                            "longitude": 126.912071,
-                                                            "avgTravelTime": 30,
-                                                            "transferPath": "버스 > 1호선 > 2호선"
-                                                          },
-                                                          {
-                                                            "name": "서울역",
-                                                            "latitude": 37.554648,
-                                                            "longitude": 126.972559,
-                                                            "avgTravelTime": 35,
-                                                            "transferPath": "1호선 > 4호선"
-                                                          },
-                                                          {
-                                                            "name": "용산역",
-                                                            "latitude": 37.529844,
-                                                            "longitude": 126.964804,
-                                                            "avgTravelTime": 32,
-                                                            "transferPath": "경의중앙선 > 1호선"
-                                                          }
-                                                        ]
-                                                      },
-                                                      "timestamp": "2026-01-21T15:15:00"
-                                                    }
+                                                      {
+                                                             "success": true,
+                                                             "data": [
+                                                                 {
+                                                                     "endStation": "압구정",
+                                                                     "endStationLine": "3호선",
+                                                                     "latitude": 37.527072,
+                                                                     "longitude": 127.028461,
+                                                                     "userRoutes": [
+                                                                         {
+                                                                             "nickname": "안녕",
+                                                                             "startStation": "건대입구",
+                                                                             "startStationLine": "7호선",
+                                                                             "latitude": 37.540373,
+                                                                             "longitude": 127.069191,
+                                                                             "travelTime": 23,
+                                                                             "transferPath": [
+                                                                                 {
+                                                                                     "linenumber": "3호선",
+                                                                                     "station": "고속터미널",
+                                                                                     "latitude": 37.504891,
+                                                                                     "longitude": 127.004916
+                                                                                 }
+                                                                             ],
+                                                                             "stations": [
+                                                                                 {
+                                                                                     "linenumber": "7호선",
+                                                                                     "station": "건대입구",
+                                                                                     "latitude": 37.540373,
+                                                                                     "longitude": 127.069191
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "7호선",
+                                                                                     "station": "자양",
+                                                                                     "latitude": 37.53154,
+                                                                                     "longitude": 127.066704
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "7호선",
+                                                                                     "station": "청담",
+                                                                                     "latitude": 37.519365,
+                                                                                     "longitude": 127.05335
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "7호선",
+                                                                                     "station": "강남구청",
+                                                                                     "latitude": 37.517179,
+                                                                                     "longitude": 127.041255
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "7호선",
+                                                                                     "station": "학동",
+                                                                                     "latitude": 37.514229,
+                                                                                     "longitude": 127.031656
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "7호선",
+                                                                                     "station": "논현",
+                                                                                     "latitude": 37.511093,
+                                                                                     "longitude": 127.021415
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "7호선",
+                                                                                     "station": "반포",
+                                                                                     "latitude": 37.508178,
+                                                                                     "longitude": 127.011727
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "7호선",
+                                                                                     "station": "고속터미널",
+                                                                                     "latitude": 37.504891,
+                                                                                     "longitude": 127.004916
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "3호선",
+                                                                                     "station": "고속터미널",
+                                                                                     "latitude": 37.504891,
+                                                                                     "longitude": 127.004916
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "3호선",
+                                                                                     "station": "잠원",
+                                                                                     "latitude": 37.512759,
+                                                                                     "longitude": 127.01122
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "3호선",
+                                                                                     "station": "신사",
+                                                                                     "latitude": 37.516334,
+                                                                                     "longitude": 127.020114
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "3호선",
+                                                                                     "station": "압구정",
+                                                                                     "latitude": 37.527072,
+                                                                                     "longitude": 127.028461
+                                                                                 }
+                                                                             ]
+                                                                         },
+                                                                         {
+                                                                             "nickname": "안녕1",
+                                                                             "startStation": "강남",
+                                                                             "startStationLine": "2호선",
+                                                                             "latitude": 37.49799,
+                                                                             "longitude": 127.027912,
+                                                                             "travelTime": 11,
+                                                                             "transferPath": [
+                                                                                 {
+                                                                                     "linenumber": "3호선",
+                                                                                     "station": "교대",
+                                                                                     "latitude": 37.493961,
+                                                                                     "longitude": 127.014667
+                                                                                 }
+                                                                             ],
+                                                                             "stations": [
+                                                                                 {
+                                                                                     "linenumber": "2호선",
+                                                                                     "station": "강남",
+                                                                                     "latitude": 37.49799,
+                                                                                     "longitude": 127.027912
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "2호선",
+                                                                                     "station": "교대",
+                                                                                     "latitude": 37.493961,
+                                                                                     "longitude": 127.014667
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "3호선",
+                                                                                     "station": "교대",
+                                                                                     "latitude": 37.493961,
+                                                                                     "longitude": 127.014667
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "3호선",
+                                                                                     "station": "고속터미널",
+                                                                                     "latitude": 37.504891,
+                                                                                     "longitude": 127.004916
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "3호선",
+                                                                                     "station": "잠원",
+                                                                                     "latitude": 37.512759,
+                                                                                     "longitude": 127.01122
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "3호선",
+                                                                                     "station": "신사",
+                                                                                     "latitude": 37.516334,
+                                                                                     "longitude": 127.020114
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "3호선",
+                                                                                     "station": "압구정",
+                                                                                     "latitude": 37.527072,
+                                                                                     "longitude": 127.028461
+                                                                                 }
+                                                                             ]
+                                                                         },
+                                                                         {
+                                                                             "nickname": "안녕2",
+                                                                             "startStation": "홍대입구",
+                                                                             "startStationLine": "2호선",
+                                                                             "latitude": 37.55679,
+                                                                             "longitude": 126.923708,
+                                                                             "travelTime": 26,
+                                                                             "transferPath": [
+                                                                                 {
+                                                                                     "linenumber": "3호선",
+                                                                                     "station": "을지로3가",
+                                                                                     "latitude": 37.566306,
+                                                                                     "longitude": 126.991696
+                                                                                 }
+                                                                             ],
+                                                                             "stations": [
+                                                                                 {
+                                                                                     "linenumber": "2호선",
+                                                                                     "station": "홍대입구",
+                                                                                     "latitude": 37.55679,
+                                                                                     "longitude": 126.923708
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "2호선",
+                                                                                     "station": "신촌",
+                                                                                     "latitude": 37.555131,
+                                                                                     "longitude": 126.936926
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "2호선",
+                                                                                     "station": "이대",
+                                                                                     "latitude": 37.556733,
+                                                                                     "longitude": 126.946013
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "2호선",
+                                                                                     "station": "아현",
+                                                                                     "latitude": 37.557345,
+                                                                                     "longitude": 126.956141
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "2호선",
+                                                                                     "station": "충정로",
+                                                                                     "latitude": 37.559704,
+                                                                                     "longitude": 126.964378
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "2호선",
+                                                                                     "station": "시청",
+                                                                                     "latitude": 37.565715,
+                                                                                     "longitude": 126.977088
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "2호선",
+                                                                                     "station": "을지로입구",
+                                                                                     "latitude": 37.566014,
+                                                                                     "longitude": 126.982618
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "2호선",
+                                                                                     "station": "을지로3가",
+                                                                                     "latitude": 37.566306,
+                                                                                     "longitude": 126.991696
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "3호선",
+                                                                                     "station": "을지로3가",
+                                                                                     "latitude": 37.566306,
+                                                                                     "longitude": 126.991696
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "3호선",
+                                                                                     "station": "충무로",
+                                                                                     "latitude": 37.56143,
+                                                                                     "longitude": 126.994072
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "3호선",
+                                                                                     "station": "동대입구",
+                                                                                     "latitude": 37.559052,
+                                                                                     "longitude": 127.005602
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "3호선",
+                                                                                     "station": "약수",
+                                                                                     "latitude": 37.554867,
+                                                                                     "longitude": 127.010541
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "3호선",
+                                                                                     "station": "금호",
+                                                                                     "latitude": 37.548034,
+                                                                                     "longitude": 127.015872
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "3호선",
+                                                                                     "station": "옥수",
+                                                                                     "latitude": 37.541684,
+                                                                                     "longitude": 127.017269
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "3호선",
+                                                                                     "station": "압구정",
+                                                                                     "latitude": 37.527072,
+                                                                                     "longitude": 127.028461
+                                                                                 }
+                                                                             ]
+                                                                         }
+                                                                     ]
+                                                                 },
+                                                                 {
+                                                                     "endStation": "이태원",
+                                                                     "endStationLine": "6호선",
+                                                                     "latitude": 37.534488,
+                                                                     "longitude": 126.994302,
+                                                                     "userRoutes": [
+                                                                         {
+                                                                             "nickname": "안녕",
+                                                                             "startStation": "건대입구",
+                                                                             "startStationLine": "2호선",
+                                                                             "latitude": 37.540373,
+                                                                             "longitude": 127.069191,
+                                                                             "travelTime": 26,
+                                                                             "transferPath": [
+                                                                                 {
+                                                                                     "linenumber": "6호선",
+                                                                                     "station": "신당",
+                                                                                     "latitude": 37.56564,
+                                                                                     "longitude": 127.019614
+                                                                                 }
+                                                                             ],
+                                                                             "stations": [
+                                                                                 {
+                                                                                     "linenumber": "2호선",
+                                                                                     "station": "건대입구",
+                                                                                     "latitude": 37.540373,
+                                                                                     "longitude": 127.069191
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "2호선",
+                                                                                     "station": "성수",
+                                                                                     "latitude": 37.544581,
+                                                                                     "longitude": 127.055961
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "2호선",
+                                                                                     "station": "뚝섬",
+                                                                                     "latitude": 37.547184,
+                                                                                     "longitude": 127.047367
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "2호선",
+                                                                                     "station": "한양대",
+                                                                                     "latitude": 37.555273,
+                                                                                     "longitude": 127.043655
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "2호선",
+                                                                                     "station": "왕십리",
+                                                                                     "latitude": 37.561238,
+                                                                                     "longitude": 127.036954
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "2호선",
+                                                                                     "station": "상왕십리",
+                                                                                     "latitude": 37.564354,
+                                                                                     "longitude": 127.029354
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "2호선",
+                                                                                     "station": "신당",
+                                                                                     "latitude": 37.56564,
+                                                                                     "longitude": 127.019614
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "6호선",
+                                                                                     "station": "신당",
+                                                                                     "latitude": 37.56564,
+                                                                                     "longitude": 127.019614
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "6호선",
+                                                                                     "station": "청구",
+                                                                                     "latitude": 37.560276,
+                                                                                     "longitude": 127.013639
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "6호선",
+                                                                                     "station": "약수",
+                                                                                     "latitude": 37.554867,
+                                                                                     "longitude": 127.010541
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "6호선",
+                                                                                     "station": "버티고개",
+                                                                                     "latitude": 37.548013,
+                                                                                     "longitude": 127.007055
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "6호선",
+                                                                                     "station": "한강진",
+                                                                                     "latitude": 37.539631,
+                                                                                     "longitude": 127.001725
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "6호선",
+                                                                                     "station": "이태원",
+                                                                                     "latitude": 37.534488,
+                                                                                     "longitude": 126.994302
+                                                                                 }
+                                                                             ]
+                                                                         },
+                                                                         {
+                                                                             "nickname": "안녕1",
+                                                                             "startStation": "강남",
+                                                                             "startStationLine": "2호선",
+                                                                             "latitude": 37.49799,
+                                                                             "longitude": 127.027912,
+                                                                             "travelTime": 33,
+                                                                             "transferPath": [
+                                                                                 {
+                                                                                     "linenumber": "3호선",
+                                                                                     "station": "교대",
+                                                                                     "latitude": 37.493961,
+                                                                                     "longitude": 127.014667
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "6호선",
+                                                                                     "station": "약수",
+                                                                                     "latitude": 37.554867,
+                                                                                     "longitude": 127.010541
+                                                                                 }
+                                                                             ],
+                                                                             "stations": [
+                                                                                 {
+                                                                                     "linenumber": "2호선",
+                                                                                     "station": "강남",
+                                                                                     "latitude": 37.49799,
+                                                                                     "longitude": 127.027912
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "2호선",
+                                                                                     "station": "교대",
+                                                                                     "latitude": 37.493961,
+                                                                                     "longitude": 127.014667
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "3호선",
+                                                                                     "station": "교대",
+                                                                                     "latitude": 37.493961,
+                                                                                     "longitude": 127.014667
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "3호선",
+                                                                                     "station": "고속터미널",
+                                                                                     "latitude": 37.504891,
+                                                                                     "longitude": 127.004916
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "3호선",
+                                                                                     "station": "잠원",
+                                                                                     "latitude": 37.512759,
+                                                                                     "longitude": 127.01122
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "3호선",
+                                                                                     "station": "신사",
+                                                                                     "latitude": 37.516334,
+                                                                                     "longitude": 127.020114
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "3호선",
+                                                                                     "station": "압구정",
+                                                                                     "latitude": 37.527072,
+                                                                                     "longitude": 127.028461
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "3호선",
+                                                                                     "station": "옥수",
+                                                                                     "latitude": 37.541684,
+                                                                                     "longitude": 127.017269
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "3호선",
+                                                                                     "station": "금호",
+                                                                                     "latitude": 37.548034,
+                                                                                     "longitude": 127.015872
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "3호선",
+                                                                                     "station": "약수",
+                                                                                     "latitude": 37.554867,
+                                                                                     "longitude": 127.010541
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "6호선",
+                                                                                     "station": "약수",
+                                                                                     "latitude": 37.554867,
+                                                                                     "longitude": 127.010541
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "6호선",
+                                                                                     "station": "버티고개",
+                                                                                     "latitude": 37.548013,
+                                                                                     "longitude": 127.007055
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "6호선",
+                                                                                     "station": "한강진",
+                                                                                     "latitude": 37.539631,
+                                                                                     "longitude": 127.001725
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "6호선",
+                                                                                     "station": "이태원",
+                                                                                     "latitude": 37.534488,
+                                                                                     "longitude": 126.994302
+                                                                                 }
+                                                                             ]
+                                                                         },
+                                                                         {
+                                                                             "nickname": "안녕2",
+                                                                             "startStation": "홍대입구",
+                                                                             "startStationLine": "공항철도",
+                                                                             "latitude": 37.55679,
+                                                                             "longitude": 126.923708,
+                                                                             "travelTime": 14,
+                                                                             "transferPath": [
+                                                                                 {
+                                                                                     "linenumber": "6호선",
+                                                                                     "station": "공덕",
+                                                                                     "latitude": 37.544431,
+                                                                                     "longitude": 126.951372
+                                                                                 }
+                                                                             ],
+                                                                             "stations": [
+                                                                                 {
+                                                                                     "linenumber": "공항철도",
+                                                                                     "station": "홍대입구",
+                                                                                     "latitude": 37.55679,
+                                                                                     "longitude": 126.923708
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "공항철도",
+                                                                                     "station": "공덕",
+                                                                                     "latitude": 37.544431,
+                                                                                     "longitude": 126.951372
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "6호선",
+                                                                                     "station": "공덕",
+                                                                                     "latitude": 37.544431,
+                                                                                     "longitude": 126.951372
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "6호선",
+                                                                                     "station": "효창공원앞",
+                                                                                     "latitude": 37.539233,
+                                                                                     "longitude": 126.961384
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "6호선",
+                                                                                     "station": "삼각지",
+                                                                                     "latitude": 37.534075,
+                                                                                     "longitude": 126.9726
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "6호선",
+                                                                                     "station": "녹사평",
+                                                                                     "latitude": 37.534675,
+                                                                                     "longitude": 126.986695
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "6호선",
+                                                                                     "station": "이태원",
+                                                                                     "latitude": 37.534488,
+                                                                                     "longitude": 126.994302
+                                                                                 }
+                                                                             ]
+                                                                         }
+                                                                     ]
+                                                                 },
+                                                                 {
+                                                                     "endStation": "신사",
+                                                                     "endStationLine": "신분당선",
+                                                                     "latitude": 37.516334,
+                                                                     "longitude": 127.020114,
+                                                                     "userRoutes": [
+                                                                         {
+                                                                             "nickname": "안녕",
+                                                                             "startStation": "건대입구",
+                                                                             "startStationLine": "7호선",
+                                                                             "latitude": 37.540373,
+                                                                             "longitude": 127.069191,
+                                                                             "travelTime": 16,
+                                                                             "transferPath": [
+                                                                                 {
+                                                                                     "linenumber": "신분당선",
+                                                                                     "station": "논현",
+                                                                                     "latitude": 37.511093,
+                                                                                     "longitude": 127.021415
+                                                                                 }
+                                                                             ],
+                                                                             "stations": [
+                                                                                 {
+                                                                                     "linenumber": "7호선",
+                                                                                     "station": "건대입구",
+                                                                                     "latitude": 37.540373,
+                                                                                     "longitude": 127.069191
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "7호선",
+                                                                                     "station": "자양",
+                                                                                     "latitude": 37.53154,
+                                                                                     "longitude": 127.066704
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "7호선",
+                                                                                     "station": "청담",
+                                                                                     "latitude": 37.519365,
+                                                                                     "longitude": 127.05335
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "7호선",
+                                                                                     "station": "강남구청",
+                                                                                     "latitude": 37.517179,
+                                                                                     "longitude": 127.041255
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "7호선",
+                                                                                     "station": "학동",
+                                                                                     "latitude": 37.514229,
+                                                                                     "longitude": 127.031656
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "7호선",
+                                                                                     "station": "논현",
+                                                                                     "latitude": 37.511093,
+                                                                                     "longitude": 127.021415
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "신분당선",
+                                                                                     "station": "논현",
+                                                                                     "latitude": 37.511093,
+                                                                                     "longitude": 127.021415
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "신분당선",
+                                                                                     "station": "신사",
+                                                                                     "latitude": 37.516334,
+                                                                                     "longitude": 127.020114
+                                                                                 }
+                                                                             ]
+                                                                         },
+                                                                         {
+                                                                             "nickname": "안녕1",
+                                                                             "startStation": "강남",
+                                                                             "startStationLine": "신분당선",
+                                                                             "latitude": 37.49799,
+                                                                             "longitude": 127.027912,
+                                                                             "travelTime": 4,
+                                                                             "transferPath": [],
+                                                                             "stations": [
+                                                                                 {
+                                                                                     "linenumber": "신분당선",
+                                                                                     "station": "강남",
+                                                                                     "latitude": 37.49799,
+                                                                                     "longitude": 127.027912
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "신분당선",
+                                                                                     "station": "신논현",
+                                                                                     "latitude": 37.504598,
+                                                                                     "longitude": 127.02506
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "신분당선",
+                                                                                     "station": "논현",
+                                                                                     "latitude": 37.511093,
+                                                                                     "longitude": 127.021415
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "신분당선",
+                                                                                     "station": "신사",
+                                                                                     "latitude": 37.516334,
+                                                                                     "longitude": 127.020114
+                                                                                 }
+                                                                             ]
+                                                                         },
+                                                                         {
+                                                                             "nickname": "안녕2",
+                                                                             "startStation": "홍대입구",
+                                                                             "startStationLine": "2호선",
+                                                                             "latitude": 37.55679,
+                                                                             "longitude": 126.923708,
+                                                                             "travelTime": 29,
+                                                                             "transferPath": [
+                                                                                 {
+                                                                                     "linenumber": "3호선",
+                                                                                     "station": "을지로3가",
+                                                                                     "latitude": 37.566306,
+                                                                                     "longitude": 126.991696
+                                                                                 }
+                                                                             ],
+                                                                             "stations": [
+                                                                                 {
+                                                                                     "linenumber": "2호선",
+                                                                                     "station": "홍대입구",
+                                                                                     "latitude": 37.55679,
+                                                                                     "longitude": 126.923708
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "2호선",
+                                                                                     "station": "신촌",
+                                                                                     "latitude": 37.555131,
+                                                                                     "longitude": 126.936926
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "2호선",
+                                                                                     "station": "이대",
+                                                                                     "latitude": 37.556733,
+                                                                                     "longitude": 126.946013
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "2호선",
+                                                                                     "station": "아현",
+                                                                                     "latitude": 37.557345,
+                                                                                     "longitude": 126.956141
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "2호선",
+                                                                                     "station": "충정로",
+                                                                                     "latitude": 37.559704,
+                                                                                     "longitude": 126.964378
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "2호선",
+                                                                                     "station": "시청",
+                                                                                     "latitude": 37.565715,
+                                                                                     "longitude": 126.977088
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "2호선",
+                                                                                     "station": "을지로입구",
+                                                                                     "latitude": 37.566014,
+                                                                                     "longitude": 126.982618
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "2호선",
+                                                                                     "station": "을지로3가",
+                                                                                     "latitude": 37.566306,
+                                                                                     "longitude": 126.991696
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "3호선",
+                                                                                     "station": "을지로3가",
+                                                                                     "latitude": 37.566306,
+                                                                                     "longitude": 126.991696
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "3호선",
+                                                                                     "station": "충무로",
+                                                                                     "latitude": 37.56143,
+                                                                                     "longitude": 126.994072
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "3호선",
+                                                                                     "station": "동대입구",
+                                                                                     "latitude": 37.559052,
+                                                                                     "longitude": 127.005602
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "3호선",
+                                                                                     "station": "약수",
+                                                                                     "latitude": 37.554867,
+                                                                                     "longitude": 127.010541
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "3호선",
+                                                                                     "station": "금호",
+                                                                                     "latitude": 37.548034,
+                                                                                     "longitude": 127.015872
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "3호선",
+                                                                                     "station": "옥수",
+                                                                                     "latitude": 37.541684,
+                                                                                     "longitude": 127.017269
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "3호선",
+                                                                                     "station": "압구정",
+                                                                                     "latitude": 37.527072,
+                                                                                     "longitude": 127.028461
+                                                                                 },
+                                                                                 {
+                                                                                     "linenumber": "3호선",
+                                                                                     "station": "신사",
+                                                                                     "latitude": 37.516334,
+                                                                                     "longitude": 127.020114
+                                                                                 }
+                                                                             ]
+                                                                         }
+                                                                     ]
+                                                                 }
+                                                             ],
+                                                             "timestamp": "2026-02-03T20:48:11"
+                                                         }
                                                     """
                                     )
 
                     )
             ),
-            @ApiResponse(
-                    responseCode = "401",
-                    description = "사용자 인증 실패",
-                    content = @Content(
-                            mediaType = "application/json",
-                            examples = @ExampleObject("""
-                {
-                  "success": false,
-                  "code": "USER_UNAUTHORIZED",
-                  "message": "사용자 인증에 실패했습니다.",
-                  "timestamp": "2026-01-29T02:26:25"
-                }
-                """)
-                    )
-            ),
+
             // SESSION_COOKIE_EXPIRED
             @ApiResponse(
                     responseCode = "401",
@@ -388,95 +1112,161 @@ public class MeetingApiDocumentation {
     @Retention(RetentionPolicy.RUNTIME)
     @Operation(
             summary = "장소 추천 API",
-            description = "주변 추천 장소를 조회합니다."
+            description = "중간 지점과 카테고리를 기준으로 주변 추천 장소 목록을 조회합니다."
     )
     @ApiResponses({
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "장소 추천 조회 성공",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = swyp.mingling.global.response.ApiResponse.class),
-                            examples = @ExampleObject(
-                                    name = "SUCCESS",
-                                    value = """
-                {
-                  "success": true,
-                  "data": [
-                      {
-                        "title": "카페1",
-                        "roadAddress": "서울 동작구 동작대로..."
-                      },
-                      {
-                        "title": "카페2",
-                        "roadAddress": "서울 서초구 방배천로..."
-                      }
-                  ],
-                  "timestamp": "2026-01-22T16:00:00"
-                }
+        @ApiResponse(
+            responseCode = "200",
+            description = "장소 추천 조회 성공",
+            content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = swyp.mingling.global.response.ApiResponse.class),
+                examples = @ExampleObject(
+                    name = "SUCCESS",
+                    value = """
+                    {
+                        "success": true,
+                        "data": {
+                            "placeInfos": [
+                                {
+                                    "placeName": "두쫀쿠하우스",
+                                    "categoryName": "음식점 > 카페",
+                                    "categoryGroupName": "카페",
+                                    "phone": "02-1234-4568",
+                                    "addressName": "서울 마포구 합정동 123-45",
+                                    "roadAddressName": "서울 마포구 월드컵로1길 12",
+                                    "placeUrl": "http://place.map.kakao.com/0000000000",
+                                    "x": "126.000000000000",
+                                    "y": "37.0000000000000"
+                                },
+                                {
+                                    "placeName": "두쫀쿠마켓",
+                                    "categoryName": "음식점 > 카페",
+                                    "categoryGroupName": "카페",
+                                    "phone": "02-9123-4567",
+                                    "addressName": "서울 마포구 서교동 456-789",
+                                    "roadAddressName": "서울 마포구 양화로12길 3",
+                                    "placeUrl": "http://place.map.kakao.com/00000001",
+                                    "x": "126.0000000001",
+                                    "y": "37.0000000000001"
+                                },
+                                {
+                                    "placeName": "두쫀쿠커피",
+                                    "categoryName": "음식점 > 카페 > 커피전문점",
+                                    "categoryGroupName": "카페",
+                                    "phone": "02-891-2345",
+                                    "addressName": "서울 마포구 합정동 123-4",
+                                    "roadAddressName": "서울 마포구 동교로 1",
+                                    "placeUrl": "http://place.map.kakao.com/0000000002",
+                                    "x": "126.0000000000002",
+                                    "y": "37.0000000000002"
+                                }
+                            ],
+                            "sliceInfo": {
+                                "hasNext": false,
+                                "page": 5,
+                                "size": 3
+                            }
+                        },
+                        "timestamp": "2026-01-31T05:00:00"
+                    }
                 """
-                            )
-                    )
-            ),
-            @ApiResponse(
-                    responseCode = "401",
-                    description = "사용자 인증 실패",
-                    content = @Content(
-                            mediaType = "application/json",
-                            examples = @ExampleObject("""
-                {
-                  "success": false,
-                  "code": "USER_UNAUTHORIZED",
-                  "message": "사용자 인증에 실패했습니다.",
-                  "data": null,
-                  "timestamp": "2026-01-22T16:30:00"
-                }
-                """)
-                    )
-            ),
-            // SESSION_COOKIE_EXPIRED
-            @ApiResponse(
-                    responseCode = "401",
-                    description = "세션 및 쿠키 오류",
-                    content = @Content(
-                            mediaType = "application/json",
-                            examples = @ExampleObject(
-                                    name = "SESSION_COOKIE_EXPIRED",
-                                    description = "세션 및 쿠키 만료",
-                                    value = """
-                {
-                  "success": false,
-                  "code": "SESSION_COOKIE_EXPIRED",
-                  "message": "세션 및 쿠키가 만료가 되었습니다.",
-                  "timestamp": "2026-01-24T04:00:00"
-                }
-                """
-                            )
-                    )
-            ),
-            @ApiResponse(
-                    responseCode = "404",
-                    description = "존재하지 않는 모임",
-                    content = @Content(
-                            mediaType = "application/json",
-                            examples = @ExampleObject("""
+                )
+            )
+        ),
+        @ApiResponse(
+            responseCode = "400",
+            description = "지원하지 않는 카카오 카테고리",
+            content = @Content(
+                mediaType = "application/json",
+                examples = @ExampleObject(
+                    name = "INVALID_KAKAO_CATEGORY",
+                    value = """
+            {
+              "success": false,
+              "code": "INVALID_KAKAO_CATEGORY",
+              "message": "지원하지 않는 카카오 카테고리입니다.",
+              "data": null,
+              "timestamp": "2026-01-31T05:00:00"
+            }
+            """
+                )
+            )
+        ),
+        @ApiResponse(
+                responseCode = "401",
+                description = "사용자 인증 실패",
+                content = @Content(
+                        mediaType = "application/json",
+                        examples = @ExampleObject("""
+            {
+              "success": false,
+              "code": "USER_UNAUTHORIZED",
+              "message": "사용자 인증에 실패했습니다.",
+              "data": null,
+              "timestamp": "2026-01-22T16:30:00"
+            }
+            """)
+                )
+        ),
+        // SESSION_COOKIE_EXPIRED
+        @ApiResponse(
+                responseCode = "401",
+                description = "세션 및 쿠키 오류",
+                content = @Content(
+                        mediaType = "application/json",
+                        examples = @ExampleObject(
+                                name = "SESSION_COOKIE_EXPIRED",
+                                description = "세션 및 쿠키 만료",
+                                value = """
+            {
+              "success": false,
+              "code": "SESSION_COOKIE_EXPIRED",
+              "message": "세션 및 쿠키가 만료가 되었습니다.",
+              "timestamp": "2026-01-24T04:00:00"
+            }
+            """
+                        )
+                )
+        ),
+        // NOT_FOUND
+        @ApiResponse(
+            responseCode = "404",
+            description = "존재하지 않는 모임",
+            content = @Content(
+                mediaType = "application/json",
+                examples = @ExampleObject("""
                 {
                   "success": false,
                   "code": "MEETING_NOT_FOUND",
                   "message": "모임을 찾을 수 없습니다.",
                   "data": null,
-                  "timestamp": "2026-01-22T16:30:00"
+                  "timestamp": "2026-01-23T23:00:00"
                 }
                 """)
-                    )
-            ),
-            // INTERNAL_SERVER_ERROR
-            @ApiResponse(
-                    responseCode = "500",
-                    description = "서버 내부 오류",
-                    content = @Content(
-                            mediaType = "application/json",
-                            examples = @ExampleObject("""
+            )
+        ),
+        @ApiResponse(
+            responseCode = "500",
+            description = "서버 오류",
+            content = @Content(
+                mediaType = "application/json",
+                examples = {
+                    @ExampleObject(
+                        name = "EXTERNAL_API_ERROR",
+                        value = """
+                {
+                  "success": false,
+                  "code": "EXTERNAL_API_ERROR",
+                  "message": "외부 API 호출 중 오류가 발생했습니다.",
+                  "data": null,
+                  "timestamp": "2026-01-30T10:05:00"
+                }
+                """
+                    ),
+                    @ExampleObject(
+                        name = "INTERNAL_SERVER_ERROR",
+                        value = """
                 {
                   "success": false,
                   "code": "INTERNAL_SERVER_ERROR",
@@ -484,9 +1274,11 @@ public class MeetingApiDocumentation {
                   "data": null,
                   "timestamp": "2026-01-22T17:00:00"
                 }
-                """)
+                """
                     )
+                }
             )
+        )
     })
     public @interface GetRecommendDoc {}
 
@@ -906,6 +1698,141 @@ public class MeetingApiDocumentation {
             )
     })
     public @interface CreateDepartureDoc {}
+
+    /**
+     * 출발지 삭제 API 문서
+     */
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.RUNTIME)
+    @Operation(
+            summary = "출발지 삭제 API",
+            description = "로그인된 사용자의 세션(nickname)을 기반으로 특정 모임(UUID로 구분)에 참여 중인 사용자의 출발지를 삭제하고 성공시 닉네임을 반환합니다"
+    )
+    @ApiResponses({
+            // SUCCESS
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "출발지 삭제 성공",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = swyp.mingling.global.response.ApiResponse.class),
+                            examples = @ExampleObject(
+                                    name = "SUCCESS",
+                                    description = "출발지 수정 성공",
+                                    value = """
+                    {
+                      "success": true,
+                      "data": "홍길동",
+                      "timestamp": "2026-01-19T21:30:00"
+                    }
+                    """
+                            )
+                    )
+            ),
+
+            // BAD_REQUEST
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "잘못된 요청",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = {
+                                    @ExampleObject(
+                                            name = "BAD_REQUEST",
+                                            description = "잘못된 요청",
+                                            value = """
+                        {
+                          "success": false,
+                          "code": "BAD_REQUEST",
+                          "message": "잘못된 요청입니다.",
+                          "timestamp": "2026-01-19T21:30:00"
+                        }
+                        """
+                                    )
+                            }
+                    )
+            ),
+
+            // USER_UNAUTHORIZED
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "사용자 인증 실패",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject(
+                                    name = "USER_UNAUTHORIZED",
+                                    value = """
+                {
+                  "success": false,
+                  "code": "USER_UNAUTHORIZED",
+                  "message": "사용자 인증에 실패했습니다.",
+                  "timestamp": "2026-01-24T04:00:00"
+                }
+                """
+                            )
+                    )
+            ),
+
+            // SESSION_COOKIE_EXPIRED
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "세션 및 쿠키 오류",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject(
+                                    name = "SESSION_COOKIE_EXPIRED",
+                                    description = "세션 및 쿠키 만료",
+                                    value = """
+                {
+                  "success": false,
+                  "code": "SESSION_COOKIE_EXPIRED",
+                  "message": "세션 및 쿠키가 만료가 되었습니다.",
+                  "timestamp": "2026-01-24T04:00:00"
+                }
+                """
+                            )
+                    )
+            ),
+
+            // DEPARTURE_NOT_FOUND
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "사용자의 출발지가 존재하지 않을 때",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject(
+                                    name = "DEPARTURE_NOT_FOUND",
+                                    description = "세션 및 쿠키 만료",
+                                    value = """
+                {
+                  "success": false,
+                  "code": "DEPARTURE_NOT_FOUND",
+                  "message": "사용자의 출발지가 등록되지 않았습니다.",
+                  "timestamp": "2026-01-24T04:00:00"
+                }
+                """
+                            )
+                    )
+            ),
+
+            // INTERNAL_SERVER_ERROR
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "서버 내부 오류",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject("""
+                {
+                  "success": false,
+                  "code": "INTERNAL_SERVER_ERROR",
+                  "message": "서버 내부 오류가 발생했습니다.",
+                  "timestamp": "2026-01-19T21:30:00"
+                }
+                """)
+                    )
+            )
+    })
+    public @interface DeleteDepartDoc {}
 
 }
 

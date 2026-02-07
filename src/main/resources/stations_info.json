@@ -1272,8 +1272,14 @@
     "longitude": 126.980347
   },
   {
-    "line": "4호선",
+    "line": "7호선",
     "name": "이수",
+    "latitude": 37.485196,
+    "longitude": 126.981605
+  },
+  {
+    "line": "4호선",
+    "name": "총신대입구",
     "latitude": 37.486263,
     "longitude": 126.981989
   },
@@ -3862,5 +3868,29 @@
     "name": "동탄",
     "latitude": 37.20034,
     "longitude": 127.09569
+  },
+  {
+    "line": "8호선",
+    "name": "암사역사공원",
+    "latitude": 37.557167,
+    "longitude": 127.137556
+  },
+  {
+    "line": "8호선",
+    "name": "장자호수공원",
+    "latitude": 37.5876578,
+    "longitude": 127.1379073
+  },
+  {
+    "line": "8호선",
+    "name": "동구릉",
+    "latitude": 37.611056,
+    "longitude": 127.138004
+  },
+  {
+    "line": "8호선",
+    "name": "다산",
+    "latitude": 37.624268,
+    "longitude": 127.149809
   }
 ]

@@ -1,7 +1,4 @@
 spring:
-  profiles:
-    active: dev
-
   application:
     name: mingling
 
@@ -39,6 +36,16 @@ spring:
       host: ${LOCAL_REDIS_HOST}
       port: ${LOCAL_REDIS_PORT}
 
+kakao:
+  rest-api-key: ${KAKAO_REST_API_KEY}
+  local:
+    base-url: https://dapi.kakao.com
+
+seoul:
+  metro:
+    base-url: http://openapi.seoul.go.kr:8088
+    api-key: ${SEOUL_METRO_API_KEY}
+
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
@@ -51,6 +58,10 @@ springdoc:
   show-actuator: true
   default-consumes-media-type: application/json
   default-produces-media-type: application/json
+
+mingling:
+  cookie:
+    path: "/meeting/"
 
 server:
   port: 8888

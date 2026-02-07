@@ -1,40 +1,22 @@
 package swyp.mingling.domain.meeting.controller;
 
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-import java.util.List;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.annotation.*;
 import swyp.mingling.domain.meeting.dto.request.CreateDepartureRequest;
 import swyp.mingling.domain.meeting.dto.request.CreateMeetingRequest;
 import swyp.mingling.domain.meeting.dto.request.UpdateDepartureRequest;
-import swyp.mingling.domain.meeting.dto.response.CreateDepartureResponse;
-import swyp.mingling.domain.meeting.dto.response.CreateMeetingResponse;
-import swyp.mingling.domain.meeting.dto.response.GetMeetingStatusResponse;
-import swyp.mingling.domain.meeting.dto.response.GetMidpointResponse;
-import swyp.mingling.domain.meeting.dto.response.RecommendResponse;
-import swyp.mingling.domain.meeting.dto.response.ResultMeetingResponse;
-import swyp.mingling.domain.meeting.dto.response.UpdateDepartureResponse;
-import swyp.mingling.domain.meeting.service.CreateDepartureUseCase;
-import swyp.mingling.domain.meeting.service.CreateMeetingUseCase;
-import swyp.mingling.domain.meeting.service.GetMeetingStatusUseCase;
-import swyp.mingling.domain.meeting.service.ResultMeetingUseCase;
-import swyp.mingling.domain.meeting.service.UpdateDepartureUseCase;
+import swyp.mingling.domain.meeting.dto.response.*;
+import swyp.mingling.domain.meeting.dto.response.midpoint.GetMidPointResponse;
+import swyp.mingling.domain.meeting.service.*;
 import swyp.mingling.global.documentation.MeetingApiDocumentation;
 import swyp.mingling.global.response.ApiResponse;
+
+import java.util.List;
+import java.util.UUID;
 
 /**
  * 모임 관련 API 컨트롤러
@@ -50,7 +32,10 @@ public class MeetingController {
     private final ResultMeetingUseCase resultMeetingUseCase;
     private final CreateDepartureUseCase createDepartureUseCase;
     private final UpdateDepartureUseCase updateDepartureUseCase;
+    private final DeleteDepartureUseCase deleteDepartureUseCase;
     private final GetMeetingStatusUseCase getMeetingStatusUseCase;
+    private final RecommendPlaceUseCase recommendPlaceUseCase;
+    private final MidPointAsyncUseCase midPointAsyncUseCase;
 
     /**
      * 모임 생성 API
@@ -67,32 +52,19 @@ public class MeetingController {
     }
 
     /**
-     * 중간지점 조회 API
+     * 중간지점 조회 API (동기 버전)
      *
      * @param meetingId 모임 식별자 (UUID)
      * @return 중간지점 번화가 및 추천 장소 목록
      */
     @MeetingApiDocumentation.GetMidpointDoc
     @GetMapping("/{meetingId}/midpoint")
-    public ApiResponse<GetMidpointResponse> getMidpoint(@PathVariable("meetingId") UUID meetingId,
-                                                        @Parameter(hidden = true)
-                                                        @SessionAttribute(value = "userName") String userName) {
-        // TODO: 실제 로직 구현 필요
-        // 1. meetingId로 모임 존재 여부 확인
-        // 2. name + meetingId로 기존 참여자 조회(확인필요)
-        // 3. 중간 지점 이름과 위도 경도, 로그인한 참여자의 출발 위치부터 중간지점 까지의 경로 전달
+    public ApiResponse<Object> getMidpoint(@PathVariable("meetingId") UUID meetingId) {
 
-        List<GetMidpointResponse.MidpointDto> mockMidpoints = List.of(
-                new GetMidpointResponse.MidpointDto("합정역", 37.5484757, 126.912071, 30, "2호선 > 6호선"),
-                new GetMidpointResponse.MidpointDto("서울역", 37.554648, 126.972559, 35, "1호선 > 4호선"),
-                new GetMidpointResponse.MidpointDto("용산역", 37.529844, 126.964804, 32, "경의중앙선 > 1호선")
-        );
+        List<GetMidPointResponse> execute = midPointAsyncUseCase.execute(meetingId);
 
 
-
-        GetMidpointResponse response = new GetMidpointResponse(mockMidpoints);
-
-        return ApiResponse.success(response);
+        return ApiResponse.success(execute);
     }
 
     /**
@@ -102,7 +74,7 @@ public class MeetingController {
      * @return 생성된 모임 URL 응답
      */
     @MeetingApiDocumentation.ResultMeetingDoc
-    @GetMapping("/{meetingId}/result")
+    @GetMapping("/result/{meetingId}")
     public ApiResponse<ResultMeetingResponse> resultMeeting(@PathVariable("meetingId") String meetingId) {
         ResultMeetingResponse response = resultMeetingUseCase.getResultMeetingUrl(meetingId);
         return ApiResponse.success(response);
@@ -114,20 +86,19 @@ public class MeetingController {
      * @param meetingId 모임 UUID
      * @param midPlace  중간 지점 장소 (query param)
      * @param category  모임 목적 (query param)
+     * @param page      조회할 페이지 번호 (1부터 시작)
+     * @param size      조회할 개수 (기본값 10)
      * @return 장소 추천 장소들 목록
      */
     @MeetingApiDocumentation.GetRecommendDoc
     @GetMapping("/{meetingId}/recommend")
-    public ApiResponse<List<RecommendResponse>> getRecommend(@PathVariable("meetingId") UUID meetingId,
-                                                             @RequestParam String midPlace,
-                                                             @RequestParam String category) {
-
-        List<RecommendResponse> recommendResponses = List.of(
-                new RecommendResponse("카페1", "서울 동작구 동작대로..."),
-                new RecommendResponse("카페2", "서울 서초구 방배천로...")
-        );
-
-        return ApiResponse.success(recommendResponses);
+    public ApiResponse<RecommendResponse> getRecommend(@PathVariable("meetingId") UUID meetingId,
+                                                       @RequestParam String midPlace,
+                                                       @RequestParam String category,
+                                                       @RequestParam(defaultValue = "1") int page,
+                                                       @RequestParam(defaultValue = "15") int size) {
+        RecommendResponse response = recommendPlaceUseCase.execute(midPlace, category, page, size);
+        return ApiResponse.success(response);
     }
 
     /**
@@ -184,6 +155,26 @@ public class MeetingController {
         UpdateDepartureResponse response = updateDepartureUseCase.execute(meetingId, nickname, request);
 
         return ApiResponse.success(response);
+
+    }
+
+    /**
+     * 출발역 삭제 API
+     *
+     * @return 사용자 닉네임
+     */
+    @MeetingApiDocumentation.DeleteDepartDoc
+    @DeleteMapping("/{meetingId}/departure")
+    public ApiResponse<String> updateDeparture(
+            @PathVariable("meetingId") UUID meetingId,
+            HttpSession session) {
+
+        //세션에서 nickname 가져오기
+        String nickname = (String) session.getAttribute(String.valueOf(meetingId));
+
+        String deletedNickname = deleteDepartureUseCase.execute(meetingId, nickname);
+
+        return ApiResponse.success(deletedNickname);
 
     }
 }

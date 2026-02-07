@@ -11,4 +11,4 @@ COPY --from=builder app/spring-boot-loader/ ./
 COPY --from=builder app/snapshot-dependencies/ ./
 COPY --from=builder app/application/ ./
 
-ENTRYPOINT ["java", "-Xmx384m", "-Dspring.profiles.active=prod", "org.springframework.boot.loader.launch.JarLauncher"]
+ENTRYPOINT ["java", "-Xmx384m", "org.springframework.boot.loader.launch.JarLauncher"]
