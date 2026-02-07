@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 import swyp.mingling.external.dto.response.SeoulMetroRouteResponse;
 
 @Slf4j
@@ -48,7 +49,36 @@ public class SeoulMetroClient {
                 })
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
-                .bodyToMono(SeoulMetroRouteResponse.class)
+                .onStatus(
+                        status -> status.is5xxServerError(),
+                        clientResponse -> {
+                            log.error("공공 데이터 API 서버 오류 발생 - HTTP 상태: {}", clientResponse.statusCode());
+                            return clientResponse.bodyToMono(String.class)
+                                    .doOnNext(body -> log.error("API 에러 응답 body: {}", body))
+                                    .then(Mono.error(new RuntimeException("공공 데이터 포털 API 서버 오류")));
+                        }
+                )
+                .bodyToMono(String.class)
+                .doOnNext(rawBody -> log.info("API Raw 응답 body: {}", rawBody))
+                .flatMap(rawBody -> {
+                    try {
+                        // JSON 파싱 시도
+                        return Mono.just(new com.fasterxml.jackson.databind.ObjectMapper()
+                                .readValue(rawBody, SeoulMetroRouteResponse.class));
+                    } catch (Exception e) {
+                        log.error("JSON 파싱 실패: {}", e.getMessage());
+                        return Mono.just(new SeoulMetroRouteResponse());
+                    }
+                })
+                .doOnSuccess(response -> {
+                    if (response != null) {
+                        log.info("API 응답 받음 - header: {}, body exists: {}",
+                                response.getHeader(), response.getBody() != null);
+                    } else {
+                        log.warn("API 응답이 null입니다");
+                    }
+                })
+                .doOnError(error -> log.error("WebClient 에러 발생: {}", error.getMessage(), error))
                 .block();
     }
 }
