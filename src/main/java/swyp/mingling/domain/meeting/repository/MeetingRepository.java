@@ -21,4 +21,6 @@ public interface MeetingRepository extends JpaRepository<Meeting, UUID> {
         WHERE m.id = :meetingId and p.departure is not null
     """)
      List<DepartureListResponse> findDeparturesAndNicknameByMeetingId(@Param("meetingId") UUID meetingId);
+
+     long findCountById(Meeting meeting);
 }
