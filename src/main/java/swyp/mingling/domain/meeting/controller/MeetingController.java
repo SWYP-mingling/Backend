@@ -35,7 +35,7 @@ public class MeetingController {
     private final DeleteDepartureUseCase deleteDepartureUseCase;
     private final GetMeetingStatusUseCase getMeetingStatusUseCase;
     private final RecommendPlaceUseCase recommendPlaceUseCase;
-    private final MidPointUseCase midPointUseCase;
+    private final MidPointAsyncUseCase midPointAsyncUseCase;
 
     /**
      * 모임 생성 API
@@ -52,7 +52,7 @@ public class MeetingController {
     }
 
     /**
-     * 중간지점 조회 API
+     * 중간지점 조회 API (동기 버전)
      *
      * @param meetingId 모임 식별자 (UUID)
      * @return 중간지점 번화가 및 추천 장소 목록
@@ -61,7 +61,7 @@ public class MeetingController {
     @GetMapping("/{meetingId}/midpoint")
     public ApiResponse<Object> getMidpoint(@PathVariable("meetingId") UUID meetingId) {
 
-        List<GetMidPointResponse> execute = midPointUseCase.execute(meetingId);
+        List<GetMidPointResponse> execute = midPointAsyncUseCase.execute(meetingId);
 
 
         return ApiResponse.success(execute);
