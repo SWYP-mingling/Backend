@@ -60,8 +60,9 @@ public class EnterMeetingUseCase {
         } else {
             // 새로운 참여자인 경우, 실제 참여자 수 체크
             long currentParticipantCount = participantRepository.countByMeetingAndIsDeletedFalse(meeting);
+            long maxParticipants = meeting.getCount();
 
-            if(currentParticipantCount >= 10) { // 참여자 MAX 값
+            if(currentParticipantCount >= maxParticipants) { // 참여자 MAX 값
                 throw BusinessException.capacityExceeded();
             }
 
