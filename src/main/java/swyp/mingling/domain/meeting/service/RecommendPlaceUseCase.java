@@ -130,8 +130,10 @@ public class RecommendPlaceUseCase {
                 return Optional.empty();
             }
 
+            String categoryWithoutSpaces = category.replaceAll("\\s+", "");
+
             return Arrays.stream(values())
-                .filter(c -> c.categoryName.equals(category))
+                .filter(c -> c.categoryName.equals(categoryWithoutSpaces))
                 .findFirst();
         }
     }
