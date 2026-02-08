@@ -71,20 +71,37 @@ public class MidPointAsyncUseCase {
                 .limit(5)
                 .toList();
 
+        // ========================================
         // 편차가 작은 번화가 3개 추출 (비동기 병렬 처리)
+        // ========================================
+        // [개선 이유]
+        // 기존 방식: CompletableFuture.supplyAsync 안에서 루프로 join() 호출
+        //   - 비동기처럼 보이지만 실제로는 순차 대기하여 성능 저하
+        //   - API 응답 지연 시 서버가 강제로 연결 종류 위험성
+        //   - 예시: 핫플1 처리 → 핫플2 처리 → 핫플3 처리 (순차)
+        //
+        // 개선 방식: allOf()로 모든 Future를 한번에 묶어 병렬 처리
+        //   - 모든 API 호출이 동시에 시작되어 대기 시간 최소화
+        //   - 타임아웃 위험 감소 및 전체 응답 속도 향상
+        //   - 예시: 핫플1, 핫플2, 핫플3 모두 동시 처리 → 가장 느린 것만 대기
+        // ========================================
+
+        // 1단계: 모든 API 호출을 비동기로 먼저 시작
         List<CompletableFuture<MidPointCandidate>> candidateFutures = fivehotlists.stream()
-                .map(fivehotlist -> CompletableFuture.supplyAsync(() -> {
-
+                .map(fivehotlist -> {
                     // 각 후보 장소에 대해 모든 참여자의 경로를 병렬로 조회
-                    List<CompletableFuture<SubwayRouteInfo>> routeFutures = departurelists.stream() // 동시요청
-                            .map(departurelist -> CompletableFuture.supplyAsync(() -> { // 별도 스레드
+                    List<CompletableFuture<SubwayRouteInfo>> routeFutures = departurelists.stream()
+                            .map(departurelist -> CompletableFuture.supplyAsync(() -> {
+                                // 역 이름 정규화 (비교 및 반환값 일관성을 위해 "역" 제거)
+                                String normalizedDeparture = normalizeStationName(departurelist.getDeparture());
+                                String normalizedHotPlace = normalizeStationName(fivehotlist.getName());
 
-                                if(departurelist.getDeparture().equals(fivehotlist.getName())) {
-                                    // 같은 장소면 직접 생성
+                                if(normalizedDeparture.equals(normalizedHotPlace)) {
+                                    // 같은 장소면 직접 생성 (정규화된 이름 사용)
                                     return SubwayRouteInfo.builder()
-                                            .startStation(departurelist.getDeparture())
+                                            .startStation(normalizedDeparture)
                                             .startStationLine(fivehotlist.getLine())
-                                            .endStation(fivehotlist.getName())
+                                            .endStation(normalizedHotPlace)
                                             .endStationLine(fivehotlist.getLine())
                                             .totalTravelTime(0)
                                             .transferCount(0)
@@ -92,7 +109,7 @@ public class MidPointAsyncUseCase {
                                             .stations(List.of())
                                             .build();
                                 } else {
-                                    // 다르면 API 호출
+                                    // 다르면 API 호출 (API는 자체적으로 정규화된 값을 반환)
                                     return subwayRouteService.getRoute(
                                             departurelist.getDeparture(),
                                             fivehotlist.getName()
@@ -101,34 +118,54 @@ public class MidPointAsyncUseCase {
                             }))
                             .toList();
 
-                    // 모든 경로 조회 완료 대기
-                    List<SubwayRouteInfo> routes = routeFutures.stream()
-                            .map(CompletableFuture::join)
-                            .toList();
+                    // [개선사항]
+                    // allOf()를 사용하여 모든 경로 조회를 한번에 대기
+                    // 기존: routeFutures.stream().map(CompletableFuture::join) == 순차 대기
+                    // 개선: allOf()로 묶어서 가장 느린 작업 하나만 기다림
+                    CompletableFuture<Void> allRoutes = CompletableFuture.allOf(
+                            routeFutures.toArray(new CompletableFuture[0])
+                    );
 
-                    int min = Integer.MAX_VALUE;
-                    int max = Integer.MIN_VALUE;
+                    // 모든 경로가 완료되면 MidPointCandidate 생성
+                    // thenApply()로 비블로킹 방식으로 후속 처리
+                    return allRoutes.thenApply(v -> {
+                        List<SubwayRouteInfo> routes = routeFutures.stream()
+                                .map(CompletableFuture::join)
+                                .toList();
 
-                    for (SubwayRouteInfo route : routes) {
-                        int time = route.getTotalTravelTime();
-                        min = Math.min(min, time);
-                        max = Math.max(max, time);
-                    }
+                        int min = Integer.MAX_VALUE;
+                        int max = Integer.MIN_VALUE;
 
-                    int deviation = max - min;
+                        for (SubwayRouteInfo route : routes) {
+                            int time = route.getTotalTravelTime();
+                            min = Math.min(min, time);
+                            max = Math.max(max, time);
+                        }
 
-                    int sum = 0;
-                    for (SubwayRouteInfo route : routes) {
-                        sum += route.getTotalTravelTime();
-                    }
+                        int deviation = max - min;
 
-                    int avgTime = sum / routes.size();
+                        int sum = 0;
+                        for (SubwayRouteInfo route : routes) {
+                            sum += route.getTotalTravelTime();
+                        }
 
-                    return new MidPointCandidate(routes, deviation, avgTime);
-                }))
-                .toList(); // 객체를 하나의 리스트로 생성
+                        int avgTime = sum / routes.size();
 
-        // 모든 후보지 처리 완료 대기
+                        return new MidPointCandidate(routes, deviation, avgTime);
+                    });
+                })
+                .toList();
+
+        // 2단계: 모든 후보지 처리가 완료될 때까지 한번에 대기
+        // 5개 핫플레이스 × N명의 경로 조회가 모두 병렬로 실행
+        // 가장 느린 API 호출이 완료될 때까지만 대기
+        CompletableFuture<Void> allCandidates = CompletableFuture.allOf(
+                candidateFutures.toArray(new CompletableFuture[0])
+        );
+
+        // 모든 작업 완료 대기 후 결과 수집
+        allCandidates.join();
+
         List<MidPointCandidate> candidates = candidateFutures.stream()
                 .map(CompletableFuture::join)
                 .toList();
@@ -229,7 +266,7 @@ public class MidPointAsyncUseCase {
         long elapsedTime = endTime - startTime;
         log.info("Total station coordinate cache hits: {}", stationCoordinateCache.size());
         log.info("=== [MidPointAsyncUseCase] 중간지점 찾기 완료 (비동기) - meetingId: {}, 걸린 시간: {}ms ({} 초) ===",
-                 meetingId, elapsedTime, elapsedTime / 1000.0);
+                meetingId, elapsedTime, elapsedTime / 1000.0);
         return finalResult;
 
     }
@@ -249,4 +286,22 @@ public class MidPointAsyncUseCase {
 
         return R * c; // km 단위
     }
+
+    /**
+     * @param stationName 역 이름
+     * @return 정규화된 역 이름 ("역" 제거)
+     */
+    private String normalizeStationName(String stationName) {
+        if (stationName == null || stationName.isEmpty()) {
+            return stationName;
+        }
+
+        // "역"이 끝에 붙어있으면 제거
+        if (stationName.endsWith("역")) {
+            return stationName.substring(0, stationName.length() - 1);
+        }
+
+        return stationName;
+    }
 }
+
