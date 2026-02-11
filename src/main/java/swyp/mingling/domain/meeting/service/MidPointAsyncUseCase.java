@@ -225,13 +225,24 @@ public class MidPointAsyncUseCase {
                                 // 경로 상 역들의 좌표 캐싱
                                 List<StationPathResponse> stationResponses = route.getStations().stream()
                                         .map(station -> {
+                                            String name = station.getStationName();
+                                            String line = station.getLineNumber();
+
+                                            //검색어
+                                            String searchName = name;
+
+                                            //경의중앙선 양평 검색어 변경
+                                            if ("양평".equals(name) && "경의선".equals(line)) {
+                                                searchName = "양평(경의중앙선)";
+                                            }
+
                                             StationCoordinate coord = stationCoordinateCache.computeIfAbsent(
-                                                    station.getStationName(),
+                                                    searchName,
                                                     stationName -> findStationCoordinateUseCase.excute(stationName)
                                             );
                                             return StationPathResponse.from(
-                                                    station.getLineNumber(),
-                                                    station.getStationName(),
+                                                    line,
+                                                    name,
                                                     coord.getLatitude(),
                                                     coord.getLongitude()
                                             );
