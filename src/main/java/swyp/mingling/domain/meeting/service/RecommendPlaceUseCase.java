@@ -34,7 +34,11 @@ public class RecommendPlaceUseCase {
      * @param size     조회할 개수 (기본값 15)
      * @return 추천 장소 목록
      */
-    @Cacheable
+    @Cacheable(
+        cacheNames = "place-recommend",
+        cacheManager = "placeCacheManager",
+        key = "'recommend:' + #midPlace + ':' + #category + ':' + #page + ':' + #size"
+    )
     public RecommendResponse execute(String midPlace, String category, int page, int size) {
 
         log.info("[CACHE MISS] Call Kakao place search API - midPlace: {}, category: {}, page: {}, size: {}"
