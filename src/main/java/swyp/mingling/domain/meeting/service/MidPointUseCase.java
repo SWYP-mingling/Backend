@@ -114,7 +114,7 @@ public class MidPointUseCase {
             int avgTime = sum / routes.size();
 
             candidates.add(
-                    new MidPointCandidate(routes, deviation, avgTime)
+                    new MidPointCandidate(routes, deviation, avgTime, false, 0)
             );
         }
 
@@ -173,6 +173,7 @@ public class MidPointUseCase {
                             .endStation(endStationName)
                             .latitude(findStationCoordinateUseCase.excute(endStationName).getLatitude())
                             .longitude(findStationCoordinateUseCase.excute(endStationName).getLongitude())
+
                             .userRoutes(userRouteDtos)
                             .build();
                 })

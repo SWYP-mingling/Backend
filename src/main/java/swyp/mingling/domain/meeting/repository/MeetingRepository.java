@@ -7,6 +7,7 @@ import swyp.mingling.domain.meeting.dto.response.midpoint.DepartureListResponse;
 import swyp.mingling.domain.meeting.entity.Meeting;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -21,4 +22,10 @@ public interface MeetingRepository extends JpaRepository<Meeting, UUID> {
         WHERE m.id = :meetingId and p.departure is not null
     """)
      List<DepartureListResponse> findDeparturesAndNicknameByMeetingId(@Param("meetingId") UUID meetingId);
+
+     @Query("SELECT mp.name FROM Meeting m " +
+             "JOIN m.purposeMappings mpm " +
+             "JOIN mpm.purpose mp " +
+             "WHERE m.id = :meetingId")
+     Optional<String> findPurposeNamesByMeetingId(@Param("meetingId") UUID meetingId);
 }

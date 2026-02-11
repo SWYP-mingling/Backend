@@ -23,6 +23,12 @@ public class GetMidPointResponse {
     @Schema(description = "경도", example = "126.9236")
     private double longitude;
 
+    @Schema(description = "장소가 가장 많은지 여부")
+    private boolean isHot;
+
+    @Schema(description = "주변 장소 개수")
+    private Integer placeCount;
+
     @Schema(description = "사용자 목록")
     List<UserRouteDto> userRoutes;
 }

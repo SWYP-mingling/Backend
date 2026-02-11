@@ -21,6 +21,7 @@ public class SubwayRouteInfo {
     private final String endStation;
     private final String endStationLine;
     private final Integer totalTravelTime;
+    private final Integer placeCount;
     private final Double totalDistance;
     private final Integer transferCount;
     private final List<TransferInfo> transferPath;
