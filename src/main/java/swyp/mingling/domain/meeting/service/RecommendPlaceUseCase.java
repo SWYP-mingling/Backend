@@ -1,8 +1,5 @@
 package swyp.mingling.domain.meeting.service;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +10,10 @@ import swyp.mingling.external.KakaoPlaceClient;
 import swyp.mingling.external.dto.response.KakaoPlaceSearchResponse;
 import swyp.mingling.global.enums.KakaoCategoryGroupCode;
 import swyp.mingling.global.exception.BusinessException;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * 장소 추천 UseCase
@@ -33,11 +34,7 @@ public class RecommendPlaceUseCase {
      * @param size     조회할 개수 (기본값 15)
      * @return 추천 장소 목록
      */
-    @Cacheable(
-        cacheNames = "place-recommend",
-        cacheManager = "placeCacheManager",
-        key = "'recommend:' + #midPlace + ':' + #category + ':' + #page + ':' + #size"
-    )
+    @Cacheable
     public RecommendResponse execute(String midPlace, String category, int page, int size) {
 
         log.info("[CACHE MISS] Call Kakao place search API - midPlace: {}, category: {}, page: {}, size: {}"

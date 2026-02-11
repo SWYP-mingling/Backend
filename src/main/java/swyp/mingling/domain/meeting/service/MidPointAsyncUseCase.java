@@ -5,12 +5,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import swyp.mingling.domain.meeting.dto.response.midpoint.*;
 import swyp.mingling.domain.meeting.dto.StationCoordinate;
+import swyp.mingling.domain.meeting.dto.response.midpoint.*;
 import swyp.mingling.domain.meeting.repository.HotPlaceRepository;
 import swyp.mingling.domain.meeting.repository.MeetingRepository;
 import swyp.mingling.domain.subway.dto.SubwayRouteInfo;
 import swyp.mingling.domain.subway.service.SubwayRouteService;
+import swyp.mingling.external.dto.response.KakaoPlaceSearchResponse;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -27,6 +28,7 @@ public class MidPointAsyncUseCase {
     private final FindStationCoordinateUseCase findStationCoordinateUseCase;
     private final HotPlaceRepository hotPlaceRepository;
     private final SubwayRouteService subwayRouteService;
+    private final SearchPlaceCountUseCase searchPlaceCountUseCase;
 
     public List<GetMidPointResponse> execute(UUID meetingId) {
         long startTime = System.currentTimeMillis();
@@ -70,6 +72,9 @@ public class MidPointAsyncUseCase {
                 })
                 .limit(5)
                 .toList();
+
+        //카테고리 가져오기
+        String category = meetingRepository.findPurposeNamesByMeetingId(meetingId).orElse("식당");
 
         // ========================================
         // 편차가 작은 번화가 3개 추출 (비동기 병렬 처리)
@@ -118,13 +123,23 @@ public class MidPointAsyncUseCase {
                             }))
                             .toList();
 
+                    //수정: 카카오 장소 추천 API를 비동기로 요청
+                    CompletableFuture<KakaoPlaceSearchResponse> kakaoPlaceSearchResponse = CompletableFuture.supplyAsync(() ->
+                            searchPlaceCountUseCase.execute(fivehotlist.getName(), category, 1, 15)
+                    );
+
+                    // 비동기 작업을 하나의 리스트로 통합
+                    List<CompletableFuture<?>> allCombinedTasks = new ArrayList<>(routeFutures);
+                    allCombinedTasks.add(kakaoPlaceSearchResponse);
+
                     // [개선사항]
                     // allOf()를 사용하여 모든 경로 조회를 한번에 대기
                     // 기존: routeFutures.stream().map(CompletableFuture::join) == 순차 대기
                     // 개선: allOf()로 묶어서 가장 느린 작업 하나만 기다림
                     CompletableFuture<Void> allRoutes = CompletableFuture.allOf(
-                            routeFutures.toArray(new CompletableFuture[0])
+                            allCombinedTasks.toArray(new CompletableFuture[0])
                     );
+
 
                     // 모든 경로가 완료되면 MidPointCandidate 생성
                     // thenApply()로 비블로킹 방식으로 후속 처리
@@ -132,6 +147,10 @@ public class MidPointAsyncUseCase {
                         List<SubwayRouteInfo> routes = routeFutures.stream()
                                 .map(CompletableFuture::join)
                                 .toList();
+
+                        KakaoPlaceSearchResponse place = kakaoPlaceSearchResponse.join();
+
+                        int placeCount = place.getMeta().getTotalCount();
 
                         int min = Integer.MAX_VALUE;
                         int max = Integer.MIN_VALUE;
@@ -151,7 +170,7 @@ public class MidPointAsyncUseCase {
 
                         int avgTime = sum / routes.size();
 
-                        return new MidPointCandidate(routes, deviation, avgTime);
+                        return new MidPointCandidate(routes, deviation, avgTime, false, placeCount);
                     });
                 })
                 .toList();
@@ -170,22 +189,46 @@ public class MidPointAsyncUseCase {
                 .map(CompletableFuture::join)
                 .toList();
 
-        List<List<SubwayRouteInfo>> midlist =
+        // 이동시간 + 편차 고려한 리스트 중 2개 추출
+        List<MidPointCandidate> sortedByFairness =
                 candidates.stream()
                         .sorted(
                                 Comparator.comparing(MidPointCandidate::getDeviation)
                                         .thenComparing(MidPointCandidate::getAvgTime)
                         )
-                        .limit(3)
-                        .map(MidPointCandidate::getRoutes)
+                        .limit(2)
                         .toList();
 
+        // 장소 개수 기준 상위 1개 추출 (중복 여부 상관없이 1위 추출)
+        MidPointCandidate hotnessSelection = candidates.stream()
+                .sorted(Comparator.comparing(MidPointCandidate::getPlaceCount).reversed())
+                .findFirst()
+                .orElse(sortedByFairness.get(0)); // 만약 리스트가 비어있을 경우 대비
+
+        // 장소가 가장많은 중간지점은 Hot = true
+        hotnessSelection.setHot(true);
+
+        // 중복 제거를 위한 LinkedHashSet
+        Set<MidPointCandidate> set = new LinkedHashSet<>();
+        // 중간지점 추가
+        set.addAll(sortedByFairness);
+        set.add(hotnessSelection);
+
+        List<MidPointCandidate> finalThree = new ArrayList<>(set);
+
+//        // List<List<SubwayRouteInfo>> 형식으로 변환
+//        List<List<SubwayRouteInfo>> midlist = finalThree.stream()
+//                .map(MidPointCandidate::getRoutes)
+//                .toList();
+
         // 1. 결과 데이터를 담을 리스트 (좌표 조회 캐시 적용)
-        List<GetMidPointResponse> finalResult = midlist.stream()
+        List<GetMidPointResponse> finalResult = finalThree.stream()
                 .map(routeList -> {
                     // 이 그룹의 공통 목적지 추출
-                    String endStationName = routeList.get(0).getEndStation();
-                    String endStationLine = routeList.get(0).getEndStationLine();
+                    String endStationName = routeList.getRoutes().get(0).getEndStation();
+                    String endStationLine = routeList.getRoutes().get(0).getEndStationLine();
+                    Boolean isHot = routeList.isHot();
+                    Integer placeCount = routeList.getPlaceCount();
 
                     // 목적지 좌표 캐싱
                     StationCoordinate endStationCoord = stationCoordinateCache.computeIfAbsent( // 만약 데이터가 없으면 계산
@@ -194,9 +237,9 @@ public class MidPointAsyncUseCase {
                     );
 
                     // 2. 인덱스를 활용해 사용자별 닉네임과 경로 정보를 매핑 (IntStream 사용)
-                    List<UserRouteDto> userRouteDtos = IntStream.range(0, routeList.size())
+                    List<UserRouteDto> userRouteDtos = IntStream.range(0, routeList.getRoutes().size())
                             .mapToObj(i -> {
-                                SubwayRouteInfo route = routeList.get(i);
+                                SubwayRouteInfo route = routeList.getRoutes().get(i);
                                 // 기존 참여자 리스트(departurelists)에서 같은 순서의 닉네임을 가져옴
                                 String nickname = departurelists.get(i).getNickname();
 
@@ -268,6 +311,8 @@ public class MidPointAsyncUseCase {
                             .endStation(endStationName)
                             .latitude(endStationCoord.getLatitude())
                             .longitude(endStationCoord.getLongitude())
+                            .isHot(isHot)
+                            .placeCount(placeCount)
                             .userRoutes(userRouteDtos)
                             .build();
                 })
