@@ -32,7 +32,7 @@ public enum ErrorCode {
 
     // 모임 관련 에러
     INVALID_CAPACITY(HttpStatus.BAD_REQUEST, "INVALID_CAPACITY", "모임 인원은 최소 2명 이상이어야 합니다."),
-    CAPACITY_EXCEEDED(HttpStatus.BAD_REQUEST, "CAPACITY_EXCEEDED", "참여 인원은 10명까지 가능합니다."),
+    CAPACITY_EXCEEDED(HttpStatus.BAD_REQUEST, "CAPACITY_EXCEEDED", "해당 모임은 정원이 모두 찼습니다."),
     INVALID_DEADLINE(HttpStatus.BAD_REQUEST, "INVALID_DEADLINE", "마감 시간은 현재 시간 이후여야 합니다."),
     MEETING_NOT_FOUND(HttpStatus.NOT_FOUND, "MEETING_NOT_FOUND", "모임을 찾을 수 없습니다."),
     MEETING_CLOSED(HttpStatus.CONFLICT, "MEETING_CLOSED", "이미 마감된 모임입니다."),

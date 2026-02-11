@@ -30,12 +30,12 @@ public class SeoulMetroRouteParser {
 
         List<SeoulMetroRouteResponse.PathInfo> pathList = response.getPathInfoList();
 
-        // 출발역 = 첫 번째 경로의 출발역
-        String startStation = pathList.get(0).getDptreStn().getStnNm();
+        // 출발역 = 첫 번째 경로의 출발역 (역 이름 정규화: "역" 제거)
+        String startStation = normalizeStationName(pathList.get(0).getDptreStn().getStnNm());
         String startStationLine = formatLineNumber(pathList.get(0).getDptreStn().getLineNm());
 
-        // 도착역 = 마지막 경로의 도착역
-        String endStation = pathList.get(pathList.size() - 1).getArvlStn().getStnNm();
+        // 도착역 = 마지막 경로의 도착역 (역 이름 정규화: "역" 제거)
+        String endStation = normalizeStationName(pathList.get(pathList.size() - 1).getArvlStn().getStnNm());
         String endStationLine = formatLineNumber(pathList.get(pathList.size() - 1).getArvlStn().getLineNm());
 
         // 총 이동 시간 (초 → 분 변환)
@@ -82,7 +82,7 @@ public class SeoulMetroRouteParser {
             // 출발역 추가 (첫 번째 경로일 때만)
             if (i == 0) {
                 stations.add(SubwayRouteInfo.StationInfo.builder()
-                        .stationName(path.getDptreStn().getStnNm())
+                        .stationName(normalizeStationName(path.getDptreStn().getStnNm()))
                         .lineNumber(formatLineNumber(path.getDptreStn().getLineNm()))
                         .travelTime(0)
                         .isTransfer(false)
@@ -94,12 +94,15 @@ public class SeoulMetroRouteParser {
             Integer travelTimeInSeconds = path.getReqHr();
             Integer travelTimeInMinutes = travelTimeInSeconds != null ? travelTimeInSeconds / 60 : 0;
 
+            String arrivalStationName = normalizeStationName(path.getArvlStn().getStnNm());
+            boolean isTransfer = "Y".equalsIgnoreCase(path.getTrsitYn());
+
             stations.add(SubwayRouteInfo.StationInfo.builder()
-                    .stationName(path.getArvlStn().getStnNm())
+                    .stationName(arrivalStationName)
                     .lineNumber(formatLineNumber(path.getArvlStn().getLineNm()))
                     .travelTime(travelTimeInMinutes)
-                    .isTransfer("Y".equalsIgnoreCase(path.getTrsitYn()))
-                    .transferStationName("Y".equalsIgnoreCase(path.getTrsitYn()) ? path.getArvlStn().getStnNm() : null)
+                    .isTransfer(isTransfer)
+                    .transferStationName(isTransfer ? arrivalStationName : null)
                     .build());
         }
 
@@ -126,7 +129,7 @@ public class SeoulMetroRouteParser {
         // 각 경로의 도착역 호선 확인하여 변경 시 환승 정보 추가
         for (SeoulMetroRouteResponse.PathInfo path : pathList) {
             String arrivalLine = path.getArvlStn().getLineNm();
-            String arrivalStation = path.getArvlStn().getStnNm();
+            String arrivalStation = normalizeStationName(path.getArvlStn().getStnNm());
 
             // 호선이 변경되었을 때 = 환승이 발생한 경우
             if (!arrivalLine.equals(currentLine)) {
@@ -165,5 +168,22 @@ public class SeoulMetroRouteParser {
 
         // 특수 노선 (경의중앙선, 공항철도 등)은 그대로 반환
         return lineNumber;
+    }
+
+    /**
+     * @param stationName 역 이름
+     * @return 정규화된 역 이름 ("역" 제거)
+     */
+    private String normalizeStationName(String stationName) {
+        if (stationName == null || stationName.isEmpty()) {
+            return stationName;
+        }
+
+        // "역"이 끝에 붙어있으면 제거
+        if (stationName.endsWith("역")) {
+            return stationName.substring(0, stationName.length() - 1);
+        }
+
+        return stationName;
     }
 }

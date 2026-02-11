@@ -1,8 +1,5 @@
 package swyp.mingling.domain.meeting.service;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +10,10 @@ import swyp.mingling.external.KakaoPlaceClient;
 import swyp.mingling.external.dto.response.KakaoPlaceSearchResponse;
 import swyp.mingling.global.enums.KakaoCategoryGroupCode;
 import swyp.mingling.global.exception.BusinessException;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * 장소 추천 UseCase
@@ -130,8 +131,10 @@ public class RecommendPlaceUseCase {
                 return Optional.empty();
             }
 
+            String categoryWithoutSpaces = category.replaceAll("\\s+", "");
+
             return Arrays.stream(values())
-                .filter(c -> c.categoryName.equals(category))
+                .filter(c -> c.categoryName.equals(categoryWithoutSpaces))
                 .findFirst();
         }
     }
