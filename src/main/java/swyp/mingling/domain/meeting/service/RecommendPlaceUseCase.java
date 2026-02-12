@@ -1,8 +1,12 @@
 package swyp.mingling.domain.meeting.service;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import swyp.mingling.domain.meeting.dto.response.RecommendResponse;
@@ -10,10 +14,6 @@ import swyp.mingling.external.KakaoPlaceClient;
 import swyp.mingling.external.dto.response.KakaoPlaceSearchResponse;
 import swyp.mingling.global.enums.KakaoCategoryGroupCode;
 import swyp.mingling.global.exception.BusinessException;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
 
 /**
  * 장소 추천 UseCase
@@ -65,7 +65,7 @@ public class RecommendPlaceUseCase {
             .map(doc -> RecommendResponse.PlaceInfo.builder()
                 .placeName(doc.getPlaceName())
                 .categoryName(doc.getCategoryName())
-                .categoryGroupName(doc.getCategoryGroupName())
+                .categoryGroupName(getCategoryGroupName(doc.getCategoryGroupName(), categoryEnum))
                 .phone(doc.getPhone())
                 .addressName(doc.getAddressName())
                 .roadAddressName(doc.getRoadAddressName())
@@ -137,5 +137,18 @@ public class RecommendPlaceUseCase {
                 .filter(c -> c.categoryName.equals(categoryWithoutSpaces))
                 .findFirst();
         }
+    }
+
+    /**
+     * 카카오 장소 검색 응답의 categoryGroupName 값을 반환
+     * 외부 API 응답에서 categoryGroupName 이 null 또는 빈 문자열인 경우
+     * Category enum 의 categoryName 값을 기본값으로 사용
+     *
+     * @param categoryGroupName 카카오 장소 검색 API 에서 전달된 categoryGroupName 값
+     * @param categoryEnum Category enum
+     * @return null 또는 빈 값일 경우 기본 카테고리 이름으로 대체된 categoryGroupName
+     */
+    private static String getCategoryGroupName(String categoryGroupName, Category categoryEnum) {
+        return StringUtils.defaultIfBlank(categoryGroupName, categoryEnum.getCategoryName());
     }
 }
