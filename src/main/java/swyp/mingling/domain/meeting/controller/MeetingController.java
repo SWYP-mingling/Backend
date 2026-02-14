@@ -36,6 +36,7 @@ public class MeetingController {
     private final GetMeetingStatusUseCase getMeetingStatusUseCase;
     private final RecommendPlaceUseCase recommendPlaceUseCase;
     private final MidPointAsyncUseCase midPointAsyncUseCase;
+    private final GuestStatusUseCase guestStatusUseCase;
 
     /**
      * 모임 생성 API
@@ -175,6 +176,16 @@ public class MeetingController {
         String deletedNickname = deleteDepartureUseCase.execute(meetingId, nickname);
 
         return ApiResponse.success(deletedNickname);
+
+    }
+
+    @GetMapping("/{meetingId}/guestStatus")
+    public ApiResponse<GuestStatusResponse> gueststatus(
+            @PathVariable("meetingId") UUID meetingId) {
+
+        GuestStatusResponse execute = guestStatusUseCase.execute(meetingId);
+
+        return ApiResponse.success(execute);
 
     }
 }
