@@ -1834,5 +1834,114 @@ public class MeetingApiDocumentation {
     })
     public @interface DeleteDepartDoc {}
 
+
+
+    /**
+     * 비로그인일때 참여 현황 조회 API 문서
+     */
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.RUNTIME)
+    @Operation(
+            summary = "비로그인 모임 참여 현황 조회 API",
+            description = "비로그인일때 모임의 현재 참여 현황을 조회합니다. " +
+                    "모임명, 모임 목적, 총 인원 수, 현재 참여자 수, 참여자 이름들을 반환합니다. "
+    )
+    @ApiResponses({
+            // SUCCESS
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "비로그인 모임 참여 현황 조회 성공",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = swyp.mingling.global.response.ApiResponse.class),
+                            examples = @ExampleObject(
+                                    name = "SUCCESS",
+                                    description = "비로그인 모임 참여 현황 조회 성공",
+                                    value = """
+                                            {
+                                                 "success": true,
+                                                 "data": {
+                                                     "meetingName": "K6 성능 테스트",
+                                                     "category": "카페",
+                                                     "totalParticipantCount": 5,
+                                                     "currentParticipantCount": 4,
+                                                     "participants": [
+                                                         {
+                                                             "userName": "테스터1"
+                                                         },
+                                                         {
+                                                             "userName": "테스터2"
+                                                         },
+                                                         {
+                                                             "userName": "테스터3"
+                                                         },
+                                                         {
+                                                             "userName": "테스터4"
+                                                         }
+                                                     ]
+                                                 },
+                                                 "timestamp": "2026-02-14T19:39:46"
+                                             }
+                    """
+                            )
+                    )
+            ),
+
+            // UNAUTHORIZED
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "사용자 인증 실패",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject("""
+                {
+                  "success": false,
+                  "code": "USER_UNAUTHORIZED",
+                  "message": "사용자 인증에 실패했습니다.",
+                  "data": null,
+                  "timestamp": "2026-01-23T23:00:00"
+                }
+                """)
+                    )
+            ),
+
+            // NOT_FOUND
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "존재하지 않는 모임",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject("""
+                {
+                  "success": false,
+                  "code": "MEETING_NOT_FOUND",
+                  "message": "모임을 찾을 수 없습니다.",
+                  "data": null,
+                  "timestamp": "2026-01-23T23:00:00"
+                }
+                """)
+                    )
+            ),
+
+            // INTERNAL_SERVER_ERROR
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "서버 내부 오류",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject("""
+                {
+                  "success": false,
+                  "code": "INTERNAL_SERVER_ERROR",
+                  "message": "서버 내부 오류가 발생했습니다.",
+                  "data": null,
+                  "timestamp": "2026-01-23T23:00:00"
+                }
+                """)
+                    )
+            )
+    })
+    public @interface GuestStatusDoc {}
+
 }
 
