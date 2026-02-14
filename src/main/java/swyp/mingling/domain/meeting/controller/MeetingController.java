@@ -36,7 +36,7 @@ public class MeetingController {
     private final GetMeetingStatusUseCase getMeetingStatusUseCase;
     private final RecommendPlaceUseCase recommendPlaceUseCase;
     private final MidPointAsyncUseCase midPointAsyncUseCase;
-    private final GuestStatusUseCase guestStatusUseCase;
+    private final GuestMeetingStatusUseCase guestMeetingStatusUseCase;
 
     /**
      * 모임 생성 API
@@ -182,10 +182,10 @@ public class MeetingController {
 
     @MeetingApiDocumentation.GuestStatusDoc
     @GetMapping("/{meetingId}/guestStatus")
-    public ApiResponse<GuestStatusResponse> gueststatus(
+    public ApiResponse<GuestStatusResponse> guestMeetingStatus(
             @PathVariable("meetingId") UUID meetingId) {
 
-        GuestStatusResponse execute = guestStatusUseCase.execute(meetingId);
+        GuestStatusResponse execute = guestMeetingStatusUseCase.execute(meetingId);
 
         return ApiResponse.success(execute);
 

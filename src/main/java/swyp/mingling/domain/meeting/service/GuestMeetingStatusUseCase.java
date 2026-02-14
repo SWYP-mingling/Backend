@@ -15,7 +15,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class GuestStatusUseCase {
+public class GuestMeetingStatusUseCase {
 
     private final MeetingQueryRepository meetingQueryRepository;
     private final MeetingRepository meetingRepository;
