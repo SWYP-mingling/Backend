@@ -179,6 +179,8 @@ public class MeetingController {
 
     }
 
+
+    @MeetingApiDocumentation.GuestStatusDoc
     @GetMapping("/{meetingId}/guestStatus")
     public ApiResponse<GuestStatusResponse> gueststatus(
             @PathVariable("meetingId") UUID meetingId) {

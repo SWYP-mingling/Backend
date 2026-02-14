@@ -15,8 +15,10 @@ import java.util.List;
 @Schema(description = "모임 참여 현황 조회 응답")
 public class GuestStatusResponse {
 
+    @Schema(description = "모임 명", example = "K6 성능 테스트")
     private String meetingName;
 
+    @Schema(description = "모임 목적", example = "카페")
     private String category;
 
     @Schema(description = "전체 참여자 수", example = "10")
