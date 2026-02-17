@@ -170,7 +170,9 @@ public class MidPointAsyncUseCase {
 
                         int avgTime = sum / routes.size();
 
-                        return new MidPointCandidate(routes, deviation, avgTime, false, placeCount);
+                        double totalScore = (avgTime * 0.6) + (deviation * 0.4);
+
+                        return new MidPointCandidate(routes, deviation, avgTime, false, placeCount, totalScore);
                     });
                 })
                 .toList();
@@ -193,8 +195,7 @@ public class MidPointAsyncUseCase {
         List<MidPointCandidate> sortedByFairness =
                 candidates.stream()
                         .sorted(
-                                Comparator.comparing(MidPointCandidate::getDeviation)
-                                        .thenComparing(MidPointCandidate::getAvgTime)
+                                Comparator.comparing(MidPointCandidate::getTotalScore)
                         )
                         .limit(2)
                         .toList();
