@@ -1,6 +1,10 @@
 FROM eclipse-temurin:21-jre-alpine AS builder
 WORKDIR /app
 COPY build/libs/*.jar app.jar
+
+RUN mkdir /logs
+VOLUME /logs
+
 RUN java -Djarmode=layertools -jar app.jar extract
 
 FROM eclipse-temurin:21-jre-alpine

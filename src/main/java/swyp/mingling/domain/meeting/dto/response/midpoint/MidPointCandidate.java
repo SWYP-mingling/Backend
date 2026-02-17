@@ -15,6 +15,7 @@ public class MidPointCandidate {
     private int avgTime;                  // 평균 이동시간 or 총합
     private boolean isHot;                // 가장 장소가 많은 곳
     private int placeCount;               // 주변 장소 개수
+    private double totalScore;            // 편차, 이동시간 고려한 최종 점수
 
     public void setHot(boolean hot) {
         isHot = hot;

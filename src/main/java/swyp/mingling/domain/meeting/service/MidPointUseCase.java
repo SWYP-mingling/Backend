@@ -113,16 +113,17 @@ public class MidPointUseCase {
 
             int avgTime = sum / routes.size();
 
+            double totalScore = (avgTime * 0.6) + (deviation * 0.4);
+
             candidates.add(
-                    new MidPointCandidate(routes, deviation, avgTime, false, 0)
+                    new MidPointCandidate(routes, deviation, avgTime, false, 0, totalScore)
             );
         }
 
         List<List<SubwayRouteInfo>> midlist =
                 candidates.stream()
                         .sorted(
-                                Comparator.comparing(MidPointCandidate::getDeviation)
-                                        .thenComparing(MidPointCandidate::getAvgTime)
+                                Comparator.comparing(MidPointCandidate::getTotalScore)
                         )
                         .limit(3)
                         .map(MidPointCandidate::getRoutes)
