@@ -6,11 +6,19 @@
 
 ## 🛠 Tech Stack
 
-- **Language**: Java 21
-- **Framework**: Spring Boot 4.x
-- **Database**: MariaDB
-- **Build Tool**: Gradle
-- **Documentation**: Swagger UI (Springdoc)
+### Language
+
+![Java](https://img.shields.io/badge/Java-%23ED8B00.svg?style=flat&logo=openjdk&logoColor=white)
+### Framework
+
+![Spring Boot](https://img.shields.io/badge/-Spring%20Boot-brightgreen?logo=spring&logoColor=white)
+
+### Database
+
+![MariaDB](https://img.shields.io/badge/MySQL-black?&logo=mariadb&logoColor=white)
+
+### Documentation
+![Swagger](https://img.shields.io/badge/Swagger-UI)
 
 ---
 
@@ -69,6 +77,7 @@
   "timestamp": "2026-03-06T14:00:00Z"
 }
 ```
+````
 
 ---
 
