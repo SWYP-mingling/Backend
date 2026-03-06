@@ -26,27 +26,11 @@
 
 <img width="1478" height="815" alt="Image" src="https://github.com/user-attachments/assets/8c36a44c-4e4d-4128-9ef3-c9ca59203e38" />
 
-## 🏗 Database Convention
-
-데이터 일관성과 유지보수를 위해 아래 네이밍 규칙을 엄격히 준수합니다.
-
-- **Table Naming**: Prefix를 사용하지 않으며, **단수형**과 **snake_case**를 사용합니다.
-    - _Example:_ `meeting`, `meeting_purpose`
-- **Column Naming**: **snake_case**를 사용합니다.
-    - _Example:_ `created_at`, `updated_at`
-- **Boolean Column**: `is_` prefix 사용을 권장합니다.
-    - _Example:_ `is_deleted`, `is_active`
-
 ### 📊 Entity Relationship Diagram (ERD)
 
 <img width="688" height="531" alt="Image" src="https://github.com/user-attachments/assets/7fe10a00-b2b7-4bc3-9d9a-e5d1971a9554" />
 
 ## 🚀 API Specification
-
-### 🏷 API Naming Rule
-
-- **Format**: `/<domain>/<resource>/<action>`
-- **Convention**: 소문자 및 kebab-case 사용
 
 ### 📦 Common Response Format
 
@@ -119,7 +103,7 @@
 
 ### Prerequisites
 
-- JDK 17
+- JDK 26
 - MariaDB (Local or Docker)
 
 ### Installation & Run
@@ -151,5 +135,3 @@ git clone [https://github.com/SWYP-mingling/Backend.git](https://github.com/SWYP
 
 상세한 API 명세 및 테스트는 아래 Swagger UI 링크를 참조하세요.
 👉 **[Mingling Swagger UI 바로가기](https://test-api.mingling.kr/swagger-ui/index.html)**
-
-```
