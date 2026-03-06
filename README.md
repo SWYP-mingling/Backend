@@ -103,7 +103,7 @@
 
 ### Prerequisites
 
-- JDK 26
+- JDK 21
 - MariaDB (Local or Docker)
 
 ### Installation & Run
