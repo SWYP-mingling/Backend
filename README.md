@@ -4,6 +4,21 @@
 
 ---
 
+## ✨ Features
+
+- 모임 생성
+  
+- 모임 참여
+  
+- 출발지 등록
+- ![Image](https://github.com/user-attachments/assets/7253df65-81b9-44e2-a611-b9d3253f70f5)
+  
+- 중간지점 결과보기
+  
+- 장소 추천
+
+---
+
 ## 🛠 Tech Stack
 
 ### Language
@@ -99,35 +114,48 @@
 
 ---
 
-## ⚙️ Getting Started
+## 🌐 Deployment
 
-### Prerequisites
+### 🏗 Service Architecture
+전체적인 시스템 구조는 **Nginx**를 리버스 프록시로 활용하며, 애플리케이션 서버와 데이터베이스 모두 **Docker 컨테이너**로 독립 운영됩니다. 서비스의 안정적인 운영을 위해 로그 데이터는 호스트 서버와 볼륨 마운트를 통해 영구 보관됩니다.
 
-- JDK 21
-- MariaDB (Local or Docker)
+* **Web Server**: Nginx (Reverse Proxy)
+* **Application Server**: Docker Containers (Spring Boot 3.x)
+* **Database**: Docker Container (MariaDB 10.11+)
+* **Log Management**: Host-Container Volume Mapping (`/logs`)
 
-### Installation & Run
+---
 
-1. **Repository Clone**
+### 💻 Infrastructure Detail
+| Infrastructure | Detail |
+| :--- | :--- |
+| **Cloud** | **NCP (Naver Cloud Platform)** |
+| **Instance** | Micro Server (Ubuntu 22.04 LTS) |
+| **Database** | MariaDB 10.11 (Dockerized) |
+| **Container** | Docker, Docker-compose |
 
-```bash
-git clone [https://github.com/SWYP-mingling/Backend.git](https://github.com/SWYP-mingling/Backend.git)
+---
 
-```
+### 🚀 CI/CD Pipeline
+GitHub Actions와 NCP Container Registry를 연동하여 배포 자동화를 구축했습니다.
 
-2. **Build**
+1.  **GitHub Actions**: `main` 브랜치에 코드 Push 시 빌드 및 테스트 자동 수행
+2.  **NCP Container Registry (NCR)**: 빌드된 이미지를 NCP 전용 컨테이너 저장소에 Push 및 관리
+3.  **Deployment Flow**:
+    * GitHub Actions에서 프로젝트 빌드 (Gradle)
+    * Docker 이미지 생성 후 **NCP Container Registry**로 Push
+    * 대상 서버에 SSH 접속 후 최신 이미지 `pull` 및 `docker-compose` 재실행
 
-```bash
-./gradlew build
+---
 
-```
+### 💾 Log Management
+컨테이너 재배포 시에도 과거의 에러 기록을 보존하기 위해 호스트 서버의 파일 시스템과 동기화하여 관리합니다.
 
-3. **Run Application**
-
-```bash
-./gradlew bootRun
-
-```
+* **로그 보관 경로**: `/home/ncp-user/mingling-logs` (Host) ↔ `/logs` (Container)
+* **로그 파일 구성**:
+    * `error.log`: 모든 **ERROR** 레벨 로그 기록 (서비스 장애 추적용)
+    * `warn.log`: **WARN** 이상 레벨 로그 기록 (잠재적 문제 모니터링용)
+* **모니터링**: 서버 터미널에서 `tail -f` 명령어를 통해 실시간으로 시스템 상태를 확인할 수 있습니다.
 
 ---
 
