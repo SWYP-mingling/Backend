@@ -7,15 +7,19 @@
 ## ✨ Features
 
 - 모임 생성
-  
+![Image](https://github.com/user-attachments/assets/edad101d-e82c-4abb-ad8f-dc99de97da15)
+
 - 모임 참여
-  
+![Image](https://github.com/user-attachments/assets/22de76ac-7330-4967-9a11-9533b43933d1)
+
 - 출발지 등록
-- ![Image](https://github.com/user-attachments/assets/7253df65-81b9-44e2-a611-b9d3253f70f5)
+![Image](https://github.com/user-attachments/assets/7253df65-81b9-44e2-a611-b9d3253f70f5)
   
 - 중간지점 결과보기
-  
+![Image](https://github.com/user-attachments/assets/a161fd4e-fa04-4b48-9f11-5775e78d553c)
+
 - 장소 추천
+![Image](https://github.com/user-attachments/assets/0ec6302a-a7ef-49eb-93ff-d621307f8a44)
 
 ---
 
@@ -63,7 +67,6 @@
   "timestamp": "2026-03-06T14:00:00Z"
 }
 ```
-````
 
 **❌ Failure Response**
 
@@ -76,7 +79,6 @@
   "timestamp": "2026-03-06T14:00:00Z"
 }
 ```
-````
 
 ---
 
