@@ -42,7 +42,7 @@
 
 ---
 
-## 아키텍처
+## 🖥 Architecture
 
 <img width="1478" height="815" alt="Image" src="https://github.com/user-attachments/assets/8c36a44c-4e4d-4128-9ef3-c9ca59203e38" />
 
