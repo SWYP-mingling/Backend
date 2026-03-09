@@ -4,8 +4,9 @@
 </p>
 
 <p align="center">
-  <a href="https://mingling.kr">🌐 밍글링 바로가기</a>
+  <a href="https://mingling.kr">[🌐 Mingling 바로가기]</a>
 </p>
+
 **Mingling**은 약속 및 모임 참여자들의 **출발역을 기반으로 최적의 중간 지점을 추천**하고, 모임 목적에 맞는 장소를 탐색할 수 있도록 지원하는 백엔드 서버입니다.
 
 ---
